@@ -35,19 +35,17 @@ public final class BetterWorldStats extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        reloadBetterWorldStats();
-
         Logger logger = getLogger();
-
-        offlinePlayers = Bukkit.getOfflinePlayers().length;
-
-        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) new PAPI().register();
-
+        reloadBetterWorldStats();
+        if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+            logger.info(ChatColor.AQUA + "Found PlaceholderAPI, registering placeholders");
+            new PAPI().register();
+            logger.info(ChatColor.AQUA + "Successfully registered placeholders.");
+        }
+        logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
-
-        logger.info(ChatColor.DARK_GREEN + "Initialized.");
+        logger.info(ChatColor.AQUA + "Done.");
     }
 
     private long count() {
