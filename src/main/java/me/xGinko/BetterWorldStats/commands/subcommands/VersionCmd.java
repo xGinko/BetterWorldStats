@@ -15,7 +15,7 @@ public class VersionCmd extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (sender.hasPermission("betterws.version")) {
-            sender.sendMessage(ChatColor.RED + "BetterWorldStats v" + BetterWorldStats.getInstance().getDescription().getVersion() + ChatColor.BLUE + " by xGinko");
+            sender.sendMessage(ChatColor.AQUA + "BetterWorldStats v" + BetterWorldStats.getInstance().getDescription().getVersion() + ChatColor.DARK_AQUA + " by xGinko");
         } else {
             sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).noPermissions);
         }
