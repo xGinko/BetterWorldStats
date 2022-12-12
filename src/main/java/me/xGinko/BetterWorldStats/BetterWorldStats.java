@@ -77,8 +77,8 @@ public final class BetterWorldStats extends JavaPlugin {
         scheduler.runTaskTimerAsynchronously(this, () -> fileSize = count() / 1048576.0D / 1000.0D, 0L, configCache.fileSizeUpdateDelay);
         scheduler.runTaskTimer(this, () -> {
             offlinePlayers = Bukkit.getOfflinePlayers().length;
-            getLogger().info("Updated filesize asynchronously: "+fileSize);
-        }, 10L, configCache.fileSizeUpdateDelay);
+            if (configCache.logIsEnabled) getLogger().info("Updated filesize asynchronously: "+fileSize);
+        }, 1L, configCache.fileSizeUpdateDelay);
 
         configCache.saveConfig();
     }

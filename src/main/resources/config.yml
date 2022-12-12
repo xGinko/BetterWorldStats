@@ -14,7 +14,8 @@ worlds:
   - "./world_the_end/DIM1/region"
 # How many GB should be added on top of the actual filesize, useful for if you deleted useless chunks.
 spoof-size: 0.0
-
+# Displays the updated filesize in console
+enable-console-log: true
 # PlaceholderAPI placeholders:
 # %worldstats_size%
 # %worldstats_spoof%

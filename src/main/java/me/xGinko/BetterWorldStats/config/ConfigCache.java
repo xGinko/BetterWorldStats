@@ -18,7 +18,7 @@ public class ConfigCache {
     public final Locale default_lang;
     public final DecimalFormat fileSizeFormat;
     public final HashSet<String> directoriesToScan = new HashSet<>();
-    public final boolean auto_lang;
+    public final boolean auto_lang, logIsEnabled;
     public final long serverBirthTime, fileSizeUpdateDelay;
     public final double spoofSize;
 
@@ -31,15 +31,19 @@ public class ConfigCache {
 
         this.default_lang = Locale.forLanguageTag(getString("language.default-language", "en-us").replace("_", "-"));
         this.auto_lang = getBoolean("language.auto-language", true);
+
         this.serverBirthTime = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis());
         this.fileSizeUpdateDelay = getInt("filesize-update-period-in-seconds", 3600) * 20L;
-        this.spoofSize = getDouble("spoof-size", 0.0);
         this.fileSizeFormat = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
+
         directoriesToScan.addAll(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
         )));
+        this.spoofSize = getDouble("spoof-size", 0.0);
+
+        this.logIsEnabled = getBoolean("enable-console-log", true);
     }
 
     public void saveConfig() {
