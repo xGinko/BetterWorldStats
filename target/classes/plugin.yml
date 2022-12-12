@@ -1,0 +1,21 @@
+name: BetterWorldStats
+version: 1.0
+main: me.xGinko.worldstats.BetterWorldStats
+prefix: BetterWorldStats
+authors: [ xGinko ]
+softdepend: [ PlaceholderAPI ]
+description: Better Worldstats
+commands:
+  betterws:
+    description: plugin commands
+    usage: /<command> [ reload | version ]
+  worldstats:
+    description: Shows the WorldStats
+    usage: /<command>
+permissions:
+  betterws.version:
+    description: shows the plugin version
+    default: op
+  betterws.reload:
+    description: reload the plugin
+    default: op
