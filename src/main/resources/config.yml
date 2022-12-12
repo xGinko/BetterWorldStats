@@ -1,9 +1,10 @@
 language:
-  # The default language to be used if auto-lang is off or no matching language file is found
+  # The default language to be used if auto-lang is off or no matching language file was found.
   default-language: "en-us"
-  # Enable / Disable player-locale based message display
+  # Enable / Disable locale based messages.
   auto-language: true
-# Use a tool like https://www.unixtimestamp.com/ to set your server launch date
+
+# Use a tool like https://www.unixtimestamp.com/ to set your server launch date.
 server-birth-epoch-unix-timestamp: 1646492400000
 # The update period at which the file size is checked
 filesize-update-period-in-seconds: 3600
@@ -14,10 +15,15 @@ worlds:
   - "./world_the_end/DIM1/region"
 # How many GB should be added on top of the actual filesize, useful for if you deleted useless chunks.
 spoof-size: 0.0
-# Displays the updated filesize in console
+# Whether to log to console when filesize gets updated.
 enable-console-log: true
+
 # PlaceholderAPI placeholders:
 # %worldstats_size%
 # %worldstats_spoof%
 # %worldstats_players%
+# %worldstats_ageindays%
+# These placeholders return the same values as the command:
 # %worldstats_days%
+# %worldstats_months%
+# %worldstats_years%

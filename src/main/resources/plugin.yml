@@ -13,9 +13,12 @@ commands:
     description: Shows the WorldStats
     usage: /<command>
 permissions:
+  betterws.worldstats:
+    description: Permission to use /worldstats
+    default: not op
   betterws.version:
-    description: shows the plugin version
+    description: Permission to show the plugin version
     default: op
   betterws.reload:
-    description: reload the plugin
+    description: Permission to reload the plugin configuration
     default: op

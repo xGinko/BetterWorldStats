@@ -5,15 +5,18 @@ import me.xGinko.BetterWorldStats.config.ConfigCache;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class PAPI extends PlaceholderExpansion {
     private final BetterWorldStats plugin;
     private final ConfigCache configCache;
+    private final Calendar calendar;
 
     public PAPI() {
         this.plugin = BetterWorldStats.getInstance();
         this.configCache = BetterWorldStats.getConfiguration();
+        this.calendar = Calendar.getInstance();
     }
 
     @Override
@@ -52,8 +55,20 @@ public class PAPI extends PlaceholderExpansion {
         if (identifier.equals("players")) {
             return String.valueOf(plugin.offlinePlayers);
         }
-        if (identifier.equals("days")) {
+        if (identifier.equals("ageindays")) {
             return String.valueOf(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - configCache.serverBirthTime));
+        }
+        if (identifier.equals("days")) {
+            calendar.setTimeInMillis(System.currentTimeMillis() - configCache.serverBirthTime);
+            return String.valueOf(calendar.get(Calendar.DAY_OF_MONTH) - 1);
+        }
+        if (identifier.equals("months")) {
+            calendar.setTimeInMillis(System.currentTimeMillis() - configCache.serverBirthTime);
+            return String.valueOf(calendar.get(Calendar.MONTH));
+        }
+        if (identifier.equals("years")) {
+            calendar.setTimeInMillis(System.currentTimeMillis() - configCache.serverBirthTime);
+            return String.valueOf(calendar.get(Calendar.YEAR) - 1970);
         }
         return null;
     }

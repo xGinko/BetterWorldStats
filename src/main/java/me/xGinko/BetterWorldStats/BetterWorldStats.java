@@ -36,6 +36,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void onEnable() {
         instance = this;
         Logger logger = getLogger();
+        logger.info(ChatColor.AQUA + "Loading config");
         reloadBetterWorldStats();
         if (Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             logger.info(ChatColor.AQUA + "Found PlaceholderAPI, registering placeholders");
@@ -60,25 +61,21 @@ public final class BetterWorldStats extends JavaPlugin {
         return atomicLong.get();
     }
 
-    public static BetterWorldStats getInstance()  { return instance; }
-
-    public static ConfigCache getConfiguration() { return configCache; }
-
     public void reloadBetterWorldStats() {
         reloadLang();
         saveDefaultConfig();
         reloadConfig();
         configCache = new ConfigCache();
+        configCache.saveConfig();
 
         BukkitScheduler scheduler = getServer().getScheduler();
         scheduler.cancelTasks(this);
+
         scheduler.runTaskTimerAsynchronously(this, () -> fileSize = count() / 1048576.0D / 1000.0D, 0L, configCache.fileSizeUpdateDelay);
         scheduler.runTaskTimer(this, () -> {
             offlinePlayers = Bukkit.getOfflinePlayers().length;
             if (configCache.logIsEnabled) getLogger().info("Updated filesize asynchronously: "+fileSize);
         }, 1L, configCache.fileSizeUpdateDelay);
-
-        configCache.saveConfig();
     }
 
     public void reloadLang() {
@@ -135,5 +132,13 @@ public final class BetterWorldStats extends JavaPlugin {
         } else {
             return getLang(configCache.default_lang);
         }
+    }
+
+    public static BetterWorldStats getInstance()  {
+        return instance;
+    }
+
+    public static ConfigCache getConfiguration() {
+        return configCache;
     }
 }

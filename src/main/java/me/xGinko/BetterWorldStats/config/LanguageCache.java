@@ -29,11 +29,11 @@ public class LanguageCache {
             fileConfiguration.load(langFile);
 
             this.worldStatsMessage = getListTranslation("stats-message", Arrays.asList(
-                    "&6-----------------------------------------------------",
-                    "&3The server has spawned &a%players%&3 player(s) at least once",
-                    "&3The map is &a%years%&3 years, &a%months%&3 months and &a%days%&3 days old",
-                    "&3The world (with compression) is a total of &a%spoof%&3 GB",
-                    "&6-----------------------------------------------------"
+                    "&3----------------------------------------------------",
+                    " &7The server has spawned &6%players%&7 player(s) at least once",
+                    " &7The map is &6%years%&7 years, &6%months%&7 months and &6%days%&7 days old",
+                    " &7The world (with compression) is a total of &6%size% GB",
+                    "&3----------------------------------------------------"
             ));
             this.noPermissions = getStringTranslation("no-permission", "You don't have permission to use this command.");
 

@@ -25,8 +25,9 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        calendar.setTimeInMillis(System.currentTimeMillis() - configCache.serverBirthTime);
+        if (!sender.hasPermission("betterws.worldstats")) return true;
 
+        calendar.setTimeInMillis(System.currentTimeMillis() - configCache.serverBirthTime);
         int year = calendar.get(Calendar.YEAR) - 1970;
         int month = calendar.get(Calendar.MONTH);
         int day = calendar.get(Calendar.DAY_OF_MONTH) - 1;
@@ -48,15 +49,15 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
         return true;
     }
 
-    private String format(String s, String y, String m, String d) {
+    private String format(String line, String year, String month, String day) {
         final boolean pluginEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
-        final String f = ChatColor.translateAlternateColorCodes('&', s)
-                .replace("%years%", y)
-                .replace("%months%", m)
-                .replace("%days%", d)
+        final String parsedLine = ChatColor.translateAlternateColorCodes('&', line)
+                .replace("%years%", year)
+                .replace("%months%", month)
+                .replace("%days%", day)
                 .replace("%size%", configCache.fileSizeFormat.format(plugin.fileSize))
                 .replace("%spoof%", configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize))
                 .replace("%players%", String.valueOf(plugin.offlinePlayers));
-        return pluginEnabled ? PlaceholderAPI.setPlaceholders(null, f) : f;
+        return pluginEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
     }
 }
