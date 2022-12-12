@@ -7,8 +7,8 @@
 # %players%
 stats-message:
   - '&3----------------------------------------------------'
-  - ' &6%players% &7Spieler sind dem Server mindestens einmal beigetreten. '
-  - ' &7Die Welt ist &6%years% Jahr(e)&7, &6%months% Monat(e) &7und &6%days% Tag(e) &7alt, mit einer'
-  - ' &7Dateigröße von insgesamt &6%size% GB'
+  - '&6%players% &7Spieler sind dem Server mindestens einmal beigetreten. '
+  - '&7Die Welt ist &6%years% Jahr(e)&7, &6%months% Monat(e) &7und &6%days% Tag(e) &7alt, mit einer'
+  - '&7Dateigröße von insgesamt &6%size% GB'
   - '&3----------------------------------------------------'
 no-permission: "Dir fehlt die Berechtigung für diesen Befehl."
