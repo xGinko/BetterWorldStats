@@ -19,12 +19,12 @@ public class BetterWSCmd implements CommandExecutor, TabCompleter {
     public BetterWSCmd() {
         subcommands.add(new ReloadCmd());
         subcommands.add(new VersionCmd());
+        for (int i=0; i<getSubcommands().size(); i++) {
+            tabCompletes.add(getSubcommands().get(i).getName());
+        }
     }
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length > 0) {
-            for (int i=0; i<getSubcommands().size(); i++) {
-                tabCompletes.add(getSubcommands().get(i).getName());
-            }
             return tabCompletes;
         }
         return null;
