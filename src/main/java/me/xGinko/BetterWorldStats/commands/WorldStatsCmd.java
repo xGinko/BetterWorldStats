@@ -3,7 +3,6 @@ package me.xGinko.BetterWorldStats.commands;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.xGinko.BetterWorldStats.BetterWorldStats;
 import me.xGinko.BetterWorldStats.config.ConfigCache;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -50,7 +49,6 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
     }
 
     private String format(String line, String year, String month, String day) {
-        final boolean pluginEnabled = Bukkit.getPluginManager().isPluginEnabled("PlaceholderAPI");
         final String parsedLine = ChatColor.translateAlternateColorCodes('&', line)
                 .replace("%years%", year)
                 .replace("%months%", month)
@@ -58,6 +56,6 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
                 .replace("%size%", configCache.fileSizeFormat.format(plugin.fileSize))
                 .replace("%spoof%", configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize))
                 .replace("%players%", String.valueOf(plugin.offlinePlayers));
-        return pluginEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
+        return plugin.papiIsEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
     }
 }

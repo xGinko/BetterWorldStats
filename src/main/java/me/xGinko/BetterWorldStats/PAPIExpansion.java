@@ -8,12 +8,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class PAPI extends PlaceholderExpansion {
+public class PAPIExpansion extends PlaceholderExpansion {
     private final BetterWorldStats plugin;
     private final ConfigCache configCache;
     private final Calendar calendar;
 
-    public PAPI() {
+    public PAPIExpansion() {
         this.plugin = BetterWorldStats.getInstance();
         this.configCache = BetterWorldStats.getConfiguration();
         this.calendar = Calendar.getInstance();
