@@ -55,7 +55,7 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
                 .replace("%days%", day)
                 .replace("%size%", configCache.fileSizeFormat.format(plugin.fileSize))
                 .replace("%spoof%", configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize))
-                .replace("%players%", String.valueOf(plugin.offlinePlayers));
+                .replace("%players%", String.valueOf(plugin.uniquePlayerSpawns));
         return plugin.papiIsEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
     }
 }

@@ -7,6 +7,7 @@ import me.xGinko.BetterWorldStats.config.LanguageCache;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.reflections.Reflections;
@@ -24,18 +25,19 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class BetterWorldStats extends JavaPlugin {
+public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static BetterWorldStats instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
     public boolean papiIsEnabled = false;
     public double fileSize;
-    public int offlinePlayers;
+    public int uniquePlayerSpawns;
 
     @Override
     public void onEnable() {
         instance = this;
         Logger logger = getLogger();
+        logger.info(ChatColor.AQUA + "Reading config");
         reloadBetterWorldStats();
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             papiIsEnabled = true;
@@ -72,9 +74,9 @@ public final class BetterWorldStats extends JavaPlugin {
 
         scheduler.runTaskTimerAsynchronously(this, () -> {
             fileSize = count() / 1048576.0D / 1000.0D;
-            offlinePlayers = getServer().getOfflinePlayers().length;
+            uniquePlayerSpawns = getServer().getOfflinePlayers().length;
             if (configCache.logIsEnabled) {
-                getLogger().info("Updated filesize (" + fileSize + ") and amount of joined players (" + offlinePlayers + ") asynchronously.");
+                getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + "GB) and unique players (" + uniquePlayerSpawns + ") asynchronously.");
             }
         }, 0L, configCache.fileSizeUpdateDelay);
     }

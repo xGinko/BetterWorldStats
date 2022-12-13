@@ -35,14 +35,12 @@ public class ConfigCache {
         this.serverBirthTime = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis());
         this.fileSizeUpdateDelay = getInt("filesize-update-period-in-seconds", 3600) * 20L;
         this.fileSizeFormat = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
-
         directoriesToScan.addAll(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
         )));
         this.spoofSize = getDouble("spoof-size", 0.0);
-
         this.logIsEnabled = getBoolean("enable-console-log", true);
     }
 

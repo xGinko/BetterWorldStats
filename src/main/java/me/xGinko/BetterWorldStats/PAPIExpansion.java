@@ -53,7 +53,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
             return String.valueOf(configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize));
         }
         if (identifier.equals("players")) {
-            return String.valueOf(plugin.offlinePlayers);
+            return String.valueOf(plugin.uniquePlayerSpawns);
         }
         if (identifier.equals("ageindays")) {
             return String.valueOf(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - configCache.serverBirthTime));
