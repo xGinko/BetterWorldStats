@@ -76,7 +76,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
             fileSize = count() / 1048576.0D / 1000.0D;
             uniquePlayerSpawns = getServer().getOfflinePlayers().length;
             if (configCache.logIsEnabled) {
-                getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + "GB) and unique players (" + uniquePlayerSpawns + ") asynchronously.");
+                getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + " GB) and unique players (" + uniquePlayerSpawns + ") asynchronously.");
             }
         }, 0L, configCache.fileSizeUpdateDelay);
     }

@@ -1,6 +1,6 @@
 language:
   # The default language to be used if auto-lang is off or no matching language file was found.
-  default-language: "en-us"
+  default-language: "en_us"
   # Enable / Disable locale based messages.
   auto-language: true
 
