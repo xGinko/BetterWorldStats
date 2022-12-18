@@ -12,6 +12,8 @@ commands:
   worldstats:
     description: Shows the WorldStats
     usage: /<command>
+    aliases:
+      - stats
 permissions:
   betterws.worldstats:
     description: Permission to use /worldstats
