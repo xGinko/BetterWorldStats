@@ -8,7 +8,7 @@
 stats-message:
   - '&3-----------------------------------------------------'
   - ' &7The server has spawned &6%players% player(s)&7 at least once'
-  - ' &7The map is &6%years% year(s)&7, &6%month% month(s)&7 and &6%days% day(s)&7 old'
+  - ' &7The map is &6%years% year(s)&7, &6%months% month(s)&7 and &6%days% day(s)&7 old'
   - ' &7The world (with compression) is a total of &6%size% GB'
   - '&3-----------------------------------------------------'
 no-permission: "You don't have permission to use this command."
