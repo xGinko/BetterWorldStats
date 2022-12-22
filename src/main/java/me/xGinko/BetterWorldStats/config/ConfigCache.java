@@ -9,7 +9,6 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Locale;
 import java.util.logging.Logger;
 
 public class ConfigCache {
