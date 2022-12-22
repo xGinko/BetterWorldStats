@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 public class ConfigCache {
     private final Logger logger;
     private FileConfiguration config;
-    public final Locale default_lang;
+    public final String default_lang;
     public final DecimalFormat fileSizeFormat;
     public final HashSet<String> directoriesToScan = new HashSet<>();
     public final boolean auto_lang, logIsEnabled;
@@ -29,7 +29,7 @@ public class ConfigCache {
         config = plugin.getConfig();
         configPath = new File(plugin.getDataFolder(), "config.yml");
 
-        this.default_lang = Locale.forLanguageTag(getString("language.default-language", "en-us").replace("_", "-"));
+        this.default_lang = getString("language.default-language", "en-us").replace("_", "-");
         this.auto_lang = getBoolean("language.auto-language", true);
 
         this.serverBirthTime = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis());

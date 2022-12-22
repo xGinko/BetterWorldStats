@@ -9,12 +9,11 @@ import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class PAPIExpansion extends PlaceholderExpansion {
-    private final BetterWorldStats plugin;
+
     private final ConfigCache configCache;
     private final Calendar calendar;
 
     public PAPIExpansion() {
-        this.plugin = BetterWorldStats.getInstance();
         this.configCache = BetterWorldStats.getConfiguration();
         this.calendar = Calendar.getInstance();
     }
@@ -41,19 +40,19 @@ public class PAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion();
+        return BetterWorldStats.getInstance().getDescription().getVersion();
     }
 
     @Override
     public String onPlaceholderRequest(Player player, @NotNull String identifier) {
         if (identifier.equals("size")) {
-            return String.valueOf(configCache.fileSizeFormat.format(plugin.fileSize));
+            return String.valueOf(configCache.fileSizeFormat.format(BetterWorldStats.getFileSize()));
         }
         if (identifier.equals("spoof")) {
-            return String.valueOf(configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize));
+            return String.valueOf(configCache.fileSizeFormat.format(BetterWorldStats.getFileSize() + configCache.spoofSize));
         }
         if (identifier.equals("players")) {
-            return String.valueOf(plugin.uniquePlayerSpawns);
+            return String.valueOf(BetterWorldStats.getUniquePlayers());
         }
         if (identifier.equals("ageindays")) {
             return String.valueOf(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - configCache.serverBirthTime));

@@ -5,7 +5,7 @@ language:
   auto-language: true
 
 # Use a tool like https://www.unixtimestamp.com/ to set your server launch date.
-server-birth-epoch-unix-timestamp: 1646492400000
+server-birth-epoch-unix-timestamp:
 # The update period at which the file size is checked
 filesize-update-period-in-seconds: 3600
 filesize-format-pattern: "#.##"

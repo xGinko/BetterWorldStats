@@ -12,14 +12,15 @@ import org.bukkit.event.Listener;
 import java.util.Calendar;
 
 public class WorldStatsCmd implements CommandExecutor, Listener {
-    private final BetterWorldStats plugin;
+
     private final ConfigCache configCache;
     private final Calendar calendar;
+    private final boolean isPapiEnabled;
 
     public WorldStatsCmd() {
-        this.plugin = BetterWorldStats.getInstance();
         this.configCache = BetterWorldStats.getConfiguration();
         this.calendar = Calendar.getInstance();
+        this.isPapiEnabled = BetterWorldStats.isPAPIEnabled();
     }
 
     @Override
@@ -53,9 +54,9 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
                 .replace("%years%", year)
                 .replace("%months%", month)
                 .replace("%days%", day)
-                .replace("%size%", configCache.fileSizeFormat.format(plugin.fileSize))
-                .replace("%spoof%", configCache.fileSizeFormat.format(plugin.fileSize + configCache.spoofSize))
-                .replace("%players%", String.valueOf(plugin.uniquePlayerSpawns));
-        return plugin.papiIsEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
+                .replace("%size%", configCache.fileSizeFormat.format(BetterWorldStats.getFileSize()))
+                .replace("%spoof%", configCache.fileSizeFormat.format(BetterWorldStats.getFileSize() + configCache.spoofSize))
+                .replace("%players%", String.valueOf(BetterWorldStats.getUniquePlayers()));
+        return isPapiEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
     }
 }

@@ -7,7 +7,10 @@ import me.xGinko.BetterWorldStats.config.LanguageCache;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.reflections.Reflections;
@@ -29,9 +32,9 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static BetterWorldStats instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
-    public boolean papiIsEnabled = false;
-    public double fileSize;
-    public int uniquePlayerSpawns;
+    public static boolean PapiIsEnabled = false;
+    private static double fileSize;
+    private static int uniquePlayers;
 
     @Override
     public void onEnable() {
@@ -40,26 +43,23 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger.info(ChatColor.AQUA + "Reading config");
         reloadBetterWorldStats();
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            papiIsEnabled = true;
+            PapiIsEnabled = true;
             logger.info(ChatColor.AQUA + "Found PlaceholderAPI, registering placeholders");
             new PAPIExpansion().register();
         }
         logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
+        logger.info(ChatColor.AQUA + "Registering PlayerJoinEvent Listener");
+        getServer().getPluginManager().registerEvents(this, this);
         logger.info(ChatColor.AQUA + "Done.");
     }
 
-    private long count() {
-        final AtomicLong atomicLong = new AtomicLong(0L);
-        for (String path : configCache.directoriesToScan) {
-            for (File file : Objects.requireNonNull(new File(path).listFiles())) {
-                if (file.isFile()) {
-                    atomicLong.addAndGet(file.length());
-                }
-            }
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    private void onPlayerJoinEvent(PlayerJoinEvent event) {
+        if (!event.getPlayer().hasPlayedBefore()) {
+            uniquePlayers = getServer().getOfflinePlayers().length;
         }
-        return atomicLong.get();
     }
 
     public void reloadBetterWorldStats() {
@@ -74,9 +74,9 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
 
         scheduler.runTaskTimerAsynchronously(this, () -> {
             fileSize = count() / 1048576.0D / 1000.0D;
-            uniquePlayerSpawns = getServer().getOfflinePlayers().length;
+            uniquePlayers = getServer().getOfflinePlayers().length;
             if (configCache.logIsEnabled) {
-                getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + " GB) and unique players (" + uniquePlayerSpawns + ") asynchronously.");
+                getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + " GB) and unique players (" + uniquePlayers + ") asynchronously.");
             }
         }, 0L, configCache.fileSizeUpdateDelay);
     }
@@ -110,6 +110,18 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         }
     }
 
+    private long count() {
+        final AtomicLong atomicLong = new AtomicLong(0L);
+        for (String path : configCache.directoriesToScan) {
+            for (File file : Objects.requireNonNull(new File(path).listFiles())) {
+                if (file.isFile()) {
+                    atomicLong.addAndGet(file.length());
+                }
+            }
+        }
+        return atomicLong.get();
+    }
+
     private Set<String> getDefaultLanguageFiles(){
         Reflections reflections = new Reflections("lang", Scanners.Resources);
         return reflections.getResources(Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)"));
@@ -118,14 +130,10 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     public static LanguageCache getLang(String lang) {
         lang = lang.replace("-", "_");
         if (configCache.auto_lang) {
-            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang.toString().toLowerCase()));
+            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang.toLowerCase()));
         } else {
-            return languageCacheMap.get(configCache.default_lang.toString().toLowerCase());
+            return languageCacheMap.get(configCache.default_lang.toLowerCase());
         }
-    }
-
-    public static LanguageCache getLang(Locale locale) {
-        return getLang(locale.toString().toLowerCase());
     }
 
     public static LanguageCache getLang(CommandSender commandSender) {
@@ -143,5 +151,17 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
 
     public static ConfigCache getConfiguration() {
         return configCache;
+    }
+
+    public static double getFileSize() {
+        return fileSize;
+    }
+
+    public static int getUniquePlayers() {
+        return uniquePlayers;
+    }
+
+    public static boolean isPAPIEnabled() {
+        return PapiIsEnabled;
     }
 }
