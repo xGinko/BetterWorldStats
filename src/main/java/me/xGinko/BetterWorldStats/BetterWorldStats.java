@@ -49,7 +49,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
-        logger.info(ChatColor.AQUA + "Registering PlayerJoinEvent Listener");
+        logger.info(ChatColor.AQUA + "Registering Listener");
         getServer().getPluginManager().registerEvents(this, this);
         logger.info(ChatColor.AQUA + "Done.");
     }
