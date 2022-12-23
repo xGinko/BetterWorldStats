@@ -31,7 +31,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static BetterWorldStats instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
-    public static boolean PapiIsEnabled = false;
+    private static boolean PapiIsEnabled = false;
     private static double fileSize;
     private static int uniquePlayers;
 
