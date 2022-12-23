@@ -9,8 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 import org.reflections.Reflections;
@@ -49,8 +51,6 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
-        logger.info(ChatColor.AQUA + "Registering Listener");
-        getServer().getPluginManager().registerEvents(this, this);
         logger.info(ChatColor.AQUA + "Done.");
     }
 
@@ -68,6 +68,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         configCache = new ConfigCache();
         configCache.saveConfig();
 
+        HandlerList.unregisterAll((Plugin) this);
         BukkitScheduler scheduler = getServer().getScheduler();
         scheduler.cancelTasks(this);
 
@@ -78,6 +79,8 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
                 getLogger().info("Updated filesize (" + configCache.fileSizeFormat.format(fileSize) + " GB) and unique players (" + uniquePlayers + ") asynchronously.");
             }
         }, 0L, configCache.fileSizeUpdateDelay);
+
+        getServer().getPluginManager().registerEvents(this, this);
     }
 
     public void reloadLang() {
