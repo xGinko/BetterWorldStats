@@ -1,6 +1,6 @@
 name: BetterWorldStats
 version: ${project.version}
-main: me.xGinko.BetterWorldStats.BetterWorldStats
+main: me.xGinko.betterworldstats.BetterWorldStats
 prefix: BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]

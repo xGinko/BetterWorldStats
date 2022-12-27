@@ -1,4 +1,4 @@
-package me.xGinko.BetterWorldStats.commands;
+package me.xGinko.betterworldstats.commands;
 
 import org.bukkit.command.CommandSender;
 

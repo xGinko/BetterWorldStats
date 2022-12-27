@@ -1,9 +1,10 @@
-package me.xGinko.BetterWorldStats;
+package me.xGinko.betterworldstats;
 
-import me.xGinko.BetterWorldStats.commands.BetterWSCmd;
-import me.xGinko.BetterWorldStats.commands.WorldStatsCmd;
-import me.xGinko.BetterWorldStats.config.ConfigCache;
-import me.xGinko.BetterWorldStats.config.LanguageCache;
+import me.xGinko.betterworldstats.commands.BetterWSCmd;
+import me.xGinko.betterworldstats.commands.WorldStatsCmd;
+import me.xGinko.betterworldstats.config.ConfigCache;
+import me.xGinko.betterworldstats.config.LanguageCache;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -51,6 +52,11 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
+
+        // Metrics
+        logger.info("Loading Metrics");
+        new Metrics(this, 17204);
+
         logger.info(ChatColor.AQUA + "Done.");
     }
 

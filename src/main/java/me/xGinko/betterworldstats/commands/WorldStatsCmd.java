@@ -1,8 +1,8 @@
-package me.xGinko.BetterWorldStats.commands;
+package me.xGinko.betterworldstats.commands;
 
 import me.clip.placeholderapi.PlaceholderAPI;
-import me.xGinko.BetterWorldStats.BetterWorldStats;
-import me.xGinko.BetterWorldStats.config.ConfigCache;
+import me.xGinko.betterworldstats.BetterWorldStats;
+import me.xGinko.betterworldstats.config.ConfigCache;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

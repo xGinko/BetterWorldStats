@@ -1,6 +1,6 @@
-package me.xGinko.BetterWorldStats.config;
+package me.xGinko.betterworldstats.config;
 
-import me.xGinko.BetterWorldStats.BetterWorldStats;
+import me.xGinko.betterworldstats.BetterWorldStats;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

@@ -1,7 +1,7 @@
-package me.xGinko.BetterWorldStats;
+package me.xGinko.betterworldstats;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import me.xGinko.BetterWorldStats.config.ConfigCache;
+import me.xGinko.betterworldstats.config.ConfigCache;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

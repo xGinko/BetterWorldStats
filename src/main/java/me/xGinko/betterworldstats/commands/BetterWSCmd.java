@@ -1,7 +1,7 @@
-package me.xGinko.BetterWorldStats.commands;
+package me.xGinko.betterworldstats.commands;
 
-import me.xGinko.BetterWorldStats.commands.subcommands.ReloadCmd;
-import me.xGinko.BetterWorldStats.commands.subcommands.VersionCmd;
+import me.xGinko.betterworldstats.commands.subcommands.ReloadCmd;
+import me.xGinko.betterworldstats.commands.subcommands.VersionCmd;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
