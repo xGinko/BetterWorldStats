@@ -20,7 +20,7 @@ public class ReloadCmd extends SubCommand {
             BetterWorldStats.getInstance().reloadBetterWorldStats();
             sender.sendMessage(ChatColor.GREEN + "Reload complete.");
         } else {
-            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).noPermissions);
+            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permissions);
         }
     }
 }

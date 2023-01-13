@@ -1,7 +1,7 @@
 package me.xGinko.betterworldstats.config;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xGinko.betterworldstats.BetterWorldStats;
-import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,79 +12,126 @@ import java.util.List;
 import java.util.logging.Logger;
 
 public class ConfigCache {
-    private final Logger logger;
-    private FileConfiguration config;
-    public final String default_lang;
-    public final DecimalFormat fileSizeFormat;
-    public final HashSet<String> directoriesToScan = new HashSet<>();
-    public final boolean auto_lang, logIsEnabled;
-    public final long serverBirthTime, fileSizeUpdateDelay;
-    public final double spoofSize;
 
-    private final File configPath;
+    private ConfigFile config;
+    private final File configFile;
+    private final Logger logger;
+    public final String default_lang;
+    public final DecimalFormat filesize_display_format;
+    public final HashSet<String> directories_to_scan = new HashSet<>();
+    public final boolean auto_lang, log_is_enabled;
+    public final long server_birth_time, filesize_update_period;
+    public final double additional_spoofed_filesize;
+
     public ConfigCache() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
+        configFile = new File(plugin.getDataFolder(), "config.yml");
         logger = plugin.getLogger();
-        config = plugin.getConfig();
-        configPath = new File(plugin.getDataFolder(), "config.yml");
+        createFiles();
+        loadConfig();
 
-        this.default_lang = getString("language.default-language", "en-us").replace("_", "-");
-        this.auto_lang = getBoolean("language.auto-language", true);
+        this.default_lang = getString("language.default-language", "en-us", "The default language to be used if auto-lang is off or no matching language file was found.").replace("_", "-");
+        this.auto_lang = getBoolean("language.auto-language", true, "Enable / Disable locale based messages.");
 
-        this.serverBirthTime = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis());
-        this.fileSizeUpdateDelay = getInt("filesize-update-period-in-seconds", 3600) * 20L;
-        this.fileSizeFormat = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
-        directoriesToScan.addAll(getList("worlds", Arrays.asList(
+        this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(), "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
+        this.filesize_update_period = getInt("filesize-update-period-in-seconds", 3600, "The update period at which the file size is checked.") * 20L;
+        this.filesize_display_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
+        directories_to_scan.addAll(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
-        )));
-        this.spoofSize = getDouble("spoof-size", 0.0);
-        this.logIsEnabled = getBoolean("enable-console-log", true);
+        ), "The files to scan. The path you're in is the folder where your server.jar is located."));
+        this.additional_spoofed_filesize = getDouble("spoof-size", 0.0, "How many GB should be added on top of the actual filesize. Useful if you deleted useless chunks.");
+        this.log_is_enabled = getBoolean("enable-console-log", true, "Whether to log to console when plugin updates filesize.");
+
+        config.addComment("PlaceholderAPI placeholders:\n %worldstats_size%\n %worldstats_spoof%\n %worldstats_players%\n %worldstats_ageindays%");
+        config.addComment("These placeholders return the same values as the command:\n %worldstats_days%\n %worldstats_months%\n %worldstats_years%");
+    }
+
+    private void createFiles() {
+        try {
+            File parent = new File(configFile.getParent());
+            if (!parent.exists()) {
+                if (!parent.mkdir())
+                    logger.severe("Unable to create plugin directory.");
+            }
+            if (!configFile.exists()) {
+                if (!configFile.createNewFile())
+                    logger.severe("Unable to create config file.");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void loadConfig() {
+        try {
+            config = ConfigFile.loadConfig(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void saveConfig() {
         try {
-            config.save(configPath);
-            config = BetterWorldStats.getInstance().getConfig();
+            config.save();
         } catch (IOException e) {
-            logger.severe("Failed to save configuration file! - " + e.getLocalizedMessage());
+            logger.severe("Failed to save config file! - " + e.getLocalizedMessage());
         }
     }
 
+    public boolean getBoolean(String path, boolean def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getBoolean(path, def);
+    }
+
     public boolean getBoolean(String path, boolean def) {
-        if (config.isSet(path)) return config.getBoolean(path, def);
-        config.set(path, def);
-        return def;
+        config.addDefault(path, def);
+        return config.getBoolean(path, def);
+    }
+
+    public String getString(String path, String def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getString(path, def);
     }
 
     public String getString(String path, String def) {
-        if (config.isSet(path)) return config.getString(path, def);
-        config.set(path, def);
-        return def;
+        config.addDefault(path, def);
+        return config.getString(path, def);
+    }
+
+    public double getDouble(String path, Double def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getDouble(path, def);
     }
 
     public double getDouble(String path, Double def) {
-        if (config.isSet(path)) return config.getDouble(path, def);
-        config.set(path, def);
-        return def;
+        config.addDefault(path, def);
+        return config.getDouble(path, def);
+    }
+
+    public int getInt(String path, int def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getInteger(path, def);
     }
 
     public int getInt(String path, int def) {
-        if (config.isSet(path)) return config.getInt(path, def);
-        config.set(path, def);
-        return def;
+        config.addDefault(path, def);
+        return config.getInteger(path, def);
+    }
+    
+    public long getLong(String path, long def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getLong(path, def);
+    }
+
+    public List<String> getList(String path, List<String> def, String comment) {
+        config.addDefault(path, def, comment);
+        return config.getStringList(path);
     }
 
     public List<String> getList(String path, List<String> def) {
-        if (config.isSet(path)) return config.getStringList(path);
-        config.set(path, def);
-        return def;
-    }
-
-    public long getLong(String path, long def) {
-        if (config.isSet(path)) return config.getLong(path);
-        config.set(path, def);
-        return def;
+        config.addDefault(path, def);
+        return config.getStringList(path);
     }
 }

@@ -17,7 +17,7 @@ public class VersionCmd extends SubCommand {
         if (sender.hasPermission("betterws.version")) {
             sender.sendMessage(ChatColor.AQUA + "BetterWorldStats v" + BetterWorldStats.getInstance().getDescription().getVersion() + ChatColor.DARK_AQUA + " by xGinko");
         } else {
-            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).noPermissions);
+            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permissions);
         }
     }
 }

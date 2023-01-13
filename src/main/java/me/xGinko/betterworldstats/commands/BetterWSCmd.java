@@ -16,6 +16,7 @@ public class BetterWSCmd implements CommandExecutor, TabCompleter {
 
     private final ArrayList<SubCommand> subcommands = new ArrayList<>();
     private final List<String> tabCompletes = new ArrayList<>();
+
     public BetterWSCmd() {
         subcommands.add(new ReloadCmd());
         subcommands.add(new VersionCmd());
@@ -23,12 +24,14 @@ public class BetterWSCmd implements CommandExecutor, TabCompleter {
             tabCompletes.add(getSubcommands().get(i).getName());
         }
     }
+
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length > 0) {
             return tabCompletes;
         }
         return null;
     }
+
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length > 0) {
@@ -48,5 +51,8 @@ public class BetterWSCmd implements CommandExecutor, TabCompleter {
         }
         return true;
     }
-    public ArrayList<SubCommand> getSubcommands() {return subcommands;}
+
+    public ArrayList<SubCommand> getSubcommands() {
+        return subcommands;
+    }
 }

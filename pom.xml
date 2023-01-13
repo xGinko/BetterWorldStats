@@ -6,7 +6,7 @@
 
     <groupId>me.xGinko</groupId>
     <artifactId>BetterWorldStats</artifactId>
-    <version>1.3.1</version>
+    <version>1.4</version>
     <packaging>jar</packaging>
 
     <name>BetterWorldStats</name>
@@ -76,6 +76,10 @@
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
+        <repository>
+            <id>configmaster-repo</id>
+            <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -91,6 +95,12 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.2</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Configuration Master for clean config file management -->
+        <dependency>
+            <groupId>com.github.thatsmusic99</groupId>
+            <artifactId>ConfigurationMaster-API</artifactId>
+            <version>v2.0.0-BETA-3</version>
         </dependency>
         <!-- reflections used for auto-lang feature -->
         <dependency>
