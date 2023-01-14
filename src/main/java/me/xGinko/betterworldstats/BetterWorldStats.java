@@ -139,9 +139,9 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     public static LanguageCache getLang(String lang) {
         lang = lang.replace("-", "_");
         if (configCache.auto_lang) {
-            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang.toLowerCase()));
+            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(configCache.default_lang));
         } else {
-            return languageCacheMap.get(configCache.default_lang.toLowerCase());
+            return languageCacheMap.get(configCache.default_lang);
         }
     }
 

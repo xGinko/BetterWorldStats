@@ -30,7 +30,7 @@ public class ConfigCache {
         createFiles();
         loadConfig();
 
-        this.default_lang = getString("language.default-language", "en-us", "The default language to be used if auto-lang is off or no matching language file was found.").replace("_", "-");
+        this.default_lang = getString("language.default-language", "en_us", "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("language.auto-language", true, "Enable / Disable locale based messages.");
 
         this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(), "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
