@@ -3,10 +3,13 @@ package me.xGinko.betterworldstats.commands;
 import me.clip.placeholderapi.PlaceholderAPI;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.config.ConfigCache;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 
 import java.util.Calendar;
@@ -42,13 +45,13 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
         String dayAsString = String.valueOf(day);
 
         for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
-            sender.sendMessage(format(line, yearAsString, monthAsString, dayAsString, configCache));
+            sender.sendMessage(formattedMessageLine(line, yearAsString, monthAsString, dayAsString, configCache));
         }
 
         return true;
     }
 
-    private String format(String line, String year, String month, String day, ConfigCache configCache) {
+    private String formattedMessageLine(String line, String year, String month, String day, ConfigCache configCache) {
         final String parsedLine = ChatColor.translateAlternateColorCodes('&', line)
                 .replace("%years%", year)
                 .replace("%months%", month)
