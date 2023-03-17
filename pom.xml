@@ -6,7 +6,7 @@
 
     <groupId>me.xGinko</groupId>
     <artifactId>BetterWorldStats</artifactId>
-    <version>1.4.1</version>
+    <version>1.4.2</version>
     <packaging>jar</packaging>
 
     <name>BetterWorldStats</name>
@@ -44,6 +44,14 @@
                                     <shadedPattern>me.xginko.betterworldstats.bstats</shadedPattern>
                                 </relocation>
                             </relocations>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <minimizeJar>true</minimizeJar>
                         </configuration>
@@ -112,7 +120,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.1</version>
             <scope>compile</scope>
         </dependency>
     </dependencies>

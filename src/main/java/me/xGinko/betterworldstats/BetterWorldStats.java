@@ -45,13 +45,16 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         instance = this;
         uniquePlayers = getServer().getOfflinePlayers().length;
         logger = getLogger();
+
         logger.info(ChatColor.AQUA + "Reading config");
         reloadBetterWorldStats();
+
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             PapiIsEnabled = true;
             logger.info(ChatColor.AQUA + "Found PlaceholderAPI, registering placeholders...");
             new PAPIExpansion().register();
         }
+
         logger.info(ChatColor.AQUA + "Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
