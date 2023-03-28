@@ -48,7 +48,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
         if (identifier.equals("size")) {
             return String.valueOf(configCache.filesize_display_format.format(BetterWorldStats.getFileSize()));
         }
-        if (identifier.equals("spoof")) {
+        if (identifier.equals("spoofsize")) {
             return String.valueOf(configCache.filesize_display_format.format(BetterWorldStats.getFileSize() + configCache.additional_spoofed_filesize));
         }
         if (identifier.equals("players")) {

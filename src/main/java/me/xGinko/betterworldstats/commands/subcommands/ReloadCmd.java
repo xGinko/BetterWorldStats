@@ -17,7 +17,7 @@ public class ReloadCmd extends SubCommand {
     public void perform(@NotNull CommandSender sender, String[] args) {
         if (sender.hasPermission("betterws.reload")) {
             sender.sendMessage(ChatColor.RED + "Reloading BetterWorldStats...");
-            BetterWorldStats.getInstance().reloadBetterWorldStats();
+            BetterWorldStats.getInstance().reloadPlugin();
             sender.sendMessage(ChatColor.GREEN + "Reload complete.");
         } else {
             sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permissions);

@@ -47,7 +47,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger = getLogger();
 
         logger.info(ChatColor.AQUA + "Reading config");
-        reloadBetterWorldStats();
+        reloadPlugin();
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
             PapiIsEnabled = true;
@@ -73,7 +73,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         }
     }
 
-    public void reloadBetterWorldStats() {
+    public void reloadPlugin() {
         reloadLang();
         configCache = new ConfigCache();
         configCache.saveConfig();
@@ -86,7 +86,11 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         scheduler.runTaskTimerAsynchronously(this, () -> {
             fileSize = count() / 1048576.0D / 1000.0D;
             if (configCache.log_is_enabled) {
-                logger.info("Updated filesize (" + configCache.filesize_display_format.format(fileSize) + "GB) asynchronously. Unique player joins: " + uniquePlayers);
+                logger.info("Updated filesize ("
+                        + configCache.filesize_display_format.format(fileSize) + "GB, Spoofed size: "
+                        + (configCache.filesize_display_format.format(fileSize) + configCache.additional_spoofed_filesize) + "GB) asynchronously. "
+                        + "Unique player joins: " + uniquePlayers
+                );
             }
         }, 0L, configCache.filesize_update_period);
 

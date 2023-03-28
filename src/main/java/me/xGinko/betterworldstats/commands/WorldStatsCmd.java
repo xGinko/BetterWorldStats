@@ -53,8 +53,7 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
                 .replace("%years%", year)
                 .replace("%months%", month)
                 .replace("%days%", day)
-                .replace("%size%", configCache.filesize_display_format.format(BetterWorldStats.getFileSize()))
-                .replace("%spoof%", configCache.filesize_display_format.format(BetterWorldStats.getFileSize() + configCache.additional_spoofed_filesize))
+                .replace("%size%", configCache.filesize_display_format.format(BetterWorldStats.getFileSize()  + configCache.additional_spoofed_filesize))
                 .replace("%players%", String.valueOf(BetterWorldStats.getUniquePlayers()));
         return isPapiEnabled ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
     }

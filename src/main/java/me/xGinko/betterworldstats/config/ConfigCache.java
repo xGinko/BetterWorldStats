@@ -44,7 +44,7 @@ public class ConfigCache {
         this.additional_spoofed_filesize = getDouble("spoof-size", 0.0, "How many GB should be added on top of the actual filesize. Useful if you deleted useless chunks.");
         this.log_is_enabled = getBoolean("enable-console-log", true, "Whether to log to console when plugin updates filesize.");
 
-        config.addComment("PlaceholderAPI placeholders:\n %worldstats_size%\n %worldstats_spoof%\n %worldstats_players%\n %worldstats_ageindays%");
+        config.addComment("PlaceholderAPI placeholders:\n %worldstats_size%\n %worldstats_spoofsize%\n %worldstats_players%\n %worldstats_ageindays%");
         config.addComment("These placeholders return the same values as the command:\n %worldstats_days%\n %worldstats_months%\n %worldstats_years%");
     }
 
