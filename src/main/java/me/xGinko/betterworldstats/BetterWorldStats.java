@@ -47,7 +47,10 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         uniquePlayers = getServer().getOfflinePlayers().length;
         logger = getLogger();
 
-        logger.info("Reading config");
+        logger.info("Loading languages");
+        reloadLang();
+
+        logger.info("Loading config");
         reloadConfiguration();
 
         logger.info("Starting plugin tasks");
@@ -78,13 +81,13 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     public void reloadPlugin() {
+        reloadLang();
         reloadConfiguration();
         reloadTasks();
         reloadPAPIExpansion();
     }
 
     private void reloadConfiguration() {
-        reloadLang();
         configCache = new ConfigCache();
         configCache.saveConfig();
     }
