@@ -104,9 +104,9 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         scheduler.runTaskTimerAsynchronously(this, () -> {
             fileSize = count() / 1048576.0D / 1000.0D;
             if (configCache.log_is_enabled) {
-                logger.info("Updated filesize ("
-                        + configCache.filesize_display_format.format(fileSize) + "GB, Spoofed size: "
-                        + (configCache.filesize_display_format.format(fileSize) + configCache.additional_spoofed_filesize) + "GB) asynchronously. "
+                logger.info("Updated filesize asynchronously. "
+                        + "(Real size: " + configCache.filesize_display_format.format(fileSize) + "GB, "
+                        + "Spoofed size: " + configCache.filesize_display_format.format(fileSize + configCache.additional_spoofed_filesize) + "GB). "
                         + "Unique player joins: " + uniquePlayers
                 );
             }
