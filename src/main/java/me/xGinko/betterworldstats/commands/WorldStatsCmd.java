@@ -18,7 +18,7 @@ public class WorldStatsCmd implements CommandExecutor, Listener {
 
     public WorldStatsCmd() {
         this.calendar = Calendar.getInstance();
-        this.isPapiEnabled = BetterWorldStats.isPAPIEnabled();
+        this.isPapiEnabled = BetterWorldStats.getIsPAPIInstalled();
     }
 
     @Override

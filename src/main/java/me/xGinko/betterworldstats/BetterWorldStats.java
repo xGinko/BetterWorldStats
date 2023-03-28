@@ -35,8 +35,9 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static BetterWorldStats instance;
     private static ConfigCache configCache;
     private static HashMap<String, LanguageCache> languageCacheMap;
+    private static PAPIExpansion papiExpansion;
     private static Logger logger;
-    private static boolean PapiIsEnabled = false;
+    private static boolean PAPI_can_be_used = false;
     private static double fileSize;
     private static int uniquePlayers;
 
@@ -46,16 +47,19 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         uniquePlayers = getServer().getOfflinePlayers().length;
         logger = getLogger();
 
-        logger.info(ChatColor.AQUA + "Reading config");
-        reloadPlugin();
+        logger.info("Reading config");
+        reloadConfiguration();
+
+        logger.info("Starting plugin tasks");
+        reloadTasks();
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            PapiIsEnabled = true;
-            logger.info(ChatColor.AQUA + "Found PlaceholderAPI, registering placeholders...");
-            new PAPIExpansion().register();
+            PAPI_can_be_used = true;
+            logger.info(ChatColor.GREEN + "Found PlaceholderAPI, registering placeholders...");
+            reloadPAPIExpansion();
         }
 
-        logger.info(ChatColor.AQUA + "Registering commands");
+        logger.info("Registering commands");
         getCommand("betterws").setExecutor(new BetterWSCmd());
         getCommand("worldstats").setExecutor(new WorldStatsCmd());
 
@@ -63,7 +67,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         logger.info("Loading Metrics");
         new Metrics(this, 17204);
 
-        logger.info(ChatColor.AQUA + "Done.");
+        logger.info("Done.");
     }
 
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
@@ -74,10 +78,24 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     public void reloadPlugin() {
+        reloadConfiguration();
+        reloadTasks();
+        reloadPAPIExpansion();
+    }
+
+    private void reloadConfiguration() {
         reloadLang();
         configCache = new ConfigCache();
         configCache.saveConfig();
+    }
 
+    private void reloadPAPIExpansion() {
+        if (papiExpansion != null) papiExpansion.unregister();
+        papiExpansion = new PAPIExpansion();
+        papiExpansion.register();
+    }
+
+    private void reloadTasks() {
         HandlerList.unregisterAll((Plugin) this);
         BukkitScheduler scheduler = getServer().getScheduler();
         scheduler.cancelTasks(this);
@@ -153,9 +171,8 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     public static LanguageCache getLang(CommandSender commandSender) {
-        if (commandSender instanceof Player ) {
-            Player player = (Player) commandSender;
-            return getLang(player.getLocale());
+        if (commandSender instanceof Player) {
+            return getLang(((Player) commandSender).getLocale());
         } else {
             return getLang(configCache.default_lang);
         }
@@ -177,8 +194,8 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         return uniquePlayers;
     }
 
-    public static boolean isPAPIEnabled() {
-        return PapiIsEnabled;
+    public static boolean getIsPAPIInstalled() {
+        return PAPI_can_be_used;
     }
 
 }

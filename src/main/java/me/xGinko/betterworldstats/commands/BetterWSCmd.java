@@ -14,14 +14,14 @@ import java.util.List;
 
 public class BetterWSCmd implements CommandExecutor, TabCompleter {
 
-    private final ArrayList<SubCommand> subcommands = new ArrayList<>();
+    private final List<SubCommand> subCommands = new ArrayList<>();
     private final List<String> tabCompletes = new ArrayList<>();
 
     public BetterWSCmd() {
-        subcommands.add(new ReloadCmd());
-        subcommands.add(new VersionCmd());
-        for (int i=0; i<getSubcommands().size(); i++) {
-            tabCompletes.add(getSubcommands().get(i).getName());
+        subCommands.add(new ReloadCmd());
+        subCommands.add(new VersionCmd());
+        for (SubCommand subCommand : subCommands) {
+            tabCompletes.add(subCommand.getName());
         }
     }
 
@@ -35,24 +35,20 @@ public class BetterWSCmd implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (args.length > 0) {
-            for (int i = 0; i < getSubcommands().size(); i++) {
-                if (args[0].equalsIgnoreCase(getSubcommands().get(i).getName())) {
-                    getSubcommands().get(i).perform(sender, args);
+            for (SubCommand subCommand : subCommands) {
+                if (args[0].equalsIgnoreCase(subCommand.getName())) {
+                    subCommand.perform(sender, args);
                 }
             }
         } else {
             sender.sendMessage(ChatColor.DARK_AQUA+"----------------------------------------------------");
             sender.sendMessage(ChatColor.AQUA+"BetterWorldStats Commands ");
             sender.sendMessage(ChatColor.DARK_AQUA+"----------------------------------------------------");
-            for (int i = 0; i < getSubcommands().size(); i++) {
-                sender.sendMessage(ChatColor.AQUA+getSubcommands().get(i).getSyntax() + ChatColor.DARK_GRAY+" - " + ChatColor.GRAY+getSubcommands().get(i).getDescription());
+            for (SubCommand subCommand : subCommands) {
+                sender.sendMessage(ChatColor.AQUA + subCommand.getSyntax() + ChatColor.DARK_GRAY + " - " + ChatColor.GRAY + subCommand.getDescription());
             }
             sender.sendMessage(ChatColor.DARK_AQUA+"----------------------------------------------------");
         }
         return true;
-    }
-
-    public ArrayList<SubCommand> getSubcommands() {
-        return subcommands;
     }
 }
