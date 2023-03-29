@@ -114,7 +114,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         reloadLang();
         reloadConfiguration();
         reloadTasks();
-        reloadPAPIExpansion();
+        if (PAPI_can_be_used) reloadPAPIExpansion();
         BetterWorldStatsCommand.reloadCommands();
     }
 
