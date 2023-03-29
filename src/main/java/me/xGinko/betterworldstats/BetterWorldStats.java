@@ -36,7 +36,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static PAPIExpansion papiExpansion;
     private static Logger logger;
-    private static boolean PAPI_can_be_used = false;
+    private static boolean PAPIisPresent = false;
     private static double fileSize;
     private static int uniquePlayers;
 
@@ -56,7 +56,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         reloadTasks();
 
         if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-            PAPI_can_be_used = true;
+            PAPIisPresent = true;
             logger.info(ChatColor.GREEN + "Found PlaceholderAPI, registering placeholders...");
             reloadPAPIExpansion();
         }
@@ -114,7 +114,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         reloadLang();
         reloadConfiguration();
         reloadTasks();
-        if (PAPI_can_be_used) reloadPAPIExpansion();
+        if (PAPIisPresent) reloadPAPIExpansion();
         BetterWorldStatsCommand.reloadCommands();
     }
 
@@ -197,7 +197,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     public static boolean getIsPAPIInstalled() {
-        return PAPI_can_be_used;
+        return PAPIisPresent;
     }
 
 }
