@@ -45,6 +45,7 @@ public class BetterWSCmd implements BetterWorldStatsCommand, TabCompleter {
             for (SubCommand subCommand : subCommands) {
                 if (args[0].equalsIgnoreCase(subCommand.getName())) {
                     subCommand.perform(sender, args);
+                    cmdExists = true;
                 }
             }
             if (!cmdExists) showCommandOverview(sender);
