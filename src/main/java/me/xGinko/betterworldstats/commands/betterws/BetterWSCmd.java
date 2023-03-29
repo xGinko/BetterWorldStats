@@ -32,7 +32,7 @@ public class BetterWSCmd implements BetterWorldStatsCommand, TabCompleter {
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (command.getName().equalsIgnoreCase(label()) && args.length == 1) {
+        if (args.length == 1) {
             return tabCompletes;
         }
         return null;
@@ -40,7 +40,7 @@ public class BetterWSCmd implements BetterWorldStatsCommand, TabCompleter {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (command.getName().equalsIgnoreCase(label()) && args.length == 1) {
+        if (args.length == 1) {
             boolean cmdExists = false;
             for (SubCommand subCommand : subCommands) {
                 if (args[0].equalsIgnoreCase(subCommand.getName())) {
