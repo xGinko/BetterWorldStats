@@ -1,11 +1,11 @@
-package me.xGinko.betterworldstats.commands.subcommands;
+package me.xGinko.betterworldstats.commands.betterws.subcommands;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-public class VersionCmd extends SubCommand {
+public class VersionSubCmd extends SubCommand {
     @Override
     public String getName() {return "version";}
     @Override
@@ -17,7 +17,7 @@ public class VersionCmd extends SubCommand {
         if (sender.hasPermission("betterws.version")) {
             sender.sendMessage(ChatColor.AQUA + "BetterWorldStats v" + BetterWorldStats.getInstance().getDescription().getVersion() + ChatColor.DARK_AQUA + " by xGinko");
         } else {
-            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permissions);
+            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permission);
         }
     }
 }

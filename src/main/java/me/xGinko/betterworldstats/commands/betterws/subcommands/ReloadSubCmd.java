@@ -1,12 +1,11 @@
-package me.xGinko.betterworldstats.commands.subcommands;
+package me.xGinko.betterworldstats.commands.betterws.subcommands;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
 
-public class ReloadCmd extends SubCommand {
+public class ReloadSubCmd extends SubCommand {
     @Override
     public String getName() {return "reload";}
     @Override
@@ -14,13 +13,13 @@ public class ReloadCmd extends SubCommand {
     @Override
     public String getSyntax() {return "/betterws reload";}
     @Override
-    public void perform(@NotNull CommandSender sender, String[] args) {
+    public void perform(CommandSender sender, String[] args) {
         if (sender.hasPermission("betterws.reload")) {
             sender.sendMessage(ChatColor.RED + "Reloading BetterWorldStats...");
             BetterWorldStats.getInstance().reloadPlugin();
             sender.sendMessage(ChatColor.GREEN + "Reload complete.");
         } else {
-            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permissions);
+            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permission);
         }
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 public class LanguageCache {
     private final FileConfiguration fileConfiguration;
     boolean addedMissing = false;
-    public String no_permissions;
+    public String no_permission;
     public List<String> world_stats_message;
 
     public LanguageCache(String lang) {
@@ -35,7 +35,7 @@ public class LanguageCache {
                     " &7The world (with compression) is a total of &6%size% GB",
                     "&3-----------------------------------------------------"
             ));
-            this.no_permissions = getStringTranslation("no-permission", "You don't have permission to use this command.");
+            this.no_permission = getStringTranslation("no-permission", "You don't have permission to use this command.");
 
             if (addedMissing) fileConfiguration.save(langFile);
         } catch (IOException e) {

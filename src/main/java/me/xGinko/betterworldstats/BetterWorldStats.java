@@ -1,7 +1,6 @@
 package me.xGinko.betterworldstats;
 
-import me.xGinko.betterworldstats.commands.BetterWSCmd;
-import me.xGinko.betterworldstats.commands.WorldStatsCmd;
+import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.ConfigCache;
 import me.xGinko.betterworldstats.config.LanguageCache;
 import org.bstats.bukkit.Metrics;
@@ -63,39 +62,13 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         }
 
         logger.info("Registering commands");
-        getCommand("betterws").setExecutor(new BetterWSCmd());
-        getCommand("worldstats").setExecutor(new WorldStatsCmd());
+        BetterWorldStatsCommand.reloadCommands();
 
         // Metrics
         logger.info("Loading Metrics");
         new Metrics(this, 17204);
 
         logger.info("Done.");
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
-    private void onPlayerJoinEvent(PlayerJoinEvent event) {
-        if (!event.getPlayer().hasPlayedBefore()) {
-            uniquePlayers = getServer().getOfflinePlayers().length;
-        }
-    }
-
-    public void reloadPlugin() {
-        reloadLang();
-        reloadConfiguration();
-        reloadTasks();
-        reloadPAPIExpansion();
-    }
-
-    private void reloadConfiguration() {
-        configCache = new ConfigCache();
-        configCache.saveConfig();
-    }
-
-    private void reloadPAPIExpansion() {
-        if (papiExpansion != null) papiExpansion.unregister();
-        papiExpansion = new PAPIExpansion();
-        papiExpansion.register();
     }
 
     private void reloadTasks() {
@@ -116,6 +89,44 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         }, 0L, configCache.filesize_update_period);
 
         getServer().getPluginManager().registerEvents(this, this);
+    }
+
+    private long count() {
+        final AtomicLong atomicLong = new AtomicLong(0L);
+        for (String path : configCache.directories_to_scan) {
+            for (File file : Objects.requireNonNull(new File(path).listFiles())) {
+                if (file.isFile()) {
+                    atomicLong.addAndGet(file.length());
+                }
+            }
+        }
+        return atomicLong.get();
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    private void onPlayerJoinEvent(PlayerJoinEvent event) {
+        if (!event.getPlayer().hasPlayedBefore()) {
+            uniquePlayers = getServer().getOfflinePlayers().length;
+        }
+    }
+
+    public void reloadPlugin() {
+        reloadLang();
+        reloadConfiguration();
+        reloadTasks();
+        reloadPAPIExpansion();
+        BetterWorldStatsCommand.reloadCommands();
+    }
+
+    private void reloadConfiguration() {
+        configCache = new ConfigCache();
+        configCache.saveConfig();
+    }
+
+    private void reloadPAPIExpansion() {
+        if (papiExpansion != null) papiExpansion.unregister();
+        papiExpansion = new PAPIExpansion();
+        papiExpansion.register();
     }
 
     public void reloadLang() {
@@ -145,18 +156,6 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
             e.printStackTrace();
             logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
         }
-    }
-
-    private long count() {
-        final AtomicLong atomicLong = new AtomicLong(0L);
-        for (String path : configCache.directories_to_scan) {
-            for (File file : Objects.requireNonNull(new File(path).listFiles())) {
-                if (file.isFile()) {
-                    atomicLong.addAndGet(file.length());
-                }
-            }
-        }
-        return atomicLong.get();
     }
 
     private Set<String> getDefaultLanguageFiles(){
