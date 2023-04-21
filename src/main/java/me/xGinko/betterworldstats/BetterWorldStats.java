@@ -159,7 +159,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     private Set<String> getDefaultLanguageFiles(){
-        Reflections reflections = new Reflections("lang", Scanners.Resources);
+        Reflections reflections = new Reflections("plugins/BetterWorldStats", Scanners.Resources);
         return reflections.getResources(Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)"));
     }
 
