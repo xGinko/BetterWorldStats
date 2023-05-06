@@ -15,8 +15,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
-import org.reflections.Reflections;
-import org.reflections.scanners.Scanners;
 
 import java.io.File;
 import java.io.IOException;
