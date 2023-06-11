@@ -6,7 +6,7 @@
 
     <groupId>me.xGinko</groupId>
     <artifactId>BetterWorldStats</artifactId>
-    <version>1.4.5</version>
+    <version>1.5.0</version>
     <packaging>jar</packaging>
 
     <name>BetterWorldStats</name>
