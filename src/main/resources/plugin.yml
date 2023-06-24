@@ -4,7 +4,8 @@ main: me.xGinko.betterworldstats.BetterWorldStats
 prefix: BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
-description: Better Worldstats
+description: Better Worldstats by xGinko
+folia-supported: true
 commands:
   betterws:
     description: plugin commands

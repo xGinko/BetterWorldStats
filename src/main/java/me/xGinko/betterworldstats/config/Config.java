@@ -11,7 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ConfigCache {
+public class Config {
 
     private ConfigFile config;
     private final File configFile;
@@ -20,10 +20,10 @@ public class ConfigCache {
     public final DecimalFormat filesize_display_format;
     public final HashSet<String> directories_to_scan = new HashSet<>();
     public final boolean auto_lang, log_is_enabled;
-    public final long server_birth_time, filesize_update_period;
+    public final long server_birth_time, filesize_update_period_seconds;
     public final double additional_spoofed_filesize;
 
-    public ConfigCache() {
+    public Config() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
         configFile = new File(plugin.getDataFolder(), "config.yml");
         logger = plugin.getLogger();
@@ -34,7 +34,7 @@ public class ConfigCache {
         this.auto_lang = getBoolean("language.auto-language", true, "Enable / Disable locale based messages.");
 
         this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(), "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
-        this.filesize_update_period = getInt("filesize-update-period-in-seconds", 3600, "The update period at which the file size is checked.") * 20L;
+        this.filesize_update_period_seconds = getInt("filesize-update-period-in-seconds", 3600, "The update period at which the file size is checked.");
         this.filesize_display_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
         directories_to_scan.addAll(getList("worlds", Arrays.asList(
                 "./world/region",

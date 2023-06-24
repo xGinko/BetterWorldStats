@@ -6,7 +6,7 @@
 
     <groupId>me.xGinko</groupId>
     <artifactId>BetterWorldStats</artifactId>
-    <version>1.5.0</version>
+    <version>2.0.0</version>
     <packaging>jar</packaging>
 
     <name>BetterWorldStats</name>
@@ -43,6 +43,10 @@
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>me.xginko.betterworldstats.bstats</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.tcoded.folialib</pattern>
+                                    <shadedPattern>me.xginko.betterworldstats.folialib</shadedPattern>
+                                </relocation>
                             </relocations>
                             <filters>
                                 <filter>
@@ -73,20 +77,16 @@
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>sonatype</id>
-            <url>https://oss.sonatype.org/content/groups/public/</url>
-        </repository>
-        <repository>
-            <id>nms-repo</id>
-            <url>https://repo.codemc.io/repository/nms/</url>
-        </repository>
-        <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
             <id>configmaster-repo</id>
             <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
+        </repository>
+        <repository>
+            <id>folialib-repo</id>
+            <url>https://nexuslite.gcnt.net/repos/other/</url>
         </repository>
     </repositories>
 
@@ -103,6 +103,13 @@
             <artifactId>placeholderapi</artifactId>
             <version>2.11.3</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Folia compatibility -->
+        <dependency>
+            <groupId>com.tcoded</groupId>
+            <artifactId>FoliaLib</artifactId>
+            <version>0.2.0</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Configuration Master for clean config file management -->
         <dependency>
