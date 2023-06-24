@@ -11,4 +11,4 @@ Things this fork has that seperates it from other worldstats plugins:
 - A more clear and understandable config file
 - Option to disable console logging in config
 
-#### Supports 1.12.2 - 1.19.4.
+#### Supports Spigot/Paper/Folia 1.12.2 - 1.20.1.
