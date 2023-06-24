@@ -12,18 +12,16 @@ import java.util.concurrent.atomic.AtomicLong;
 
 public class WorldSizeCheck implements BetterWorldStatsModule {
 
-    private final FoliaLib foliaLib;
     private final Config config;
     private WrappedTask scanTask;
 
     protected WorldSizeCheck() {
-        this.foliaLib = new FoliaLib(BetterWorldStats.getInstance());
         this.config = BetterWorldStats.getConfiguration();
     }
 
     @Override
     public void enable() {
-        this.scanTask = foliaLib.getImpl().runTimerAsync(() -> {
+        this.scanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl().runTimerAsync(() -> {
             double fileSize = count() / 1048576.0D / 1000.0D;
             BetterWorldStats.setWorldFileSize(fileSize);
 
