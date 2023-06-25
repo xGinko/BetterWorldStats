@@ -10,8 +10,8 @@ public interface BetterWorldStatsModule {
     HashSet<BetterWorldStatsModule> modules = new HashSet<>();
 
     static void reloadModules() {
-        modules.clear();
         modules.forEach(BetterWorldStatsModule::disable);
+        modules.clear();
 
         modules.add(new UniquePlayerCounter());
         modules.add(new WorldSizeCheck());
