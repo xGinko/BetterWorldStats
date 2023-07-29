@@ -51,7 +51,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
             case "spoofsize":
                 return String.valueOf(config.filesize_display_format.format(BetterWorldStats.worldSize().get() + config.additional_spoofed_filesize));
             case "players":
-                return String.valueOf(BetterWorldStats.uniquePlayerCount());
+                return String.valueOf(BetterWorldStats.uniquePlayerCount().get());
             case "ageindays":
                 return String.valueOf(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
             case "days":

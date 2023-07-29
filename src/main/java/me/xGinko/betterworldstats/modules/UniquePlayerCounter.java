@@ -17,10 +17,8 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
     @Override
     public void enable() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
+        new FoliaLib(plugin).getImpl().runNextTick(() -> BetterWorldStats.uniquePlayerCount().set(plugin.getServer().getOfflinePlayers().length));
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
-        new FoliaLib(plugin).getImpl().runNextTick(
-                () -> BetterWorldStats.uniquePlayerCount().set(plugin.getServer().getOfflinePlayers().length)
-        );
     }
 
     @Override

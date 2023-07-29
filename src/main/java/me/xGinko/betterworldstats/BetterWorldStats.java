@@ -29,6 +29,7 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static PAPIExpansion papiExpansion;
     private static Logger logger;
+
     private static final AtomicDouble worldSize = new AtomicDouble();
     private static final AtomicInteger uniquePlayerCount = new AtomicInteger();
 

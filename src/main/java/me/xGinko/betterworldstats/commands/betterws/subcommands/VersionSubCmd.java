@@ -4,20 +4,39 @@ import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.plugin.PluginDescriptionFile;
 
 public class VersionSubCmd extends SubCommand {
+
+    public VersionSubCmd() {}
+
     @Override
-    public String getName() {return "version";}
+    public String getName() {
+        return "version";
+    }
+
     @Override
-    public String getDescription() {return "Get the plugin version.";}
+    public String getDescription() {
+        return "Get the plugin version.";
+    }
+
     @Override
-    public String getSyntax() {return "/betterws version";}
+    public String getSyntax() {
+        return "/betterws version";
+    }
+
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (sender.hasPermission("betterws.version")) {
-            sender.sendMessage(ChatColor.AQUA + "BetterWorldStats v" + BetterWorldStats.getInstance().getDescription().getVersion() + ChatColor.DARK_AQUA + " by xGinko");
+            PluginDescriptionFile pluginyml = BetterWorldStats.getInstance().getDescription();
+            sender.sendMessage("\n");
+            sender.sendMessage(
+                    ChatColor.GOLD+pluginyml.getName()+" "+pluginyml.getVersion()+
+                            ChatColor.GRAY+" by "+ChatColor.DARK_AQUA+pluginyml.getAuthors().get(0)
+            );
+            sender.sendMessage("\n");
         } else {
-            sender.sendMessage(ChatColor.RED + BetterWorldStats.getLang(sender).no_permission);
+            sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
         }
     }
 }

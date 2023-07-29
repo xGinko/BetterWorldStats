@@ -52,12 +52,12 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
     }
 
     private String formattedMessageLine(String line, int year, int month, int day) {
-        final String parsedLine = ChatColor.translateAlternateColorCodes('&', line)
+        final String placeholdersFilled = line
                 .replace("%years%", String.valueOf(year))
                 .replace("%months%", String.valueOf(month))
                 .replace("%days%", String.valueOf(day))
                 .replace("%size%", config.filesize_display_format.format(BetterWorldStats.worldSize().get() + config.additional_spoofed_filesize))
                 .replace("%players%", String.valueOf(BetterWorldStats.uniquePlayerCount().get()));
-        return isPAPIpresent ? PlaceholderAPI.setPlaceholders(null, parsedLine) : parsedLine;
+        return isPAPIpresent ? PlaceholderAPI.setPlaceholders(null, placeholdersFilled) : placeholdersFilled;
     }
 }
