@@ -23,14 +23,14 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
     public void enable() {
         this.scanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl().runTimerAsync(() -> {
             double fileSize = count() / 1048576.0D / 1000.0D;
-            BetterWorldStats.setWorldFileSize(fileSize);
+            BetterWorldStats.worldSize().set(fileSize);
 
             if (config.log_is_enabled) {
                  BetterWorldStats.getLog().info(
                          "Updated filesize asynchronously "
                         + "(Real size: " + config.filesize_display_format.format(fileSize) + "GB, "
                         + "Spoofed size: " + config.filesize_display_format.format(fileSize + config.additional_spoofed_filesize) + "GB). "
-                        + "Unique player joins: " + BetterWorldStats.getUniquePlayers()
+                        + "Unique player joins: " + BetterWorldStats.uniquePlayerCount().get()
                 );
             }
         }, 0L, config.filesize_update_period_seconds, TimeUnit.SECONDS);
@@ -43,12 +43,16 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
 
     private long count() {
         final AtomicLong atomicLong = new AtomicLong(0L);
-        for (String path : config.directories_to_scan) {
-            for (File file : Objects.requireNonNull(new File(path).listFiles())) {
-                if (file.isFile()) {
-                    atomicLong.addAndGet(file.length());
+        try {
+            for (String path : config.directories_to_scan) {
+                for (File file : Objects.requireNonNull(new File(path).listFiles())) {
+                    if (file.isFile()) {
+                        atomicLong.addAndGet(file.length());
+                    }
                 }
             }
+        } catch (NullPointerException e) {
+            BetterWorldStats.getLog().warning("One or more world files could not be found.");
         }
         return atomicLong.get();
     }

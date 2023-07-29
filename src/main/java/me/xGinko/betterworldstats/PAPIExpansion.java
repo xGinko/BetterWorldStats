@@ -47,11 +47,11 @@ public class PAPIExpansion extends PlaceholderExpansion {
     public String onPlaceholderRequest(Player player, @NotNull String identifier) {
         switch (identifier) {
             case "size":
-                return String.valueOf(config.filesize_display_format.format(BetterWorldStats.getWorldFileSize()));
+                return String.valueOf(config.filesize_display_format.format(BetterWorldStats.worldSize().get()));
             case "spoofsize":
-                return String.valueOf(config.filesize_display_format.format(BetterWorldStats.getWorldFileSize() + config.additional_spoofed_filesize));
+                return String.valueOf(config.filesize_display_format.format(BetterWorldStats.worldSize().get() + config.additional_spoofed_filesize));
             case "players":
-                return String.valueOf(BetterWorldStats.getUniquePlayers());
+                return String.valueOf(BetterWorldStats.uniquePlayerCount());
             case "ageindays":
                 return String.valueOf(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
             case "days":

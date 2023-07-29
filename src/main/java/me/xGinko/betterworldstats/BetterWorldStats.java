@@ -1,5 +1,6 @@
 package me.xGinko.betterworldstats;
 
+import com.google.common.util.concurrent.AtomicDouble;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
@@ -27,13 +29,13 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static PAPIExpansion papiExpansion;
     private static Logger logger;
-    private static double worldFileSize;
-    private static int uniquePlayers;
+    private static final AtomicDouble worldSize = new AtomicDouble();
+    private static final AtomicInteger uniquePlayerCount = new AtomicInteger();
 
     @Override
     public void onEnable() {
         instance = this;
-        uniquePlayers = getServer().getOfflinePlayers().length;
+        uniquePlayerCount.set(getServer().getOfflinePlayers().length);
         logger = getLogger();
 
         // Fancy enable
@@ -68,7 +70,6 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     public void reloadPlugin() {
         reloadLang();
         reloadConfiguration();
-        uniquePlayers = getServer().getOfflinePlayers().length;
         if (isPlaceholderAPIInstalled()) reloadPAPIExpansion();
         BetterWorldStatsCommand.reloadCommands();
     }
@@ -149,7 +150,6 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
         }
     }
 
-    // Getters and Setters
     public static BetterWorldStats getInstance()  {
         return instance;
     }
@@ -159,17 +159,11 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     public static Logger getLog() {
         return logger;
     }
-    public static double getWorldFileSize() {
-        return worldFileSize;
+    public static AtomicDouble worldSize() {
+        return worldSize;
     }
-    public static void setWorldFileSize(double worldFileSize) {
-        BetterWorldStats.worldFileSize = worldFileSize;
-    }
-    public static int getUniquePlayers() {
-        return uniquePlayers;
-    }
-    public static void setUniquePlayers(int uniquePlayers) {
-        BetterWorldStats.uniquePlayers = uniquePlayers;
+    public static AtomicInteger uniquePlayerCount() {
+        return uniquePlayerCount;
     }
     public static boolean isPlaceholderAPIInstalled() {
         return instance.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");

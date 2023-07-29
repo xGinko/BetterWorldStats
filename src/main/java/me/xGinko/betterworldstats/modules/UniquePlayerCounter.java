@@ -1,23 +1,24 @@
 package me.xGinko.betterworldstats.modules;
 
+import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
 
-    private final BetterWorldStats plugin;
+    private final AtomicInteger totalPlayers = new AtomicInteger();
 
-    protected UniquePlayerCounter() {
-        this.plugin = BetterWorldStats.getInstance();
-    }
+    protected UniquePlayerCounter() { }
 
     @Override
     public void enable() {
+        BetterWorldStats plugin = BetterWorldStats.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -29,7 +30,7 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
     @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
     private void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
-            BetterWorldStats.setUniquePlayers(plugin.getServer().getOfflinePlayers().length);
+            BetterWorldStats.uniquePlayerCount().getAndIncrement();
         }
     }
 }
