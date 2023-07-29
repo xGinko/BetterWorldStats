@@ -1,67 +1,72 @@
 package me.xGinko.betterworldstats.config;
 
+import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xGinko.betterworldstats.BetterWorldStats;
-import org.bukkit.configuration.InvalidConfigurationException;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.ChatColor;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class LanguageCache {
-    private final FileConfiguration fileConfiguration;
-    boolean addedMissing = false;
+
+    private final ConfigFile langFile;
     public String no_permission;
     public List<String> world_stats_message;
 
-    public LanguageCache(String lang) {
-        BetterWorldStats plugin = BetterWorldStats.getInstance();
-        File langFile = new File(plugin.getDataFolder() + File.separator + "lang", lang + ".yml");
-        fileConfiguration = new YamlConfiguration();
+    public LanguageCache(String lang) throws Exception {
+        this.langFile = loadLang(new File(BetterWorldStats.getInstance().getDataFolder() + File.separator + "lang", lang + ".yml"));
 
-        if (!langFile.exists()) {
-            langFile.getParentFile().mkdirs();
-            plugin.saveResource("lang" + File.separator + lang + ".yml", false);
-        }
+        langFile.addComment("Command Placeholders:\n" + "%size% | %players% | %years% | %months% | %days%");
+
+        this.world_stats_message = getStringListTranslation("stats-message", Arrays.asList(
+                "&3-----------------------------------------------------",
+                " &7The server has spawned &6%players% player(s)&7 at least once",
+                " &7The map is &6%years% year(s)&7, &6%month% month(s)&7 and &6%days% day(s)&7 old",
+                " &7The world (with compression) is a total of &6%size% GB",
+                "&3-----------------------------------------------------"
+        ));
+        this.no_permission = getStringTranslation("no-permission", "You don't have permission to use this command.");
+
+        saveLang(this.langFile);
+    }
+
+    private ConfigFile loadLang(File ymlFile) throws Exception {
+        File parent = new File(ymlFile.getParent());
+        if (!parent.exists())
+            if (!parent.mkdir())
+                BetterWorldStats.getLog().severe("Unable to create lang directory.");
+        if (!ymlFile.exists())
+            ymlFile.createNewFile(); // Result can be ignored because this method only returns false if the file already exists
+        return ConfigFile.loadConfig(ymlFile);
+    }
+
+    private void saveLang(ConfigFile lang) {
         try {
-            fileConfiguration.load(langFile);
-
-            this.world_stats_message = getListTranslation("stats-message", Arrays.asList(
-                    "&3-----------------------------------------------------",
-                    " &7The server has spawned &6%players% player(s)&7 at least once",
-                    " &7The map is &6%years% year(s)&7, &6%month% month(s)&7 and &6%days% day(s)&7 old",
-                    " &7The world (with compression) is a total of &6%size% GB",
-                    "&3-----------------------------------------------------"
-            ));
-            this.no_permission = getStringTranslation("no-permission", "You don't have permission to use this command.");
-
-            if (addedMissing) fileConfiguration.save(langFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InvalidConfigurationException e) {
-            BetterWorldStats.getInstance().getLogger().warning("Translation file " + langFile + " is not formatted properly. Skipping it.");
+            lang.save();
+        } catch (Exception e) {
+            BetterWorldStats.getLog().severe("Failed to save language file: "+ lang.getFile().getName() +" - " + e.getLocalizedMessage());
         }
     }
 
-    public List<String> getListTranslation(String path, List<String> defaultTranslation) {
-        List<String> translation = fileConfiguration.getStringList(path);
-        if (translation.isEmpty()) {
-            fileConfiguration.set(path, defaultTranslation);
-            addedMissing = true;
-            return defaultTranslation;
-        }
-        return translation;
+    private String getStringTranslation(String path, String defaultTranslation) {
+        langFile.addDefault(path, defaultTranslation);
+        return ChatColor.translateAlternateColorCodes('&', langFile.getString(path, defaultTranslation));
     }
 
-    public String getStringTranslation(String path, String defaultTranslation) {
-        String translation = fileConfiguration.getString(path);
-        if (translation == null) {
-            fileConfiguration.set(path, defaultTranslation);
-            addedMissing = true;
-            return defaultTranslation;
-        }
-        return translation;
+    private String getStringTranslation(String path, String defaultTranslation, String comment) {
+        langFile.addDefault(path, defaultTranslation, comment);
+        return ChatColor.translateAlternateColorCodes('&', langFile.getString(path, defaultTranslation));
+    }
+
+    private List<String> getStringListTranslation(String path, List<String> defaultTranslation) {
+        langFile.addDefault(path, defaultTranslation);
+        return langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
+    }
+
+    private List<String> getStringListTranslation(String path, List<String> defaultTranslation, String comment) {
+        langFile.addDefault(path, defaultTranslation, comment);
+        return langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
     }
 }

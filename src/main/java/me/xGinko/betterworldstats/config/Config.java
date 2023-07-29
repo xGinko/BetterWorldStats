@@ -4,18 +4,14 @@ import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xGinko.betterworldstats.BetterWorldStats;
 
 import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class Config {
 
-    private ConfigFile config;
-    private final File configFile;
-    private final Logger logger;
+    private final ConfigFile config;
     public final String default_lang;
     public final DecimalFormat filesize_display_format;
     public final HashSet<String> directories_to_scan = new HashSet<>();
@@ -23,12 +19,9 @@ public class Config {
     public final long server_birth_time, filesize_update_period_seconds;
     public final double additional_spoofed_filesize;
 
-    public Config() {
-        BetterWorldStats plugin = BetterWorldStats.getInstance();
-        configFile = new File(plugin.getDataFolder(), "config.yml");
-        logger = plugin.getLogger();
-        createFiles();
-        loadConfig();
+    public Config() throws Exception {
+        this.config = loadConfig(new File(BetterWorldStats.getInstance().getDataFolder(), "config.yml"));
+        createTitle();
 
         this.default_lang = getString("language.default-language", "en_us", "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("language.auto-language", true, "Enable / Disable locale based messages.");
@@ -48,36 +41,31 @@ public class Config {
         config.addComment("These placeholders return the same values as the command:\n %worldstats_days%\n %worldstats_months%\n %worldstats_years%");
     }
 
-    private void createFiles() {
-        try {
-            File parent = new File(configFile.getParent());
-            if (!parent.exists()) {
-                if (!parent.mkdir())
-                    logger.severe("Unable to create plugin directory.");
-            }
-            if (!configFile.exists()) {
-                if (!configFile.createNewFile())
-                    logger.severe("Unable to create config file.");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void loadConfig() {
-        try {
-            config = ConfigFile.loadConfig(configFile);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private ConfigFile loadConfig(File ymlFile) throws Exception {
+        File parent = new File(ymlFile.getParent());
+        if (!parent.exists())
+            if (!parent.mkdir())
+                BetterWorldStats.getLog().severe("Unable to create plugin config directory.");
+        if (!ymlFile.exists())
+            ymlFile.createNewFile(); // Result can be ignored because this method only returns false if the file already exists
+        return ConfigFile.loadConfig(ymlFile);
     }
 
     public void saveConfig() {
         try {
             config.save();
         } catch (Exception e) {
-            logger.severe("Failed to save config file! - " + e.getLocalizedMessage());
+            BetterWorldStats.getLog().severe("Failed to save config file! - " + e.getLocalizedMessage());
         }
+    }
+
+    private void createTitle() {
+        config.addComment("                                                                                ");
+        config.addComment("  ___      _   _         __      __       _    _ ___ _        _                 ");
+        config.addComment(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
+        config.addComment(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
+        config.addComment(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
+        config.addComment("                                                                                ");
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {

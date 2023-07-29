@@ -12,14 +12,15 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
 
-    private final AtomicInteger totalPlayers = new AtomicInteger();
-
-    protected UniquePlayerCounter() { }
+    protected UniquePlayerCounter() {}
 
     @Override
     public void enable() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        new FoliaLib(plugin).getImpl().runNextTick(
+                () -> BetterWorldStats.uniquePlayerCount().set(plugin.getServer().getOfflinePlayers().length)
+        );
     }
 
     @Override

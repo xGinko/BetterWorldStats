@@ -35,7 +35,6 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     @Override
     public void onEnable() {
         instance = this;
-        uniquePlayerCount.set(getServer().getOfflinePlayers().length);
         logger = getLogger();
 
         // Fancy enable
@@ -75,9 +74,13 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
     }
 
     private void reloadConfiguration() {
-        config = new Config();
-        BetterWorldStatsModule.reloadModules();
-        config.saveConfig();
+        try {
+            config = new Config();
+            BetterWorldStatsModule.reloadModules();
+            config.saveConfig();
+        } catch (Exception e) {
+            logger.severe("Reload failed! - "+e.getLocalizedMessage());
+        }
     }
 
     private void reloadPAPIExpansion() {
@@ -109,16 +112,15 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
         }
     }
 
     private Set<String> getDefaultLanguageFiles() {
-        try {
-            Set<String> languageFiles = new HashSet<>();
-            JarFile jar = new JarFile(this.getFile());
+        Set<String> languageFiles = new HashSet<>();
+        try (JarFile jar = new JarFile(this.getFile())) {
             Enumeration<JarEntry> entries = jar.entries();
             while (entries.hasMoreElements()) {
                 JarEntry entry = entries.nextElement();
@@ -127,10 +129,11 @@ public final class BetterWorldStats extends JavaPlugin implements Listener {
                     languageFiles.add(path);
                 }
             }
-            return languageFiles;
+
         } catch (IOException e) {
-            return new HashSet<>();
+            logger.severe("Failed getting default lang files! - "+e.getLocalizedMessage());
         }
+        return languageFiles;
     }
 
     public static LanguageCache getLang(String lang) {
