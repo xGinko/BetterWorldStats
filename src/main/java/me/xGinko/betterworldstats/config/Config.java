@@ -60,12 +60,13 @@ public class Config {
     }
 
     private void createTitle() {
-        config.addComment("                                                                                ");
-        config.addComment("  ___      _   _         __      __       _    _ ___ _        _                 ");
-        config.addComment(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
-        config.addComment(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
-        config.addComment(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
-        config.addComment("                                                                                ");
+        config.addDefault("language", null);
+        config.addComment("language", "                                                                                ");
+        config.addComment("language", "  ___      _   _         __      __       _    _ ___ _        _                 ");
+        config.addComment("language", " | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
+        config.addComment("language", " | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
+        config.addComment("language", " |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
+        config.addComment("language", "                                                                                ");
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {
