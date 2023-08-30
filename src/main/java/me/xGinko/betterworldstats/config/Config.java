@@ -61,12 +61,12 @@ public class Config {
 
     private void createTitle() {
         config.addDefault("language", null);
-        config.addComment("language", "                                                                                ");
-        config.addComment("language", "  ___      _   _         __      __       _    _ ___ _        _                 ");
-        config.addComment("language", " | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
-        config.addComment("language", " | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
-        config.addComment("language", " |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
-        config.addComment("language", "                                                                                ");
+        config.addComment("language", "                                                                                "+
+        "  ___      _   _         __      __       _    _ ___ _        _                 \n"+
+        " | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         \n"+
+        " | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    \n"+
+        " |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/\n"+
+        "                                                                                ");
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {
