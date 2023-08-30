@@ -1,5 +1,4 @@
 # BetterWorldStats
-##### (Forked from RemainingToast, which was forked from WorldStatsRewritten by moomoo.)
 
 Things this fork has that seperates it from other worldstats plugins:
 - Async world size check
