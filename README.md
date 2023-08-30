@@ -1,8 +1,8 @@
 # BetterWorldStats
 
-Things this fork has that seperates it from other worldstats plugins:
+Things that seperates this plugin from other worldstats plugins:
 - Async world size check
-- Update of unique players everytime a new player joins
+- Update of unique players everytime a new player joins without causing lag
 - Language display based on client locale (Multilang)
 - Additional placeholders, enabling you to add all infos from the command into for ex. tablist (requires PlaceholderAPI)
 - Separate permissions for all plugin commands
