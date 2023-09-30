@@ -109,7 +109,7 @@
         <dependency>
             <groupId>com.tcoded</groupId>
             <artifactId>FoliaLib</artifactId>
-            <version>0.2.0</version>
+            <version>0.2.5</version>
             <scope>compile</scope>
         </dependency>
         <!-- Configuration Master for clean config file management -->
