@@ -1,6 +1,7 @@
 package me.xGinko.betterworldstats;
 
 import com.google.common.util.concurrent.AtomicDouble;
+import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
@@ -72,7 +73,8 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadPlugin() {
         reloadLang();
         reloadConfiguration();
-        if (isPlaceholderAPIInstalled()) reloadPAPIExpansion();
+        if (isPlaceholderAPIInstalled())
+            new FoliaLib(this).getImpl().runNextTick(this::reloadPAPIExpansion);
         BetterWorldStatsCommand.reloadCommands();
     }
 
