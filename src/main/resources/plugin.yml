@@ -1,6 +1,5 @@
 name: BetterWorldStats
 version: ${project.version}
-api-version: '1.12'
 main: me.xGinko.betterworldstats.BetterWorldStats
 prefix: BetterWorldStats
 authors: [ xGinko ]
