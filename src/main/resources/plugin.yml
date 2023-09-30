@@ -1,24 +1,28 @@
 name: BetterWorldStats
 version: ${project.version}
+api-version: '1.12'
 main: me.xGinko.betterworldstats.BetterWorldStats
 prefix: BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
-description: Better Worldstats by xGinko
+description: ${project.description}
 folia-supported: true
 commands:
-  betterws:
+  betterworldstats:
     description: plugin commands
     usage: /<command> [ reload | version ]
+    aliases:
+      - betterws
+      - bws
   worldstats:
     description: Shows the WorldStats
     usage: /<command>
     aliases:
       - stats
 permissions:
-  betterws.worldstats:
+  betterworldstats.worldstats:
     description: Permission to use /worldstats
-  betterws.version:
+  betterworldstats.version:
     description: Permission to show the plugin version
-  betterws.reload:
+  betterworldstats.reload:
     description: Permission to reload the plugin configuration

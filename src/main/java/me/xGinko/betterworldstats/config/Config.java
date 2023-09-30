@@ -14,7 +14,7 @@ public class Config {
     private final ConfigFile config;
     public final String default_lang;
     public final DecimalFormat filesize_display_format;
-    public final HashSet<String> directories_to_scan = new HashSet<>();
+    public final HashSet<String> directories_to_scan = new HashSet<>(3);
     public final boolean auto_lang, log_is_enabled;
     public final long server_birth_time, filesize_update_period_seconds;
     public final double additional_spoofed_filesize;

@@ -1,4 +1,4 @@
-package me.xGinko.betterworldstats.commands.betterws.subcommands;
+package me.xGinko.betterworldstats.commands.betterworldstats.subcommands;
 
 import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.BetterWorldStats;
@@ -22,18 +22,15 @@ public class ReloadSubCmd extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/betterws reload";
+        return "/bws reload";
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (sender.hasPermission("betterws.reload")) {
             sender.sendMessage(ChatColor.WHITE + "Reloading BetterWorldStats...");
-            BetterWorldStats plugin = BetterWorldStats.getInstance();
-            new FoliaLib(plugin).getImpl().runAsync(() -> {
-                plugin.reloadPlugin();
-                sender.sendMessage(ChatColor.GREEN + "Reload complete.");
-            });
+            BetterWorldStats.getInstance().reloadPlugin();
+            sender.sendMessage(ChatColor.GREEN + "Reload complete.");
         } else {
             sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
         }

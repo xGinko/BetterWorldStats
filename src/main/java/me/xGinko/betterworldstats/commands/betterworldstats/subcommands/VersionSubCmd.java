@@ -1,4 +1,4 @@
-package me.xGinko.betterworldstats.commands.betterws.subcommands;
+package me.xGinko.betterworldstats.commands.betterworldstats.subcommands;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
@@ -22,7 +22,7 @@ public class VersionSubCmd extends SubCommand {
 
     @Override
     public String getSyntax() {
-        return "/betterws version";
+        return "/bws version";
     }
 
     @Override

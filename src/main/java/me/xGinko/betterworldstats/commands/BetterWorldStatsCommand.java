@@ -1,7 +1,7 @@
 package me.xGinko.betterworldstats.commands;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.commands.betterws.BetterWSCmd;
+import me.xGinko.betterworldstats.commands.betterworldstats.BetterWorldStatsCmd;
 import me.xGinko.betterworldstats.commands.worldstats.WorldStatsCmd;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +21,7 @@ public interface BetterWorldStatsCommand extends CommandExecutor {
     static void reloadCommands() {
         commands.clear();
 
-        commands.add(new BetterWSCmd());
+        commands.add(new BetterWorldStatsCmd());
         commands.add(new WorldStatsCmd());
 
         BetterWorldStats plugin = BetterWorldStats.getInstance();

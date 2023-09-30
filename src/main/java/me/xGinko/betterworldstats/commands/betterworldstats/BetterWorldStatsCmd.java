@@ -1,6 +1,6 @@
-package me.xGinko.betterworldstats.commands.betterws;
+package me.xGinko.betterworldstats.commands.betterworldstats;
 
-import me.xGinko.betterworldstats.commands.betterws.subcommands.*;
+import me.xGinko.betterworldstats.commands.betterworldstats.subcommands.*;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.commands.SubCommand;
 import org.bukkit.ChatColor;
@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BetterWSCmd implements BetterWorldStatsCommand, TabCompleter {
+public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabCompleter {
 
     private final List<SubCommand> subCommands = new ArrayList<>();
     private final List<String> tabCompletes = new ArrayList<>();
 
-    public BetterWSCmd() {
+    public BetterWorldStatsCmd() {
         subCommands.add(new ReloadSubCmd());
         subCommands.add(new VersionSubCmd());
         for (SubCommand subCommand : subCommands) {

@@ -1,5 +1,7 @@
 package me.xGinko.betterworldstats.modules;
 
+import me.xGinko.betterworldstats.BetterWorldStats;
+
 import java.util.HashSet;
 
 public interface BetterWorldStatsModule {
@@ -15,6 +17,8 @@ public interface BetterWorldStatsModule {
 
         modules.add(new UniquePlayerCounter());
         modules.add(new WorldSizeCheck());
+        if (BetterWorldStats.getInstance().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
+            modules.add(new PAPIExpansion());
 
         modules.forEach(BetterWorldStatsModule::enable);
     }

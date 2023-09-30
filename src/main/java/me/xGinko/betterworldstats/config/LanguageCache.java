@@ -12,8 +12,8 @@ import java.util.stream.Collectors;
 public class LanguageCache {
 
     private final ConfigFile langFile;
-    public String no_permission;
-    public List<String> world_stats_message;
+    public final String no_permission;
+    public final List<String> world_stats_message;
 
     public LanguageCache(String lang) throws Exception {
         this.langFile = loadLang(new File(BetterWorldStats.getInstance().getDataFolder() + File.separator + "lang", lang + ".yml"));
@@ -29,7 +29,11 @@ public class LanguageCache {
         ));
         this.no_permission = getStringTranslation("no-permission", "You don't have permission to use this command.");
 
-        saveLang(this.langFile);
+        try {
+            langFile.save();
+        } catch (Exception e) {
+            BetterWorldStats.getLog().severe("Failed to save language file: "+ langFile.getFile().getName() +" - " + e.getLocalizedMessage());
+        }
     }
 
     private ConfigFile loadLang(File ymlFile) throws Exception {
@@ -40,14 +44,6 @@ public class LanguageCache {
         if (!ymlFile.exists())
             ymlFile.createNewFile(); // Result can be ignored because this method only returns false if the file already exists
         return ConfigFile.loadConfig(ymlFile);
-    }
-
-    private void saveLang(ConfigFile lang) {
-        try {
-            lang.save();
-        } catch (Exception e) {
-            BetterWorldStats.getLog().severe("Failed to save language file: "+ lang.getFile().getName() +" - " + e.getLocalizedMessage());
-        }
     }
 
     private String getStringTranslation(String path, String defaultTranslation) {

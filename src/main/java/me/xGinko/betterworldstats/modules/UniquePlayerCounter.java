@@ -17,7 +17,7 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
     @Override
     public void enable() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
-        new FoliaLib(plugin).getImpl().runNextTick(() -> BetterWorldStats.uniquePlayerCount().set(plugin.getServer().getOfflinePlayers().length));
+        BetterWorldStats.uniquePlayerCount().set(plugin.getServer().getOfflinePlayers().length);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -26,7 +26,7 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.NORMAL, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
     private void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
             BetterWorldStats.uniquePlayerCount().getAndIncrement();

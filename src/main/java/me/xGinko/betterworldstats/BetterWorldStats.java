@@ -6,6 +6,7 @@ import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
 import me.xGinko.betterworldstats.modules.BetterWorldStatsModule;
+import me.xGinko.betterworldstats.modules.PAPIExpansion;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,51 +31,56 @@ public final class BetterWorldStats extends JavaPlugin {
     private static BetterWorldStats instance;
     private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
-    private static PAPIExpansion papiExpansion;
     private static Logger logger;
-
-    private static final AtomicDouble worldSize = new AtomicDouble();
-    private static final AtomicInteger uniquePlayerCount = new AtomicInteger();
+    private final static AtomicDouble worldSize = new AtomicDouble();
+    private final static AtomicInteger uniquePlayerCount = new AtomicInteger();
 
     @Override
     public void onEnable() {
         instance = this;
         logger = getLogger();
-
-        // Fancy enable
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
         logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
         logger.info(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
         logger.info(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
         logger.info("                                                                                ");
-
         logger.info("Loading languages");
         reloadLang();
-
         logger.info("Loading config");
         reloadConfiguration();
-
-        if (isPlaceholderAPIInstalled()) {
-            logger.info("Found PlaceholderAPI, registering placeholders...");
-            reloadPAPIExpansion();
-        }
-
         logger.info("Registering commands");
         BetterWorldStatsCommand.reloadCommands();
-
-        // Metrics
         logger.info("Loading Metrics");
         new Metrics(this, 17204);
-
         logger.info("Done.");
+    }
+
+    public static BetterWorldStats getInstance()  {
+        return instance;
+    }
+    public static Config getConfiguration() {
+        return config;
+    }
+    public static Logger getLog() {
+        return logger;
+    }
+    public static AtomicDouble worldSize() {
+        return worldSize;
+    }
+    public static AtomicInteger uniquePlayerCount() {
+        return uniquePlayerCount;
+    }
+    public static LanguageCache getLang(CommandSender commandSender) {
+        return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);
+    }
+    public static LanguageCache getLang(String lang) {
+        return config.auto_lang ? languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang)) : languageCacheMap.get(config.default_lang);
     }
 
     public void reloadPlugin() {
         reloadLang();
         reloadConfiguration();
-        if (isPlaceholderAPIInstalled())
-            new FoliaLib(this).getImpl().runNextTick(this::reloadPAPIExpansion);
         BetterWorldStatsCommand.reloadCommands();
     }
 
@@ -84,14 +90,8 @@ public final class BetterWorldStats extends JavaPlugin {
             BetterWorldStatsModule.reloadModules();
             config.saveConfig();
         } catch (Exception e) {
-            logger.severe("Reload failed! - "+e.getLocalizedMessage());
+            logger.severe("Failed while loading config! - " + e.getLocalizedMessage());
         }
-    }
-
-    private void reloadPAPIExpansion() {
-        if (papiExpansion != null) papiExpansion.unregister();
-        papiExpansion = new PAPIExpansion();
-        papiExpansion.register();
     }
 
     public void reloadLang() {
@@ -125,55 +125,16 @@ public final class BetterWorldStats extends JavaPlugin {
 
     private Set<String> getDefaultLanguageFiles() {
         Set<String> languageFiles = new HashSet<>();
-        try (JarFile jar = new JarFile(this.getFile())) {
-            Enumeration<JarEntry> entries = jar.entries();
+        try (JarFile pluginJar = new JarFile(this.getFile())) {
+            Enumeration<JarEntry> entries = pluginJar.entries();
             while (entries.hasMoreElements()) {
-                JarEntry entry = entries.nextElement();
-                String path = entry.getName();
-                if (path.startsWith("lang/") && path.endsWith(".yml")) {
+                String path = entries.nextElement().getName();
+                if (path.startsWith("lang/") && path.endsWith(".yml"))
                     languageFiles.add(path);
-                }
             }
-
         } catch (IOException e) {
             logger.severe("Failed getting default lang files! - "+e.getLocalizedMessage());
         }
         return languageFiles;
-    }
-
-    public static LanguageCache getLang(String lang) {
-        lang = lang.replace("-", "_");
-        if (config.auto_lang) {
-            return languageCacheMap.getOrDefault(lang, languageCacheMap.get(config.default_lang));
-        } else {
-            return languageCacheMap.get(config.default_lang);
-        }
-    }
-
-    public static LanguageCache getLang(CommandSender commandSender) {
-        if (commandSender instanceof Player) {
-            return getLang(((Player) commandSender).getLocale());
-        } else {
-            return getLang(config.default_lang);
-        }
-    }
-
-    public static BetterWorldStats getInstance()  {
-        return instance;
-    }
-    public static Config getConfiguration() {
-        return config;
-    }
-    public static Logger getLog() {
-        return logger;
-    }
-    public static AtomicDouble worldSize() {
-        return worldSize;
-    }
-    public static AtomicInteger uniquePlayerCount() {
-        return uniquePlayerCount;
-    }
-    public static boolean isPlaceholderAPIInstalled() {
-        return instance.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
 }

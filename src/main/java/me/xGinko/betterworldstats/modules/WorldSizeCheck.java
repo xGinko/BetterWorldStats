@@ -41,19 +41,25 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
         if (scanTask != null) scanTask.cancel();
     }
 
-    private long count() {
+    private double count() {
         final AtomicLong atomicLong = new AtomicLong(0L);
-        try {
-            for (String path : config.directories_to_scan) {
-                for (File file : Objects.requireNonNull(new File(path).listFiles())) {
+        config.directories_to_scan.forEach(directory -> {
+            File worldFolder = new File(directory);
+            try {
+                File[] files = worldFolder.listFiles();
+                if (files == null) {
+                    BetterWorldStats.getLog().warning("Pathname '"+directory+"' is not a folder or directory. Skipping it.");
+                    return;
+                }
+                for (File file : files) {
                     if (file.isFile()) {
                         atomicLong.addAndGet(file.length());
                     }
                 }
+            } catch (SecurityException e) {
+                BetterWorldStats.getLog().severe("Could not read files in directory '"+directory+"' because access was denied.");
             }
-        } catch (NullPointerException e) {
-            BetterWorldStats.getLog().warning("One or more world files could not be found.");
-        }
+        });
         return atomicLong.get();
     }
 }
