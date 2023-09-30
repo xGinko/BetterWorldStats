@@ -1,8 +1,9 @@
 # BetterWorldStats
 
 Things that seperates this plugin from other worldstats plugins:
+- Folia compatibility
 - Async world size check
-- Update of unique players everytime a new player joins without causing lag
+- Update of unique players everytime a new player joins WITHOUT causing lag
 - Language display based on client locale (Multilang)
 - Additional placeholders, enabling you to add all infos from the command into for ex. tablist (requires PlaceholderAPI)
 - Separate permissions for all plugin commands
