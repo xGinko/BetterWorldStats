@@ -1,12 +1,10 @@
 package me.xGinko.betterworldstats;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
 import me.xGinko.betterworldstats.modules.BetterWorldStatsModule;
-import me.xGinko.betterworldstats.modules.PAPIExpansion;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -70,6 +68,9 @@ public final class BetterWorldStats extends JavaPlugin {
     }
     public static AtomicInteger uniquePlayerCount() {
         return uniquePlayerCount;
+    }
+    public static boolean foundPAPI() {
+        return instance.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
     }
     public static LanguageCache getLang(CommandSender commandSender) {
         return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);

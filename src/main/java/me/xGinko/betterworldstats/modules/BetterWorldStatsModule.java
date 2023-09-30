@@ -17,7 +17,7 @@ public interface BetterWorldStatsModule {
 
         modules.add(new UniquePlayerCounter());
         modules.add(new WorldSizeCheck());
-        if (BetterWorldStats.getInstance().getServer().getPluginManager().isPluginEnabled("PlaceholderAPI"))
+        if (BetterWorldStats.foundPAPI())
             modules.add(new PAPIExpansion());
 
         modules.forEach(BetterWorldStatsModule::enable);

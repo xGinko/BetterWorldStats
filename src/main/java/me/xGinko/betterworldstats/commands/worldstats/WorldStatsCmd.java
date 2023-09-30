@@ -20,7 +20,7 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
     public WorldStatsCmd() {
         this.config = BetterWorldStats.getConfiguration();
         this.calendar = Calendar.getInstance();
-        this.isPAPIpresent = BetterWorldStats.isPlaceholderAPIInstalled();
+        this.isPAPIpresent = BetterWorldStats.foundPAPI();
     }
 
     @Override
@@ -42,22 +42,24 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
                 day = 0;
             }
 
-            for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
-                sender.sendMessage(formattedMessageLine(line, year, month, day));
-            }
+            final String years = Integer.toString(year);
+            final String months = Integer.toString(month);
+            final String days = Integer.toString(day);
+
+            BetterWorldStats.getLang(sender).world_stats_message.forEach(line -> sender.sendMessage(formattedMessageLine(line, years, months, days)));
         } else {
             sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
         }
         return true;
     }
 
-    private String formattedMessageLine(String line, int year, int month, int day) {
+    private String formattedMessageLine(String line, String year, String month, String day) {
         final String placeholdersFilled = line
-                .replace("%years%", String.valueOf(year))
-                .replace("%months%", String.valueOf(month))
-                .replace("%days%", String.valueOf(day))
+                .replace("%years%", year)
+                .replace("%months%", month)
+                .replace("%days%", day)
                 .replace("%size%", config.filesize_display_format.format(BetterWorldStats.worldSize().get() + config.additional_spoofed_filesize))
-                .replace("%players%", String.valueOf(BetterWorldStats.uniquePlayerCount().get()));
+                .replace("%players%", Integer.toString(BetterWorldStats.uniquePlayerCount().get()));
         return isPAPIpresent ? PlaceholderAPI.setPlaceholders(null, placeholdersFilled) : placeholdersFilled;
     }
 }
