@@ -1,6 +1,5 @@
 package me.xGinko.betterworldstats.commands.betterworldstats.subcommands;
 
-import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
 import org.bukkit.ChatColor;

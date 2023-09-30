@@ -1,12 +1,11 @@
 package me.xGinko.betterworldstats.modules;
 
 import com.tcoded.folialib.FoliaLib;
-import com.tcoded.folialib.wrapper.WrappedTask;
+import com.tcoded.folialib.wrapper.task.WrappedTask;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.config.Config;
 
 import java.io.File;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 

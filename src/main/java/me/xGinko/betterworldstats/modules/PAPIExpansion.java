@@ -3,7 +3,6 @@ package me.xGinko.betterworldstats.modules;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.config.Config;
-import me.xGinko.betterworldstats.modules.BetterWorldStatsModule;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 

@@ -1,14 +1,11 @@
 package me.xGinko.betterworldstats.modules;
 
-import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
-
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
 
