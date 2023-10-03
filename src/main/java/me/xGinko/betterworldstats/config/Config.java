@@ -61,7 +61,7 @@ public class Config {
 
     private void createTitle() {
         config.addDefault("language", null);
-        config.addComment("language", "                                                                                "+
+        config.addComment("language", "                                                                                \n"+
         "  ___      _   _         __      __       _    _ ___ _        _                 \n"+
         " | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         \n"+
         " | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    \n"+
