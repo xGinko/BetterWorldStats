@@ -6,6 +6,7 @@ authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
 description: ${project.description}
 folia-supported: true
+
 commands:
   betterworldstats:
     description: plugin commands

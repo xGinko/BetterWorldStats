@@ -64,7 +64,7 @@ public class PAPIExpansion extends PlaceholderExpansion implements BetterWorldSt
             case "players":
                 return Integer.toString(BetterWorldStats.uniquePlayerCount().get());
             case "ageindays":
-                return Long.toString(TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
+                return Integer.toString((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
             case "days":
                 calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
                 return Integer.toString(calendar.get(Calendar.DAY_OF_MONTH) - 1);

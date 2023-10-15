@@ -29,7 +29,7 @@ public class Config {
         this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(), "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
         this.filesize_update_period_seconds = getInt("filesize-update-period-in-seconds", 3600, "The update period at which the file size is checked.");
         this.filesize_display_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
-        directories_to_scan.addAll(getList("worlds", Arrays.asList(
+        this.directories_to_scan.addAll(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
