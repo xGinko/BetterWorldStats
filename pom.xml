@@ -31,7 +31,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.5.0</version>
+                <version>3.5.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -101,14 +101,14 @@
         <dependency>
             <groupId>me.clip</groupId>
             <artifactId>placeholderapi</artifactId>
-            <version>2.11.4</version>
+            <version>2.11.5</version>
             <scope>provided</scope>
         </dependency>
         <!-- Folia compatibility -->
         <dependency>
             <groupId>com.tcoded</groupId>
             <artifactId>FoliaLib</artifactId>
-            <version>0.2.5</version>
+            <version>0.3.1</version>
             <scope>compile</scope>
         </dependency>
         <!-- Configuration Master for clean config file management -->
