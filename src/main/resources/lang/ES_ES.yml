@@ -1,0 +1,13 @@
+# Placeholders:
+# %years%
+# %months%
+# %days%
+# %size%
+# %players%
+stats-message:
+  - '&3-----------------------------------------------------'
+  - ' &7En en Server Spawnearon &6%players% Jugador(s)&7 Al menos una vez'
+  - ' &7El Mapa Tiene &6%years% Años(s)&7, &6%months% Meses(s)&7 y &6%days% Dias(s)&7 De antiguedad'
+  - ' &7El Mundo (Comprimido) Es un total a &6%size% GB'
+  - '&3-----------------------------------------------------'
+no-permission: "&cNo tienes permisos para usar este comando."
