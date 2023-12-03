@@ -29,7 +29,7 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (sender.hasPermission("betterws.worldstats")) {
+        if (sender.hasPermission("betterworldstats.worldstats")) {
             calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
             int year = calendar.get(Calendar.YEAR) - 1970;
             int month = calendar.get(Calendar.MONTH);

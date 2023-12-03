@@ -27,8 +27,8 @@ public class VersionSubCmd extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (sender.hasPermission("betterws.version")) {
-            PluginDescriptionFile pluginyml = BetterWorldStats.getInstance().getDescription();
+        if (sender.hasPermission("betterworldstats.version")) {
+            final PluginDescriptionFile pluginyml = BetterWorldStats.getInstance().getDescription();
             sender.sendMessage("\n");
             sender.sendMessage(
                     ChatColor.GOLD+pluginyml.getName()+" "+pluginyml.getVersion()+
