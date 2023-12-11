@@ -42,12 +42,9 @@ public class Config {
     }
 
     private ConfigFile loadConfig(File ymlFile) throws Exception {
-        File parent = new File(ymlFile.getParent());
-        if (!parent.exists())
-            if (!parent.mkdir())
-                BetterWorldStats.getLog().severe("Unable to create plugin config directory.");
-        if (!ymlFile.exists())
-            ymlFile.createNewFile(); // Result can be ignored because this method only returns false if the file already exists
+        File parent = ymlFile.getParentFile();
+        if (!parent.exists() && !parent.mkdir())
+            BetterWorldStats.getLog().severe("Unable to create plugin directory.");
         return ConfigFile.loadConfig(ymlFile);
     }
 

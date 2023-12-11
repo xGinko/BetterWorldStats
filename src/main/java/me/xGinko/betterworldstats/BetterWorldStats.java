@@ -98,11 +98,11 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(instance.getDataFolder()+ "/lang");
+            File langDirectory = new File(getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
                 String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
-                logger.info(String.format("Found language file for %s", localeString));
+                logger.info("Found language file for " + localeString);
                 LanguageCache langCache = new LanguageCache(localeString);
                 languageCacheMap.put(localeString, langCache);
             }
@@ -111,7 +111,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 Matcher langMatcher = langPattern.matcher(langFile.getName());
                 if (langMatcher.find()) {
                     String localeString = langMatcher.group(1).toLowerCase();
-                    if(!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
+                    if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
                         logger.info(String.format("Found language file for %s", localeString));
                         LanguageCache langCache = new LanguageCache(localeString);
                         languageCacheMap.put(localeString, langCache);
