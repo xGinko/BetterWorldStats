@@ -23,7 +23,7 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
         HandlerList.unregisterAll(this);
     }
 
-    @EventHandler(priority = EventPriority.LOWEST, ignoreCancelled = true)
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
             BetterWorldStats.uniquePlayerCount.getAndIncrement();
