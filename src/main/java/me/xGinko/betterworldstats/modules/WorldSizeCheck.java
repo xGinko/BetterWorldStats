@@ -8,10 +8,10 @@ import me.xGinko.betterworldstats.config.Config;
 import java.io.File;
 import java.util.concurrent.TimeUnit;
 
-public class WorldSizeCheck implements BetterWorldStatsModule {
+public class WorldSizeCheck implements BetterWorldStatsModule, Runnable {
 
     private final Config config;
-    private WrappedTask scanTask;
+    private WrappedTask wrappedScanTask;
 
     protected WorldSizeCheck() {
         this.config = BetterWorldStats.getConfiguration();
@@ -19,24 +19,27 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
 
     @Override
     public void enable() {
-        this.scanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl().runTimerAsync(() -> {
-            final double sizeInGB = this.getTotalSizeInGB();
-            BetterWorldStats.worldSize.set(sizeInGB);
-
-            if (config.log_is_enabled) {
-                 BetterWorldStats.getLog().info(
-                         "Updated filesize asynchronously "
-                        + "(Real size: " + config.filesize_display_format.format(sizeInGB) + "GB, "
-                        + "Spoofed size: " + config.filesize_display_format.format(sizeInGB + config.additional_spoofed_filesize) + "GB). "
-                        + "Unique player joins: " + BetterWorldStats.uniquePlayerCount.get()
-                );
-            }
-        }, 0L, config.filesize_update_period_seconds, TimeUnit.SECONDS);
+        this.wrappedScanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl()
+                .runTimerAsync(this, 0L, config.filesize_update_period_seconds, TimeUnit.SECONDS);
     }
 
     @Override
     public void disable() {
-        if (scanTask != null) scanTask.cancel();
+        if (this.wrappedScanTask != null) this.wrappedScanTask.cancel();
+    }
+
+    @Override
+    public void run() {
+        final double sizeInGB = this.getTotalSizeInGB();
+        BetterWorldStats.worldSize.set(sizeInGB);
+
+        if (!config.log_is_enabled) return;
+        BetterWorldStats.getLog().info("Updated filesize asynchronously "
+                + "(Real size: " + config.filesize_display_format.format(sizeInGB) + "GB, "
+                + "Spoofed size: " + config.filesize_display_format
+                .format(sizeInGB + config.additional_spoofed_filesize) + "GB). "
+                + "Unique player joins: " + BetterWorldStats.uniquePlayerCount
+        );
     }
 
     private double getTotalSizeInGB() {
