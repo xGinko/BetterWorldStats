@@ -1,5 +1,6 @@
 package me.xGinko.betterworldstats.modules;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.xGinko.betterworldstats.BetterWorldStats;
 
 import java.util.HashSet;
@@ -17,9 +18,13 @@ public interface BetterWorldStatsModule {
 
         modules.add(new UniquePlayerCounter());
         modules.add(new WorldSizeCheck());
-        if (BetterWorldStats.foundPAPI())
+        if (BetterWorldStats.foundPlaceholderAPI)
             modules.add(new PAPIExpansion());
 
         modules.forEach(BetterWorldStatsModule::enable);
+    }
+
+    static String tryPopulateWithPAPI(String input) {
+        return !BetterWorldStats.foundPlaceholderAPI ? input : PlaceholderAPI.setPlaceholders(null, input);
     }
 }

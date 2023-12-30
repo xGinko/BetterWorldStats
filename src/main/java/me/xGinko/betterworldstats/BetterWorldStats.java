@@ -30,6 +30,7 @@ public final class BetterWorldStats extends JavaPlugin {
     private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
+    public static boolean foundPlaceholderAPI;
     public final static AtomicDouble worldSize = new AtomicDouble(0.0);
     public final static AtomicInteger uniquePlayerCount = new AtomicInteger(0);
 
@@ -37,6 +38,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void onEnable() {
         instance = this;
         logger = getLogger();
+        foundPlaceholderAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
         logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
@@ -63,20 +65,12 @@ public final class BetterWorldStats extends JavaPlugin {
     public static Logger getLog() {
         return logger;
     }
-    public static AtomicDouble worldSize() {
-        return worldSize;
-    }
-    public static AtomicInteger uniquePlayerCount() {
-        return uniquePlayerCount;
-    }
-    public static boolean foundPAPI() {
-        return instance.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
-    }
     public static LanguageCache getLang(CommandSender commandSender) {
         return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);
     }
     public static LanguageCache getLang(String lang) {
-        return config.auto_lang ? languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang)) : languageCacheMap.get(config.default_lang);
+        if (!config.auto_lang) return languageCacheMap.get(config.default_lang);
+        return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang));
     }
 
     public void reloadPlugin() {
@@ -107,12 +101,13 @@ public final class BetterWorldStats extends JavaPlugin {
             }
             Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             for (File langFile : langDirectory.listFiles()) {
-                Matcher langMatcher = langPattern.matcher(langFile.getName());
-                if (!langMatcher.find()) continue;
-                final String localeString = langMatcher.group(1).toLowerCase();
-                if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
-                    logger.info(String.format("Found language file for %s", localeString));
-                    languageCacheMap.put(localeString, new LanguageCache(localeString));
+                final Matcher langMatcher = langPattern.matcher(langFile.getName());
+                if (langMatcher.find()) {
+                    final String localeString = langMatcher.group(1).toLowerCase();
+                    if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
+                        logger.info("Found language file for " + localeString);
+                        languageCacheMap.put(localeString, new LanguageCache(localeString));
+                    }
                 }
             }
         } catch (Exception e) {
@@ -122,8 +117,8 @@ public final class BetterWorldStats extends JavaPlugin {
     }
 
     private Set<String> getDefaultLanguageFiles() {
-        try (final JarFile pluginJar = new JarFile(this.getFile())) {
-            return pluginJar.stream()
+        try (final JarFile pluginJarFile = new JarFile(this.getFile())) {
+            return pluginJarFile.stream()
                     .map(ZipEntry::getName)
                     .filter(name -> name.startsWith("lang" + File.separator) && name.endsWith(".yml"))
                     .collect(Collectors.toSet());
