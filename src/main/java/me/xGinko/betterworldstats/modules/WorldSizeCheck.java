@@ -20,14 +20,14 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
     @Override
     public void enable() {
         this.scanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl().runTimerAsync(() -> {
-            final double fileSize = this.getTotalGBSize();
-            BetterWorldStats.worldSize.set(fileSize);
+            final double sizeInGB = this.getTotalSizeInGB();
+            BetterWorldStats.worldSize.set(sizeInGB);
 
             if (config.log_is_enabled) {
                  BetterWorldStats.getLog().info(
                          "Updated filesize asynchronously "
-                        + "(Real size: " + config.filesize_display_format.format(fileSize) + "GB, "
-                        + "Spoofed size: " + config.filesize_display_format.format(fileSize + config.additional_spoofed_filesize) + "GB). "
+                        + "(Real size: " + config.filesize_display_format.format(sizeInGB) + "GB, "
+                        + "Spoofed size: " + config.filesize_display_format.format(sizeInGB + config.additional_spoofed_filesize) + "GB). "
                         + "Unique player joins: " + BetterWorldStats.uniquePlayerCount.get()
                 );
             }
@@ -39,7 +39,7 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
         if (scanTask != null) scanTask.cancel();
     }
 
-    private double getTotalGBSize() {
+    private double getTotalSizeInGB() {
         long rawSize = 0L;
         for (String path : config.paths_to_scan) {
             rawSize += this.getSize(new File(path));
