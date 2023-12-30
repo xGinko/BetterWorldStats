@@ -62,18 +62,18 @@ public class PAPIExpansion extends PlaceholderExpansion implements BetterWorldSt
             case "spoofsize":
                 return config.filesize_display_format.format(BetterWorldStats.worldSize.get() + config.additional_spoofed_filesize);
             case "players":
-                return Integer.toString(BetterWorldStats.uniquePlayerCount.get());
+                return BetterWorldStats.uniquePlayerCount.toString();
             case "ageindays":
                 return Integer.toString((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
             case "days":
-                calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
-                return Integer.toString(calendar.get(Calendar.DAY_OF_MONTH) - 1);
+                this.calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
+                return Integer.toString(Math.max(this.calendar.get(Calendar.DAY_OF_MONTH) - 1, 0));
             case "months":
-                calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
-                return Integer.toString(calendar.get(Calendar.MONTH));
+                this.calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
+                return Integer.toString(Math.max(this.calendar.get(Calendar.MONTH), 0));
             case "years":
-                calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
-                return Integer.toString(calendar.get(Calendar.YEAR) - 1970);
+                this.calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
+                return Integer.toString(Math.max(this.calendar.get(Calendar.YEAR) - 1970, 0));
             default:
                 return null;
         }

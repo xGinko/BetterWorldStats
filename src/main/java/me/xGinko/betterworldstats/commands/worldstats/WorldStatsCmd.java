@@ -38,7 +38,7 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
         final String months = Integer.toString(Math.max(this.calendar.get(Calendar.MONTH), 0));
         final String days = Integer.toString(Math.max(this.calendar.get(Calendar.DAY_OF_MONTH) - 1, 0));
         final String size = config.filesize_display_format.format(BetterWorldStats.worldSize.get() + config.additional_spoofed_filesize);
-        final String players = Integer.toString(BetterWorldStats.uniquePlayerCount.get());
+        final String players = BetterWorldStats.uniquePlayerCount.toString();
 
         for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
             sender.sendMessage(BetterWorldStatsModule.tryPopulateWithPAPI(line
