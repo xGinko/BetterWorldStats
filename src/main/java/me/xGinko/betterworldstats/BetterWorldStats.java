@@ -31,14 +31,16 @@ public final class BetterWorldStats extends JavaPlugin {
     private static Config config;
     private static Logger logger;
 
-    public static final AtomicDouble worldSize = new AtomicDouble(0.0);
-    public static final AtomicInteger uniquePlayerCount = new AtomicInteger(0);
+    public AtomicDouble worldSize;
+    public AtomicInteger uniquePlayerCount;
     public static boolean foundPlaceholderAPI;
 
     @Override
     public void onEnable() {
         instance = this;
         logger = getLogger();
+        this.worldSize = new AtomicDouble(0.0);
+        this.uniquePlayerCount = new AtomicInteger(0);
         foundPlaceholderAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");

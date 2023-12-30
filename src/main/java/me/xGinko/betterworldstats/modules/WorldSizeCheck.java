@@ -10,16 +10,19 @@ import java.util.concurrent.TimeUnit;
 
 public class WorldSizeCheck implements BetterWorldStatsModule, Runnable {
 
+    private final BetterWorldStats plugin;
     private final Config config;
     private WrappedTask wrappedScanTask;
 
     protected WorldSizeCheck() {
+        this.plugin = BetterWorldStats.getInstance();
         this.config = BetterWorldStats.getConfiguration();
     }
 
     @Override
     public void enable() {
-        this.wrappedScanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl()
+        this.wrappedScanTask = new FoliaLib(plugin)
+                .getImpl()
                 .runTimerAsync(this, 0L, config.filesize_update_period_seconds, TimeUnit.SECONDS);
     }
 
@@ -31,14 +34,14 @@ public class WorldSizeCheck implements BetterWorldStatsModule, Runnable {
     @Override
     public void run() {
         final double sizeInGB = this.getTotalSizeInGB();
-        BetterWorldStats.worldSize.set(sizeInGB);
+        plugin.worldSize.set(sizeInGB);
 
         if (!config.log_is_enabled) return;
         BetterWorldStats.getLog().info("Updated filesize asynchronously "
                 + "(Real size: " + config.filesize_display_format.format(sizeInGB) + "GB, "
                 + "Spoofed size: " + config.filesize_display_format
                 .format(sizeInGB + config.additional_spoofed_filesize) + "GB). "
-                + "Unique player joins: " + BetterWorldStats.uniquePlayerCount
+                + "Unique player joins: " + plugin.uniquePlayerCount
         );
     }
 

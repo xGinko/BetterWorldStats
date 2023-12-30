@@ -9,12 +9,15 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
 
-    protected UniquePlayerCounter() {}
+    private final BetterWorldStats plugin;
+
+    protected UniquePlayerCounter() {
+        this.plugin = BetterWorldStats.getInstance();
+    }
 
     @Override
     public void enable() {
-        BetterWorldStats plugin = BetterWorldStats.getInstance();
-        BetterWorldStats.uniquePlayerCount.set(plugin.getServer().getOfflinePlayers().length);
+        plugin.uniquePlayerCount.set(plugin.getServer().getOfflinePlayers().length);
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
     }
 
@@ -26,7 +29,7 @@ public class UniquePlayerCounter implements BetterWorldStatsModule, Listener {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerJoinEvent(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
-            BetterWorldStats.uniquePlayerCount.getAndIncrement();
+            plugin.uniquePlayerCount.getAndIncrement();
         }
     }
 }

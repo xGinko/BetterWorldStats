@@ -5,16 +5,19 @@ import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.config.Config;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
 public class PAPIExpansion extends PlaceholderExpansion implements BetterWorldStatsModule {
 
+    private final BetterWorldStats plugin;
     private final Config config;
     private final Calendar calendar;
 
     protected PAPIExpansion() {
+        this.plugin = BetterWorldStats.getInstance();
         this.config = BetterWorldStats.getConfiguration();
         this.calendar = Calendar.getInstance();
     }
@@ -51,18 +54,18 @@ public class PAPIExpansion extends PlaceholderExpansion implements BetterWorldSt
 
     @Override
     public @NotNull String getVersion() {
-        return BetterWorldStats.getInstance().getDescription().getVersion();
+        return plugin.getDescription().getVersion();
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+    public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         switch (identifier) {
             case "size":
-                return config.filesize_display_format.format(BetterWorldStats.worldSize.get());
+                return config.filesize_display_format.format(plugin.worldSize.get());
             case "spoofsize":
-                return config.filesize_display_format.format(BetterWorldStats.worldSize.get() + config.additional_spoofed_filesize);
+                return config.filesize_display_format.format(plugin.worldSize.get() + config.additional_spoofed_filesize);
             case "players":
-                return BetterWorldStats.uniquePlayerCount.toString();
+                return plugin.uniquePlayerCount.toString();
             case "ageindays":
                 return Integer.toString((int) TimeUnit.MILLISECONDS.toDays(System.currentTimeMillis() - config.server_birth_time));
             case "days":
