@@ -9,7 +9,7 @@ public interface BetterWorldStatsModule {
     void enable();
     void disable();
 
-    HashSet<BetterWorldStatsModule> modules = new HashSet<>();
+    HashSet<BetterWorldStatsModule> modules = new HashSet<>(3);
 
     static void reloadModules() {
         modules.forEach(BetterWorldStatsModule::disable);

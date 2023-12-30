@@ -7,7 +7,6 @@ import me.xGinko.betterworldstats.config.Config;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class WorldSizeCheck implements BetterWorldStatsModule {
 
@@ -21,15 +20,15 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
     @Override
     public void enable() {
         this.scanTask = new FoliaLib(BetterWorldStats.getInstance()).getImpl().runTimerAsync(() -> {
-            double fileSize = count() / 1048576.0D / 1000.0D;
-            BetterWorldStats.worldSize().set(fileSize);
+            final double fileSize = this.getTotalGBSize();
+            BetterWorldStats.worldSize.set(fileSize);
 
             if (config.log_is_enabled) {
                  BetterWorldStats.getLog().info(
                          "Updated filesize asynchronously "
                         + "(Real size: " + config.filesize_display_format.format(fileSize) + "GB, "
                         + "Spoofed size: " + config.filesize_display_format.format(fileSize + config.additional_spoofed_filesize) + "GB). "
-                        + "Unique player joins: " + BetterWorldStats.uniquePlayerCount().get()
+                        + "Unique player joins: " + BetterWorldStats.uniquePlayerCount.get()
                 );
             }
         }, 0L, config.filesize_update_period_seconds, TimeUnit.SECONDS);
@@ -40,25 +39,31 @@ public class WorldSizeCheck implements BetterWorldStatsModule {
         if (scanTask != null) scanTask.cancel();
     }
 
-    private double count() {
-        final AtomicLong atomicLong = new AtomicLong(0L);
-        config.directories_to_scan.forEach(directory -> {
-            File worldFolder = new File(directory);
+    private double getTotalGBSize() {
+        long rawSize = 0L;
+        for (String path : config.paths_to_scan) {
+            rawSize += this.getSize(new File(path));
+        }
+        return rawSize / 1048576.0D / 1000.0D;
+    }
+
+    private long getSize(File file) {
+        long rawSize = 0L;
+        if (file.isFile()) {
+            rawSize += file.length();
+            return rawSize;
+        }
+        if (file.isDirectory()) {
             try {
-                File[] files = worldFolder.listFiles();
-                if (files == null) {
-                    BetterWorldStats.getLog().warning("Pathname '"+directory+"' is not a folder or directory. Skipping it.");
-                    return;
-                }
-                for (File file : files) {
-                    if (file.isFile()) {
-                        atomicLong.addAndGet(file.length());
-                    }
+                File[] subFiles = file.listFiles();
+                assert subFiles != null;
+                for (File subFile : subFiles) {
+                    rawSize += this.getSize(subFile);
                 }
             } catch (SecurityException e) {
-                BetterWorldStats.getLog().severe("Could not read files in directory '"+directory+"' because access was denied.");
+                BetterWorldStats.getLog().severe("Could not read directory '"+file.getPath()+"' because access was denied.");
             }
-        });
-        return atomicLong.get();
+        }
+        return rawSize;
     }
 }

@@ -13,16 +13,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Enumeration;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
 
 public final class BetterWorldStats extends JavaPlugin {
 
@@ -30,8 +30,8 @@ public final class BetterWorldStats extends JavaPlugin {
     private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Logger logger;
-    private final static AtomicDouble worldSize = new AtomicDouble();
-    private final static AtomicInteger uniquePlayerCount = new AtomicInteger();
+    public final static AtomicDouble worldSize = new AtomicDouble(0.0);
+    public final static AtomicInteger uniquePlayerCount = new AtomicInteger(0);
 
     @Override
     public void onEnable() {
@@ -98,44 +98,38 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(getDataFolder() + "/lang");
+            File langDirectory = new File(getDataFolder()  + File.separator + "lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
-                String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
+                final String localeString = fileName.substring(fileName.lastIndexOf(File.separator) + 1, fileName.lastIndexOf('.'));
                 logger.info("Found language file for " + localeString);
-                LanguageCache langCache = new LanguageCache(localeString);
-                languageCacheMap.put(localeString, langCache);
+                languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
             Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             for (File langFile : langDirectory.listFiles()) {
                 Matcher langMatcher = langPattern.matcher(langFile.getName());
-                if (langMatcher.find()) {
-                    String localeString = langMatcher.group(1).toLowerCase();
-                    if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
-                        logger.info(String.format("Found language file for %s", localeString));
-                        LanguageCache langCache = new LanguageCache(localeString);
-                        languageCacheMap.put(localeString, langCache);
-                    }
+                if (!langMatcher.find()) continue;
+                final String localeString = langMatcher.group(1).toLowerCase();
+                if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
+                    logger.info(String.format("Found language file for %s", localeString));
+                    languageCacheMap.put(localeString, new LanguageCache(localeString));
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
             logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
+            e.printStackTrace();
         }
     }
 
     private Set<String> getDefaultLanguageFiles() {
-        Set<String> languageFiles = new HashSet<>();
-        try (JarFile pluginJar = new JarFile(this.getFile())) {
-            Enumeration<JarEntry> entries = pluginJar.entries();
-            while (entries.hasMoreElements()) {
-                String path = entries.nextElement().getName();
-                if (path.startsWith("lang/") && path.endsWith(".yml"))
-                    languageFiles.add(path);
-            }
+        try (final JarFile pluginJar = new JarFile(this.getFile())) {
+            return pluginJar.stream()
+                    .map(ZipEntry::getName)
+                    .filter(name -> name.startsWith("lang" + File.separator) && name.endsWith(".yml"))
+                    .collect(Collectors.toSet());
         } catch (IOException e) {
             logger.severe("Failed getting default lang files! - "+e.getLocalizedMessage());
+            return Collections.emptySet();
         }
-        return languageFiles;
     }
 }

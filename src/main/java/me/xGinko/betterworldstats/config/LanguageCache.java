@@ -43,7 +43,7 @@ public class LanguageCache {
         try {
             langFile.save();
         } catch (Exception e) {
-            BetterWorldStats.getLog().severe("Failed to save language file: "+ langFile.getFile().getName() +" - " + e.getLocalizedMessage());
+            BetterWorldStats.getLog().severe("Failed to save language file: "+ langYML.getName() +" - " + e.getLocalizedMessage());
         }
     }
 
