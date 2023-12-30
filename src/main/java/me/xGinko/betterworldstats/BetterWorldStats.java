@@ -27,12 +27,13 @@ import java.util.zip.ZipEntry;
 public final class BetterWorldStats extends JavaPlugin {
 
     private static BetterWorldStats instance;
-    private static Config config;
     private static HashMap<String, LanguageCache> languageCacheMap;
+    private static Config config;
     private static Logger logger;
+
+    public static final AtomicDouble worldSize = new AtomicDouble(0.0);
+    public static final AtomicInteger uniquePlayerCount = new AtomicInteger(0);
     public static boolean foundPlaceholderAPI;
-    public final static AtomicDouble worldSize = new AtomicDouble(0.0);
-    public final static AtomicInteger uniquePlayerCount = new AtomicInteger(0);
 
     @Override
     public void onEnable() {
@@ -99,7 +100,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 logger.info("Found language file for " + localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
-            Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
+            final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             for (File langFile : langDirectory.listFiles()) {
                 final Matcher langMatcher = langPattern.matcher(langFile.getName());
                 if (langMatcher.find()) {
