@@ -24,11 +24,12 @@ public class LanguageCache {
             BetterWorldStats.getLog().severe("Unable to create lang directory.");
         // Check if the file already exists and save the one from the plugins resources folder if it does not
         if (!langYML.exists())
-            plugin.saveResource("lang/" + lang + ".yml", false);
+            plugin.saveResource("lang" + File.separator + lang + ".yml", false);
         // Finally load the lang file with configmaster
         this.langFile = ConfigFile.loadConfig(langYML);
 
-        langFile.addComment("Command Placeholders:\n" + "%size% | %players% | %years% | %months% | %days%");
+        langFile.addComment("Command Placeholders:" +
+                "\n" + "%size% | %players% | %years% | %months% | %days%");
 
         this.world_stats_message = getStringListTranslation("stats-message", Arrays.asList(
                 "&3-----------------------------------------------------",
