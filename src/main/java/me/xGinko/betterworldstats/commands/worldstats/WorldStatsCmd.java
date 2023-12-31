@@ -39,12 +39,12 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
 
         for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
             String prePopulated = line
-                    .replaceAll("%years%", years)
-                    .replaceAll("%months%", months)
-                    .replaceAll("%days%", days)
-                    .replaceAll("%players%", players)
-                    .replaceAll("%size%", size)
-                    .replaceAll("%spoofsize%", spoofsize);
+                    .replace("%years%", years)
+                    .replace("%months%", months)
+                    .replace("%days%", days)
+                    .replace("%players%", players)
+                    .replace("%size%", size)
+                    .replace("%spoofsize%", spoofsize);
             sender.sendMessage(BetterWorldStats.foundPlaceholderAPI ? StringUtil.tryPopulateWithPAPI(prePopulated) : prePopulated);
         }
 
