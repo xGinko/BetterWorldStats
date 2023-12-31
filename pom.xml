@@ -42,11 +42,15 @@
                             <relocations>
                                 <relocation>
                                     <pattern>org.bstats</pattern>
-                                    <shadedPattern>me.xginko.betterworldstats.bstats</shadedPattern>
+                                    <shadedPattern>me.xginko.betterworldstats.libs.bstats</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>com.tcoded.folialib</pattern>
-                                    <shadedPattern>me.xginko.betterworldstats.folialib</shadedPattern>
+                                    <shadedPattern>me.xginko.betterworldstats.libs.folialib</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>com.github.benmanes.caffeine</pattern>
+                                    <shadedPattern>me.xginko.betterworldstats.libs.caffeine</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -116,6 +120,13 @@
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>
             <version>v2.0.0-rc.1</version>
+        </dependency>
+        <!-- Caching -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>2.9.3</version>
+            <scope>compile</scope>
         </dependency>
         <!-- bStats -->
         <dependency>

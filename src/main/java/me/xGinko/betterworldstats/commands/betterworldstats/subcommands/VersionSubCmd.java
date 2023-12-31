@@ -27,16 +27,15 @@ public class VersionSubCmd extends SubCommand {
 
     @Override
     public void perform(CommandSender sender, String[] args) {
-        if (sender.hasPermission("betterworldstats.version")) {
-            final PluginDescriptionFile pluginyml = BetterWorldStats.getInstance().getDescription();
-            sender.sendMessage("\n");
-            sender.sendMessage(
-                    ChatColor.GOLD+pluginyml.getName()+" "+pluginyml.getVersion()+
-                            ChatColor.GRAY+" by "+ChatColor.DARK_AQUA+pluginyml.getAuthors().get(0)
-            );
-            sender.sendMessage("\n");
-        } else {
+        if (!sender.hasPermission("betterworldstats.version")) {
             sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
+            return;
         }
+
+        final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
+        sender.sendMessage("\n" +
+                ChatColor.GOLD+pluginYML.getName()+" "+pluginYML.getVersion()+
+                ChatColor.GRAY+" by "+ChatColor.DARK_AQUA+pluginYML.getAuthors().get(0)
+                + "\n");
     }
 }

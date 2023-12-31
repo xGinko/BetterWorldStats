@@ -15,11 +15,11 @@ public class Config {
 
     private final ConfigFile config;
     public final String default_lang;
-    public final DecimalFormat filesize_display_format;
+    public final DecimalFormat filesize_format;
     public final Set<String> paths_to_scan;
     public final boolean auto_lang, log_is_enabled;
-    public final long server_birth_time, filesize_update_period_seconds;
-    public final double additional_spoofed_filesize;
+    public final long filesize_update_period_millis, server_birth_time_millis;
+    public final double additional_spoof_filesize;
 
     public Config() throws Exception {
         // Create plugin folder first if it does not exist yet
@@ -40,35 +40,37 @@ public class Config {
                 .addLine("")
                 .addSolidLine());
 
-        // Lang settings
+        // Language
         this.default_lang = getString("language.default-language", "en_us",
                 "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
         this.auto_lang = getBoolean("language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
         // Settings
-        this.server_birth_time = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(),
+        this.server_birth_time_millis = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(),
                 "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
-        this.filesize_update_period_seconds = getInt("filesize-update-period-in-seconds", 3600,
-                "The update period at which the file size is checked.");
-        this.filesize_display_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
+        this.filesize_update_period_millis = getInt("filesize-update-period-in-seconds", 3600,
+                "The update period at which the file size is checked.") * 1000L;
+        this.filesize_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
         this.paths_to_scan = new HashSet<>(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
         ), "The files to scan. The path you're in is the folder where your server.jar is located."));
-        this.additional_spoofed_filesize = getDouble("spoof-size", 0.0,
+        this.additional_spoof_filesize = getDouble("spoof-size", 0.0,
                 "How many GB should be added on top of the actual filesize. Useful if you deleted useless chunks.");
         this.log_is_enabled = getBoolean("enable-console-log", false,
                 "Whether to log to console when plugin updates filesize.");
 
-        // Placeholder reminders
+        // Placeholders
         this.config.addComment("PlaceholderAPI placeholders:" +
                 "\n %worldstats_size%" +
                 "\n %worldstats_spoofsize%" +
                 "\n %worldstats_players%" +
-                "\n %worldstats_ageindays%");
-        this.config.addComment("These placeholders return the same values as the command:" +
+                "\n %worldstats_age_in_days%" +
+                "\n %worldstats_age_in_months%" +
+                "\n %worldstats_age_in_years%");
+        this.config.addComment("These PAPI placeholders return the same values as in the command:" +
                 "\n %worldstats_days%" +
                 "\n %worldstats_months%" +
                 "\n %worldstats_years%");

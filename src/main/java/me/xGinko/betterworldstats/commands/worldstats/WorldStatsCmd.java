@@ -3,23 +3,19 @@ package me.xGinko.betterworldstats.commands.worldstats;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
-import me.xGinko.betterworldstats.modules.BetterWorldStatsModule;
+import me.xGinko.betterworldstats.utils.StringUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
-
-import java.util.Calendar;
 
 public class WorldStatsCmd implements BetterWorldStatsCommand {
 
     private final BetterWorldStats plugin;
     private final Config config;
-    private final Calendar calendar;
 
     public WorldStatsCmd() {
         this.plugin = BetterWorldStats.getInstance();
         this.config = BetterWorldStats.getConfiguration();
-        this.calendar = Calendar.getInstance();
     }
 
     @Override
@@ -34,22 +30,22 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
             return true;
         }
 
-        this.calendar.setTimeInMillis(System.currentTimeMillis() - config.server_birth_time);
-
-        final String years = Integer.toString(Math.max(this.calendar.get(Calendar.YEAR) - 1970, 0));
-        final String months = Integer.toString(Math.max(this.calendar.get(Calendar.MONTH), 0));
-        final String days = Integer.toString(Math.max(this.calendar.get(Calendar.DAY_OF_MONTH) - 1, 0));
-        final String size = config.filesize_display_format.format(plugin.worldSize.get() + config.additional_spoofed_filesize);
-        final String players = plugin.uniquePlayerCount.toString();
+        final String years = plugin.statistics.serverAge.getYearsPart().toString();
+        final String months = plugin.statistics.serverAge.getMonthsPart().toString();
+        final String days = plugin.statistics.serverAge.getDaysPart().toString();
+        final String players = plugin.statistics.uniquePlayerCount.toString();
+        final String size = config.filesize_format.format(plugin.statistics.fileSize.getTrueSize());
+        final String spoofsize = config.filesize_format.format(plugin.statistics.fileSize.getSpoofedSize());
 
         for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
-            sender.sendMessage(BetterWorldStatsModule.tryPopulateWithPAPI(line
+            String prePopulated = line
                     .replaceAll("%years%", years)
                     .replaceAll("%months%", months)
                     .replaceAll("%days%", days)
-                    .replaceAll("%size%", size)
                     .replaceAll("%players%", players)
-            ));
+                    .replaceAll("%size%", size)
+                    .replaceAll("%spoofsize%", spoofsize);
+            sender.sendMessage(BetterWorldStats.foundPlaceholderAPI ? StringUtil.tryPopulateWithPAPI(prePopulated) : prePopulated);
         }
 
         return true;

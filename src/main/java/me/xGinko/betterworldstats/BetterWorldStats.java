@@ -1,13 +1,12 @@
 package me.xGinko.betterworldstats;
 
-import com.google.common.util.concurrent.AtomicDouble;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
-import me.xGinko.betterworldstats.modules.BetterWorldStatsModule;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -16,7 +15,6 @@ import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.jar.JarFile;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -30,18 +28,14 @@ public final class BetterWorldStats extends JavaPlugin {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Config config;
     private static Logger logger;
-
-    public AtomicDouble worldSize;
-    public AtomicInteger uniquePlayerCount;
-    public static boolean foundPlaceholderAPI;
+    public static boolean foundPlaceholderAPI = false;
+    public StatisticsHolder statistics;
+    private PAPIExpansion papiExpansion;
 
     @Override
     public void onEnable() {
         instance = this;
         logger = getLogger();
-        this.worldSize = new AtomicDouble(0.0);
-        this.uniquePlayerCount = new AtomicInteger(0);
-        foundPlaceholderAPI = getServer().getPluginManager().isPluginEnabled("PlaceholderAPI");
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
         logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
@@ -85,7 +79,15 @@ public final class BetterWorldStats extends JavaPlugin {
     private void reloadConfiguration() {
         try {
             config = new Config();
-            BetterWorldStatsModule.reloadModules();
+            HandlerList.unregisterAll(this);
+            this.statistics = new StatisticsHolder();
+            if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
+                foundPlaceholderAPI = true;
+                if (this.papiExpansion != null) this.papiExpansion.unregister();
+                this.papiExpansion = new PAPIExpansion();
+            } else {
+                foundPlaceholderAPI = false;
+            }
             config.saveConfig();
         } catch (Exception e) {
             logger.severe("Failed while loading config! - " + e.getLocalizedMessage());

@@ -10,12 +10,13 @@ import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabCompleter {
 
-    private final List<SubCommand> subCommands = new ArrayList<>();
-    private final List<String> tabCompletes = new ArrayList<>();
+    private final List<SubCommand> subCommands = new ArrayList<>(2);
+    private final List<String> tabCompletes = new ArrayList<>(2);
 
     public BetterWorldStatsCmd() {
         subCommands.add(new ReloadSubCmd());
@@ -32,10 +33,7 @@ public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabComplete
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (args.length == 1) {
-            return tabCompletes;
-        }
-        return null;
+        return args.length == 1 ? tabCompletes : Collections.emptyList();
     }
 
     @Override
