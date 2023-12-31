@@ -28,7 +28,7 @@ public final class BetterWorldStats extends JavaPlugin {
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Config config;
     private static Logger logger;
-    public static boolean foundPlaceholderAPI = false;
+    public static boolean foundPlaceholderAPI;
     public StatisticsHolder statistics;
     private PAPIExpansion papiExpansion;
 
