@@ -29,7 +29,7 @@ public class LanguageCache {
         this.langFile = ConfigFile.loadConfig(langYML);
 
         langFile.addComment("Command Placeholders:" +
-                "\n" + "%size% | %players% | %years% | %months% | %days%");
+                "\n" + "%size% | %spoofsize% | %players% | %years% | %months% | %days%");
 
         this.world_stats_message = getStringListTranslation("stats-message", Arrays.asList(
                 "&3-----------------------------------------------------",
