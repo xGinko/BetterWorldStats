@@ -17,7 +17,7 @@ public final class ServerAge {
 
     public ServerAge(final long server_birth_time_millis) {
         this.calendar = Calendar.getInstance(TimeZone.getDefault());
-        this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(15)).build();
+        this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
         this.server_birth_time_millis = server_birth_time_millis;
     }
 
