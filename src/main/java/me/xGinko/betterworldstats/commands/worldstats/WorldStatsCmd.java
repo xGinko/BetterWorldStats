@@ -34,8 +34,14 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
         final String months = plugin.statistics.serverAge.getMonthsPart().toString();
         final String days = plugin.statistics.serverAge.getDaysPart().toString();
         final String players = plugin.statistics.uniquePlayerCount.toString();
-        final String size = config.filesize_format.format(plugin.statistics.fileSize.getTrueSize());
-        final String spoofsize = config.filesize_format.format(plugin.statistics.fileSize.getSpoofedSize());
+        final String size = config.filesize_format.format(plugin.statistics.fileStats.getTrueSize());
+        final String spoofsize = config.filesize_format.format(plugin.statistics.fileStats.getSpoofedSize());
+        final String ageAsDays = plugin.statistics.serverAge.asDays().toString();
+        final String ageAsMonths = plugin.statistics.serverAge.asMonths().toString();
+        final String ageAsYears = plugin.statistics.serverAge.asYears().toString();
+        final String fileCount = Integer.toString(plugin.statistics.fileStats.getFileCount());
+        final String folderCount = Integer.toString(plugin.statistics.fileStats.getFolderCount());
+        final String chunkFileCount = Integer.toString(plugin.statistics.fileStats.getChunkFileCount());
 
         for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
             String prePopulated = line
@@ -44,7 +50,13 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
                     .replace("%days%", days)
                     .replace("%players%", players)
                     .replace("%size%", size)
-                    .replace("%spoofsize%", spoofsize);
+                    .replace("%spoofsize%", spoofsize)
+                    .replace("%age_as_days%", ageAsDays)
+                    .replace("%age_as_months%", ageAsMonths)
+                    .replace("%age_as_years%", ageAsYears)
+                    .replace("%file_count%", fileCount)
+                    .replace("%folder_count%", folderCount)
+                    .replace("%chunk_file_count%", chunkFileCount);
             sender.sendMessage(BetterWorldStats.foundPlaceholderAPI ? StringUtil.tryPopulateWithPAPI(prePopulated) : prePopulated);
         }
 

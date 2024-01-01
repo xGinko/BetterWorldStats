@@ -46,9 +46,15 @@ public class PAPIExpansion extends PlaceholderExpansion {
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         switch (identifier) {
             case "size":
-                return config.filesize_format.format(plugin.statistics.fileSize.getTrueSize());
+                return config.filesize_format.format(plugin.statistics.fileStats.getTrueSize());
             case "spoofsize":
-                return config.filesize_format.format(plugin.statistics.fileSize.getSpoofedSize());
+                return config.filesize_format.format(plugin.statistics.fileStats.getSpoofedSize());
+            case "file_count":
+                return Integer.toString(plugin.statistics.fileStats.getFileCount());
+            case "folder_count":
+                return Integer.toString(plugin.statistics.fileStats.getFolderCount());
+            case "chunk_file_count":
+                return Integer.toString(plugin.statistics.fileStats.getChunkFileCount());
             case "players":
                 return plugin.statistics.uniquePlayerCount.toString();
             case "days":

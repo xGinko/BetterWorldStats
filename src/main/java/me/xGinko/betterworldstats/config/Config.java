@@ -69,7 +69,10 @@ public class Config {
                 "\n %worldstats_players%" +
                 "\n %worldstats_age_in_days%" +
                 "\n %worldstats_age_in_months%" +
-                "\n %worldstats_age_in_years%");
+                "\n %worldstats_age_in_years%" +
+                "\n %worldstats_file_count%" +
+                "\n %worldstats_folder_count%" +
+                "\n %worldstats_chunk_file_count%");
         this.config.addComment("These PAPI placeholders return the same values as in the command:" +
                 "\n %worldstats_days%" +
                 "\n %worldstats_months%" +
