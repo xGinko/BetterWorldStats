@@ -51,9 +51,9 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
                     .replace("%players%", players)
                     .replace("%size%", size)
                     .replace("%spoofsize%", spoofsize)
-                    .replace("%age_as_days%", ageAsDays)
-                    .replace("%age_as_months%", ageAsMonths)
-                    .replace("%age_as_years%", ageAsYears)
+                    .replace("%age_in_days%", ageAsDays)
+                    .replace("%age_in_months%", ageAsMonths)
+                    .replace("%age_in_years%", ageAsYears)
                     .replace("%file_count%", fileCount)
                     .replace("%folder_count%", folderCount)
                     .replace("%chunk_file_count%", chunkFileCount);

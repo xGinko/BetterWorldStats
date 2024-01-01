@@ -45,29 +45,29 @@ public class LanguageCache {
         this.no_permission = getStringTranslation("no-permission", "You don't have permission to use this command.");
 
         try {
-            langFile.save();
+            this.langFile.save();
         } catch (Exception e) {
             BetterWorldStats.getLog().severe("Failed to save language file: "+ langYML.getName() +" - " + e.getLocalizedMessage());
         }
     }
 
     private String getStringTranslation(String path, String defaultTranslation) {
-        langFile.addDefault(path, defaultTranslation);
-        return ChatColor.translateAlternateColorCodes('&', langFile.getString(path, defaultTranslation));
+        this.langFile.addDefault(path, defaultTranslation);
+        return ChatColor.translateAlternateColorCodes('&', this.langFile.getString(path, defaultTranslation));
     }
 
     private String getStringTranslation(String path, String defaultTranslation, String comment) {
-        langFile.addDefault(path, defaultTranslation, comment);
-        return ChatColor.translateAlternateColorCodes('&', langFile.getString(path, defaultTranslation));
+        this.langFile.addDefault(path, defaultTranslation, comment);
+        return ChatColor.translateAlternateColorCodes('&', this.langFile.getString(path, defaultTranslation));
     }
 
     private List<String> getStringListTranslation(String path, List<String> defaultTranslation) {
-        langFile.addDefault(path, defaultTranslation);
-        return langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
+        this.langFile.addDefault(path, defaultTranslation);
+        return this.langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
     }
 
     private List<String> getStringListTranslation(String path, List<String> defaultTranslation, String comment) {
-        langFile.addDefault(path, defaultTranslation, comment);
-        return langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
+        this.langFile.addDefault(path, defaultTranslation, comment);
+        return this.langFile.getStringList(path).stream().map(line -> ChatColor.translateAlternateColorCodes('&', line)).collect(Collectors.toList());
     }
 }
