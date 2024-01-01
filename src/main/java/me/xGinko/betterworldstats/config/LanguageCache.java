@@ -28,9 +28,11 @@ public class LanguageCache {
         // Finally load the lang file with configmaster
         this.langFile = ConfigFile.loadConfig(langYML);
 
-        langFile.addComment("Command Placeholders:" +
+        this.langFile.addComment(
+                "Command Placeholders:" +
                 "\n %size%        | %spoofsize%     | %players%      | %years%      | %months%       | %days%" +
-                "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_file_count%");
+                "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_file_count%"
+        );
 
         this.world_stats_message = getStringListTranslation("stats-message", Arrays.asList(
                 "&3-----------------------------------------------------",
