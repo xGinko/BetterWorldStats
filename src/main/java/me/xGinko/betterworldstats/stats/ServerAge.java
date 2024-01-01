@@ -73,7 +73,7 @@ public final class ServerAge {
         Integer monthsAmount = this.cache.getIfPresent(Key.MONTHS);
         if (monthsAmount == null) {
             monthsAmount = (this.getYearsPart() * 12) + this.getMonthsPart();
-            this.cache.put(Key.DAYS, monthsAmount);
+            this.cache.put(Key.MONTHS, monthsAmount);
         }
         return monthsAmount;
     }
