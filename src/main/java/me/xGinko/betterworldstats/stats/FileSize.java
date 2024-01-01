@@ -34,10 +34,9 @@ public class FileSize {
                 this.sizeInGB.set(totalSize);
                 if (config.log_is_enabled) {
                     BetterWorldStats.getLog().info("Updated world size asynchronously "
-                            + "(Real size: " + config.filesize_format.format(sizeInGB) + "GB, "
+                            + "(Real size: " + config.filesize_format.format(totalSize) + "GB, "
                             + "Spoofed size: " + config.filesize_format
-                            .format(totalSize + config.additional_spoof_filesize) + "GB). "
-                    );
+                            .format(totalSize+config.additional_spoof_filesize) + "GB).");
                 }
             });
         }
