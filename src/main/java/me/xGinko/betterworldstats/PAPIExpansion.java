@@ -8,11 +8,11 @@ import org.jetbrains.annotations.Nullable;
 
 public class PAPIExpansion extends PlaceholderExpansion {
 
-    private final BetterWorldStats plugin;
+    private final WorldStats statistics;
     private final Config config;
 
     PAPIExpansion() {
-        this.plugin = BetterWorldStats.getInstance();
+        this.statistics = BetterWorldStats.getStatistics();
         this.config = BetterWorldStats.getConfiguration();
         this.register();
     }
@@ -39,36 +39,36 @@ public class PAPIExpansion extends PlaceholderExpansion {
 
     @Override
     public @NotNull String getVersion() {
-        return plugin.getDescription().getVersion();
+        return BetterWorldStats.getInstance().getDescription().getVersion();
     }
 
     @Override
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         switch (identifier) {
             case "size":
-                return config.filesize_format.format(plugin.statistics.fileStats.getTrueSize());
+                return config.filesize_format.format(statistics.fileStats.getTrueSize());
             case "spoofsize":
-                return config.filesize_format.format(plugin.statistics.fileStats.getSpoofedSize());
+                return config.filesize_format.format(statistics.fileStats.getSpoofedSize());
             case "file_count":
-                return Integer.toString(plugin.statistics.fileStats.getFileCount());
+                return Integer.toString(statistics.fileStats.getFileCount());
             case "folder_count":
-                return Integer.toString(plugin.statistics.fileStats.getFolderCount());
+                return Integer.toString(statistics.fileStats.getFolderCount());
             case "chunk_file_count":
-                return Integer.toString(plugin.statistics.fileStats.getChunkFileCount());
+                return Integer.toString(statistics.fileStats.getChunkFileCount());
             case "players":
-                return plugin.statistics.uniquePlayerCount.toString();
+                return statistics.uniquePlayerCount.toString();
             case "days":
-                return plugin.statistics.serverAge.getDaysPart().toString();
+                return statistics.mapAge.getDaysPart().toString();
             case "months":
-                return plugin.statistics.serverAge.getMonthsPart().toString();
+                return statistics.mapAge.getMonthsPart().toString();
             case "years":
-                return plugin.statistics.serverAge.getYearsPart().toString();
+                return statistics.mapAge.getYearsPart().toString();
             case "age_in_days":
-                return plugin.statistics.serverAge.asDays().toString();
+                return statistics.mapAge.asDays().toString();
             case "age_in_months":
-                return plugin.statistics.serverAge.asMonths().toString();
+                return statistics.mapAge.asMonths().toString();
             case "age_in_years":
-                return plugin.statistics.serverAge.asYears().toString();
+                return statistics.mapAge.asYears().toString();
             default:
                 return null;
         }

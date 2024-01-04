@@ -27,10 +27,10 @@ public final class BetterWorldStats extends JavaPlugin {
     private static BetterWorldStats instance;
     private static HashMap<String, LanguageCache> languageCacheMap;
     private static Config config;
+    private static WorldStats statistics;
+    private static PAPIExpansion papiExpansion;
     private static Logger logger;
     public static boolean foundPlaceholderAPI;
-    public StatisticsHolder statistics;
-    private PAPIExpansion papiExpansion;
 
     @Override
     public void onEnable() {
@@ -56,6 +56,9 @@ public final class BetterWorldStats extends JavaPlugin {
     public static BetterWorldStats getInstance()  {
         return instance;
     }
+    public static WorldStats getStatistics() {
+        return statistics;
+    }
     public static Config getConfiguration() {
         return config;
     }
@@ -80,11 +83,11 @@ public final class BetterWorldStats extends JavaPlugin {
         try {
             config = new Config();
             HandlerList.unregisterAll(this);
-            this.statistics = new StatisticsHolder();
+            statistics = new WorldStats();
             if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                 foundPlaceholderAPI = true;
-                if (this.papiExpansion != null) this.papiExpansion.unregister();
-                this.papiExpansion = new PAPIExpansion();
+                if (papiExpansion != null) papiExpansion.unregister();
+                papiExpansion = new PAPIExpansion();
             } else {
                 foundPlaceholderAPI = false;
             }
