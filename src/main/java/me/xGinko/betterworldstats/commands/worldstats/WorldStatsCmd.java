@@ -34,9 +34,9 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
         final String years = statistics.mapAge.getYearsPart().toString();
         final String months = statistics.mapAge.getMonthsPart().toString();
         final String days = statistics.mapAge.getDaysPart().toString();
-        final String players = statistics.uniquePlayerCount.toString();
+        final String players = Integer.toString(statistics.players.getUniqueJoins());
         final String size = config.filesize_format.format(statistics.fileStats.getTrueSize());
-        final String spoofsize = config.filesize_format.format(statistics.fileStats.getSpoofedSize());
+        final String spoofedSize = config.filesize_format.format(statistics.fileStats.getSpoofedSize());
         final String ageAsDays = statistics.mapAge.asDays().toString();
         final String ageAsMonths = statistics.mapAge.asMonths().toString();
         final String ageAsYears = statistics.mapAge.asYears().toString();
@@ -51,7 +51,7 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
                     .replace("%days%", days)
                     .replace("%players%", players)
                     .replace("%size%", size)
-                    .replace("%spoofsize%", spoofsize)
+                    .replace("%spoofsize%", spoofedSize)
                     .replace("%age_in_days%", ageAsDays)
                     .replace("%age_in_months%", ageAsMonths)
                     .replace("%age_in_years%", ageAsYears)

@@ -56,7 +56,7 @@ public class PAPIExpansion extends PlaceholderExpansion {
             case "chunk_file_count":
                 return Integer.toString(statistics.fileStats.getChunkFileCount());
             case "players":
-                return statistics.uniquePlayerCount.toString();
+                return Integer.toString(statistics.players.getUniqueJoins());
             case "days":
                 return statistics.mapAge.getDaysPart().toString();
             case "months":

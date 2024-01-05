@@ -2,23 +2,24 @@ package me.xGinko.betterworldstats.stats;
 
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import me.xGinko.betterworldstats.BetterWorldStats;
 
 import java.time.Duration;
 import java.util.Calendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
-public final class mapAge {
+public final class MapAge {
 
     private final Calendar calendar;
     private final Cache<Key, Integer> cache;
     private enum Key { DAYS_PART, MONTHS_PART, YEARS_PART, DAYS, MONTHS };
     private final long server_birth_time_millis;
 
-    public mapAge(final long server_birth_time_millis) {
+    public MapAge() {
         this.calendar = Calendar.getInstance(TimeZone.getDefault());
         this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
-        this.server_birth_time_millis = server_birth_time_millis;
+        this.server_birth_time_millis = BetterWorldStats.getConfiguration().server_birth_time_millis;
     }
 
     private long getMillisSinceBirth() {
