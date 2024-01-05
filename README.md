@@ -3,7 +3,7 @@
 ### Supports Spigot, Paper & Folia from 1.12.2 - 1.20.4.
 
 #### Features:
-- **Async** world size check
+- **Async** world size check that only runs when needed
 - Update of unique player count on join **without lag**
 - Language display based on client locale (Multilang)
 - **Folia** compatibility
@@ -13,15 +13,21 @@
 - A more clear and understandable config file
 - Option to disable console logging in config
 
-| PAPI Placeholders                |
-|:---------------------------:|
-| %worldstats_size%              |
-| %worldstats_spoofsize%    |
-| %worldstats_players%        |
-| %worldstats_ageindays%   |
-| %worldstats_days%             |
-| %worldstats_months%        |
-| %worldstats_years%            |
+|       PAPI Placeholders       |
+|:-----------------------------:|
+|       %worldstats_size%       |
+|    %worldstats_spoofsize%     |
+|     %worldstats_players%      |
+|       %worldstats_days%       |
+|      %worldstats_months%      |
+|      %worldstats_years%       |
+|   %worldstats_age_in_days%    |
+|  %worldstats_age_in_months%   |
+|   %worldstats_age_in_years%   |
+|    %worldstats_file_count%    |
+|   %worldstats_folder_count%   |
+| %worldstats_chunk_file_count% |
+
 
 ### Screenshots
 
