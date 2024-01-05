@@ -120,6 +120,7 @@
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>
             <version>v2.0.0-rc.1</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Caching -->
         <dependency>
