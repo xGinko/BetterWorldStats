@@ -13,14 +13,14 @@
 - A more clear and understandable config file
 - Option to disable console logging in config
 
-|       PAPI Placeholders       |                               |
-|:-----------------------------:|:-----------------------------:|
-|       %worldstats_size%       |   %worldstats_age_in_days%    |
-|    %worldstats_spoofsize%     |  %worldstats_age_in_months%   |
-|     %worldstats_players%      |   %worldstats_age_in_years%   |
-|       %worldstats_days%       |    %worldstats_file_count%    |
-|      %worldstats_months%      |   %worldstats_folder_count%   |
-|      %worldstats_years%       | %worldstats_chunk_file_count% |
+|   PAPI Placeholders    |       PAPI Placeholders       |
+|:----------------------:|:-----------------------------:|
+|   %worldstats_size%    |   %worldstats_age_in_days%    |
+| %worldstats_spoofsize% |  %worldstats_age_in_months%   |
+|  %worldstats_players%  |   %worldstats_age_in_years%   |
+|   %worldstats_days%    |    %worldstats_file_count%    |
+|  %worldstats_months%   |   %worldstats_folder_count%   |
+|   %worldstats_years%   | %worldstats_chunk_file_count% |
 
 
 ### Screenshots
