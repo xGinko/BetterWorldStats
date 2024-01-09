@@ -24,6 +24,7 @@ public class FileStats {
         this.filesTotal = new AtomicInteger(0);
         this.chunkFiles = new AtomicInteger(0);
         this.foldersTotal = new AtomicInteger(0);
+        this.updateAsync(); // Perform check on init so values aren't 0 on first request
     }
 
     private void updateAsync() {
