@@ -1,4 +1,5 @@
 [![BetterWorldStats](https://bstats.org/signatures/bukkit/BetterWorldStats.svg)](https://bstats.org/plugin/bukkit/BetterWorldStats/17204)
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/Z8Z3RVMAJ)
 
 ### Supports Spigot, Paper & Folia from 1.12.2 - 1.20.4.
 
@@ -22,7 +23,5 @@
 |  %worldstats_months%   |   %worldstats_folder_count%   |
 |   %worldstats_years%   | %worldstats_chunk_file_count% |
 
-
 ### Screenshots
-
 ![Preview of /worldstats](https://cdn.modrinth.com/data/k1yTstBI/images/58afc457e8d6d512b3a7107c429edcd02e975c7e.png)
