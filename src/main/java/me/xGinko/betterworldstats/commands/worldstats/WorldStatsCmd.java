@@ -1,17 +1,20 @@
 package me.xGinko.betterworldstats.commands.worldstats;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.WorldStats;
+import me.xGinko.betterworldstats.Statistics;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
-import me.xGinko.betterworldstats.utils.StringUtil;
+import me.xGinko.betterworldstats.utils.KyoriUtil;
+import me.xGinko.betterworldstats.utils.PAPIUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 public class WorldStatsCmd implements BetterWorldStatsCommand {
 
-    private final WorldStats statistics;
+    private final Statistics statistics;
     private final Config config;
 
     public WorldStatsCmd() {
@@ -27,38 +30,54 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
-            sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
             return true;
         }
 
-        final String years = statistics.mapAge.getYearsPart().toString();
-        final String months = statistics.mapAge.getMonthsPart().toString();
-        final String days = statistics.mapAge.getDaysPart().toString();
-        final String players = Integer.toString(statistics.players.getUniqueJoins());
-        final String size = config.filesize_format.format(statistics.fileStats.getTrueSize());
-        final String spoofedSize = config.filesize_format.format(statistics.fileStats.getSpoofedSize());
-        final String ageAsDays = statistics.mapAge.asDays().toString();
-        final String ageAsMonths = statistics.mapAge.asMonths().toString();
-        final String ageAsYears = statistics.mapAge.asYears().toString();
-        final String fileCount = Integer.toString(statistics.fileStats.getFileCount());
-        final String folderCount = Integer.toString(statistics.fileStats.getFolderCount());
-        final String chunkFileCount = Integer.toString(statistics.fileStats.getChunkFileCount());
+        final TextReplacementConfig years = TextReplacementConfig.builder()
+                .matchLiteral("%years%").replacement(statistics.mapAge.getYearsPart().toString())
+                .build();
+        final TextReplacementConfig months = TextReplacementConfig.builder()
+                .matchLiteral("%months%").replacement(statistics.mapAge.getMonthsPart().toString())
+                .build();
+        final TextReplacementConfig days = TextReplacementConfig.builder()
+                .matchLiteral("%days%").replacement(statistics.mapAge.getDaysPart().toString())
+                .build();
+        final TextReplacementConfig players = TextReplacementConfig.builder()
+                .matchLiteral("%players%").replacement(Integer.toString(statistics.players.getUniqueJoins()))
+                .build();
+        final TextReplacementConfig fileSize = TextReplacementConfig.builder()
+                .matchLiteral("%size%").replacement(config.filesize_format.format(statistics.fileStats.getTrueSize()))
+                .build();
+        final TextReplacementConfig spoofSize = TextReplacementConfig.builder()
+                .matchLiteral("%spoofsize%").replacement(config.filesize_format.format(statistics.fileStats.getSpoofedSize()))
+                .build();
+        final TextReplacementConfig ageAsDays = TextReplacementConfig.builder()
+                .matchLiteral("%age_in_days%").replacement(statistics.mapAge.asDays().toString())
+                .build();
+        final TextReplacementConfig ageAsMonths = TextReplacementConfig.builder()
+                .matchLiteral("%age_in_months%").replacement(statistics.mapAge.asMonths().toString())
+                .build();
+        final TextReplacementConfig ageAsYears = TextReplacementConfig.builder()
+                .matchLiteral("%age_in_years%").replacement(statistics.mapAge.asYears().toString())
+                .build();
+        final TextReplacementConfig fileCount = TextReplacementConfig.builder()
+                .matchLiteral("%file_count%").replacement(Integer.toString(statistics.fileStats.getFileCount()))
+                .build();
+        final TextReplacementConfig folderCount = TextReplacementConfig.builder()
+                .matchLiteral("%folder_count%").replacement(Integer.toString(statistics.fileStats.getFolderCount()))
+                .build();
+        final TextReplacementConfig chunkFileCount = TextReplacementConfig.builder()
+                .matchLiteral("%chunk_file_count%").replacement(Integer.toString(statistics.fileStats.getChunkFileCount()))
+                .build();
 
-        for (String line : BetterWorldStats.getLang(sender).world_stats_message) {
-            String prePopulated = line
-                    .replace("%years%", years)
-                    .replace("%months%", months)
-                    .replace("%days%", days)
-                    .replace("%players%", players)
-                    .replace("%size%", size)
-                    .replace("%spoofsize%", spoofedSize)
-                    .replace("%age_in_days%", ageAsDays)
-                    .replace("%age_in_months%", ageAsMonths)
-                    .replace("%age_in_years%", ageAsYears)
-                    .replace("%file_count%", fileCount)
-                    .replace("%folder_count%", folderCount)
-                    .replace("%chunk_file_count%", chunkFileCount);
-            sender.sendMessage(BetterWorldStats.foundPlaceholderAPI ? StringUtil.tryPopulateWithPAPI(prePopulated) : prePopulated);
+        for (Component line : BetterWorldStats.getLang(sender).world_stats_message) {
+            KyoriUtil.sendMessage(sender, PAPIUtil.tryPopulate(line
+                    .replaceText(years).replaceText(months).replaceText(days)
+                    .replaceText(players).replaceText(fileSize).replaceText(spoofSize)
+                    .replaceText(ageAsDays).replaceText(ageAsMonths).replaceText(ageAsYears)
+                    .replaceText(fileCount).replaceText(folderCount).replaceText(chunkFileCount)
+            ));
         }
 
         return true;

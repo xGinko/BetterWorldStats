@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class PAPIExpansion extends PlaceholderExpansion {
 
-    private final WorldStats statistics;
+    private final Statistics statistics;
     private final Config config;
 
     PAPIExpansion() {

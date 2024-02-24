@@ -5,9 +5,9 @@
 # %size%
 # %players%
 stats-message:
-  - '&3-----------------------------------------------------'
-  - ' &7En en Server Spawnearon &6%players% Jugador(s)&7 Al menos una vez'
-  - ' &7El Mapa Tiene &6%years% Años(s)&7, &6%months% Meses(s)&7 y &6%days% Dias(s)&7 De antiguedad'
-  - ' &7El Mundo (Comprimido) Es un total a &6%size% GB'
-  - '&3-----------------------------------------------------'
-no-permission: "&cNo tienes permisos para usar este comando."
+  - '<dark_aqua>-----------------------------------------------------'
+  - ' <grey>En en Server Spawnearon <gold>%players% Jugador(s)<grey> Al menos una vez'
+  - ' <grey>El Mapa Tiene <gold>%years% Años(s)<grey>, <gold>%months% Meses(s)<grey> y <gold>%days% Dias(s)<grey> De antiguedad'
+  - ' <grey>El Mundo (Comprimido) Es un total a <gold>%size% GB'
+  - '<dark_aqua>-----------------------------------------------------'
+no-permission: "<red>No tienes permisos para usar este comando."

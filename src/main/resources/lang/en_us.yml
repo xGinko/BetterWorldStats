@@ -5,9 +5,9 @@
 # %size%
 # %players%
 stats-message:
-  - '&3-----------------------------------------------------'
-  - ' &7The server has spawned &6%players% player(s)&7 at least once'
-  - ' &7The map is &6%years% year(s)&7, &6%months% month(s)&7 and &6%days% day(s)&7 old'
-  - ' &7The world (with compression) is a total of &6%size% GB'
-  - '&3-----------------------------------------------------'
-no-permission: "&cYou don't have permission to use this command."
+  - '<dark_aqua>-----------------------------------------------------'
+  - ' <grey>The server has spawned <gold>%players% player(s)<grey> at least once'
+  - ' <grey>The map is <gold>%years% year(s)<grey>, <gold>%months% month(s)<grey> and <gold>%days% day(s)<grey> old'
+  - ' <grey>The world (with compression) is a total of <gold>%size% GB'
+  - '<dark_aqua>-----------------------------------------------------'
+no-permission: "<red>You don't have permission to use this command."

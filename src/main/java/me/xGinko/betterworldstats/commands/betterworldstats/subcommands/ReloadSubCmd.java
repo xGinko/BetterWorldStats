@@ -2,7 +2,10 @@ package me.xGinko.betterworldstats.commands.betterworldstats.subcommands;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.commands.SubCommand;
-import org.bukkit.ChatColor;
+import me.xGinko.betterworldstats.utils.KyoriUtil;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 
 public class ReloadSubCmd extends SubCommand {
@@ -15,24 +18,26 @@ public class ReloadSubCmd extends SubCommand {
     }
 
     @Override
-    public String getDescription() {
-        return "Reload the plugin configuration.";
+    public TextComponent getDescription() {
+        return Component.text("Reload the plugin configuration.").color(NamedTextColor.GRAY);
     }
 
     @Override
-    public String getSyntax() {
-        return "/bws reload";
+    public TextComponent getSyntax() {
+        return Component.text("/bws reload").color(NamedTextColor.AQUA);
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (!sender.hasPermission("betterworldstats.reload")) {
-            sender.sendMessage(BetterWorldStats.getLang(sender).no_permission);
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
             return;
         }
 
-        sender.sendMessage(ChatColor.WHITE + "Reloading BetterWorldStats...");
-        BetterWorldStats.getInstance().reloadPlugin();
-        sender.sendMessage(ChatColor.GREEN + "Reload complete.");
+        KyoriUtil.sendMessage(sender, Component.text("Reloading BetterWorldStats...").color(NamedTextColor.WHITE));
+        BetterWorldStats.getFoliaLib().getImpl().runNextTick(reload -> {
+            BetterWorldStats.getInstance().reloadPlugin();
+            KyoriUtil.sendMessage(sender, Component.text("Reload complete.").color(NamedTextColor.GREEN));
+        });
     }
 }

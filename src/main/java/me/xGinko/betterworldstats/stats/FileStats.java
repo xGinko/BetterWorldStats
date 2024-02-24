@@ -1,7 +1,6 @@
 package me.xGinko.betterworldstats.stats;
 
 import com.google.common.util.concurrent.AtomicDouble;
-import com.tcoded.folialib.FoliaLib;
 import com.tcoded.folialib.impl.ServerImplementation;
 import me.xGinko.betterworldstats.BetterWorldStats;
 import me.xGinko.betterworldstats.config.Config;
@@ -18,13 +17,11 @@ public class FileStats {
     private long next_possible_check_time_millis = 0L;
 
     public FileStats() {
-        this.serverImpl = new FoliaLib(BetterWorldStats.getInstance()).getImpl();
+        this.serverImpl = BetterWorldStats.getFoliaLib().getImpl();
         this.config = BetterWorldStats.getConfiguration();
         this.sizeInGB = new AtomicDouble(0.0);
-        this.filesTotal = new AtomicInteger(0);
-        this.chunkFiles = new AtomicInteger(0);
-        this.foldersTotal = new AtomicInteger(0);
-        this.updateAsync(); // Perform check on init so values aren't 0 on first request
+        this.filesTotal = this.chunkFiles = this.foldersTotal = new AtomicInteger(0);
+        this.updateAsync(); // Check on init so values aren't 0 on first request
     }
 
     private void updateAsync() {
@@ -91,7 +88,7 @@ public class FileStats {
                     bytes += this.getByteSize(subFile);
                 }
             } catch (SecurityException e) {
-                BetterWorldStats.getLog().severe("Could not read directory '"+file.getPath()+"' because access was denied.");
+                BetterWorldStats.getLog().error("Could not read directory '"+file.getPath()+"' because access was denied.", e);
             }
         }
         return bytes;

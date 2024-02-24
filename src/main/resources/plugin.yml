@@ -15,7 +15,7 @@ commands:
       - betterws
       - bws
   worldstats:
-    description: Shows the WorldStats
+    description: Shows the Statistics
     usage: /<command>
     aliases:
       - stats

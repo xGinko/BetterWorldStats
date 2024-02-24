@@ -6,10 +6,10 @@ import me.xGinko.betterworldstats.BetterWorldStats;
 
 import java.io.File;
 import java.text.DecimalFormat;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.time.DateTimeException;
+import java.time.ZoneId;
+import java.time.zone.ZoneRulesException;
+import java.util.*;
 
 public class Config {
 
@@ -17,6 +17,7 @@ public class Config {
     public final String default_lang;
     public final DecimalFormat filesize_format;
     public final Set<String> paths_to_scan;
+    public final TimeZone timeZone;
     public final boolean auto_lang, log_is_enabled;
     public final long filesize_update_period_millis, server_birth_time_millis;
     public final double additional_spoof_filesize;
@@ -25,7 +26,7 @@ public class Config {
         // Create plugin folder first if it does not exist yet
         File pluginFolder = BetterWorldStats.getInstance().getDataFolder();
         if (!pluginFolder.exists() && !pluginFolder.mkdir())
-            BetterWorldStats.getLog().severe("Failed to create plugin folder.");
+            BetterWorldStats.getLog().error("Failed to create plugin folder.");
         // Load config.yml with ConfigMaster
         this.config = ConfigFile.loadConfig(new File(pluginFolder, "config.yml"));
 
@@ -48,7 +49,19 @@ public class Config {
 
         // Settings
         this.server_birth_time_millis = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(),
-                "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.");
+                "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.\n" +
+                        "This option expects you to enter the timestamp in millis. If you have issues with your server age being way too\n" +
+                        "high, its probably because you entered the time in seconds and are therefore missing 3 zeros at the end.");
+        ZoneId zoneId = ZoneId.systemDefault();
+        try {
+            zoneId = ZoneId.of(getString("time-zone", zoneId.getId(),
+                    "The TimeZone (ZoneId) to use for scheduling restart times."));
+        } catch (ZoneRulesException e) {
+            BetterWorldStats.getLog().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
+        } catch (DateTimeException e) {
+            BetterWorldStats.getLog().warn("Configured timezone has an invalid format. Using system default zone '"+zoneId+"'");
+        }
+        this.timeZone = TimeZone.getTimeZone(zoneId);
         this.filesize_update_period_millis = getInt("filesize-update-period-in-seconds", 3600,
                 "The update period at which the file size is checked.") * 1000L;
         this.filesize_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
@@ -83,7 +96,7 @@ public class Config {
         try {
             this.config.save();
         } catch (Exception e) {
-            BetterWorldStats.getLog().severe("Failed to save config file! - " + e.getLocalizedMessage());
+            BetterWorldStats.getLog().error("Failed to save config file!", e);
         }
     }
 

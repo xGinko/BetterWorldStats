@@ -1,8 +1,11 @@
 package me.xGinko.betterworldstats;
 
+import com.tcoded.folialib.FoliaLib;
 import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xGinko.betterworldstats.config.Config;
 import me.xGinko.betterworldstats.config.LanguageCache;
+import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -14,9 +17,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.jar.JarFile;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -25,17 +28,23 @@ import java.util.zip.ZipEntry;
 public final class BetterWorldStats extends JavaPlugin {
 
     private static BetterWorldStats instance;
-    private static HashMap<String, LanguageCache> languageCacheMap;
+    private static FoliaLib foliaLib;
+    private static Map<String, LanguageCache> languageCacheMap;
     private static Config config;
-    private static WorldStats statistics;
+    private static Statistics statistics;
     private static PAPIExpansion papiExpansion;
-    private static Logger logger;
-    public static boolean foundPlaceholderAPI;
+    private static BukkitAudiences audiences;
+    private static ComponentLogger logger;
+    private static Metrics metrics;
 
     @Override
     public void onEnable() {
         instance = this;
-        logger = getLogger();
+        foliaLib = new FoliaLib(this);
+        audiences = BukkitAudiences.create(this);
+        logger = ComponentLogger.logger(this.getName());
+        metrics = new Metrics(this, 17204);
+
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
         logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
@@ -48,21 +57,46 @@ public final class BetterWorldStats extends JavaPlugin {
         reloadConfiguration();
         logger.info("Registering commands");
         BetterWorldStatsCommand.reloadCommands();
-        logger.info("Loading Metrics");
-        new Metrics(this, 17204);
         logger.info("Done.");
+    }
+
+    @Override
+    public void onDisable() {
+        HandlerList.unregisterAll(this);
+        if (foliaLib != null) {
+            foliaLib.getImpl().cancelAllTasks();
+            foliaLib = null;
+        }
+        if (audiences != null) {
+            audiences.close();
+            audiences = null;
+        }
+        if (papiExpansion != null) {
+            papiExpansion.unregister();
+            papiExpansion = null;
+        }
+        if (metrics != null) {
+            metrics.shutdown();
+            metrics = null;
+        }
     }
 
     public static BetterWorldStats getInstance()  {
         return instance;
     }
-    public static WorldStats getStatistics() {
+    public static Statistics getStatistics() {
         return statistics;
+    }
+    public static FoliaLib getFoliaLib() {
+        return foliaLib;
+    }
+    public static BukkitAudiences getAudiences() {
+        return audiences;
     }
     public static Config getConfiguration() {
         return config;
     }
-    public static Logger getLog() {
+    public static ComponentLogger getLog() {
         return logger;
     }
     public static LanguageCache getLang(CommandSender commandSender) {
@@ -83,17 +117,14 @@ public final class BetterWorldStats extends JavaPlugin {
         try {
             config = new Config();
             HandlerList.unregisterAll(this);
-            statistics = new WorldStats();
-            if (this.getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                foundPlaceholderAPI = true;
+            statistics = new Statistics();
+            if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                 if (papiExpansion != null) papiExpansion.unregister();
                 papiExpansion = new PAPIExpansion();
-            } else {
-                foundPlaceholderAPI = false;
             }
             config.saveConfig();
         } catch (Exception e) {
-            logger.severe("Failed while loading config! - " + e.getLocalizedMessage());
+            logger.error("Failed loading config!", e);
         }
     }
 
@@ -119,8 +150,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 }
             }
         } catch (Exception e) {
-            logger.severe("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!");
-            e.printStackTrace();
+            logger.error("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!", e);
         }
     }
 
@@ -131,7 +161,7 @@ public final class BetterWorldStats extends JavaPlugin {
                     .filter(name -> name.startsWith("lang" + File.separator) && name.endsWith(".yml"))
                     .collect(Collectors.toSet());
         } catch (IOException e) {
-            logger.severe("Failed getting default lang files! - "+e.getLocalizedMessage());
+            logger.error("Failed getting default lang files!", e);
             return Collections.emptySet();
         }
     }

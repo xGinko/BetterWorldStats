@@ -1,6 +1,7 @@
 package me.xGinko.betterworldstats.stats;
 
 import me.xGinko.betterworldstats.BetterWorldStats;
+import me.xGinko.betterworldstats.Statistics;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -8,7 +9,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Players implements Listener {
+public class Players extends Statistics implements Listener {
 
     private final AtomicInteger uniquePlayers;
 
