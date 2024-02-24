@@ -55,7 +55,7 @@ public class Config {
         ZoneId zoneId = ZoneId.systemDefault();
         try {
             zoneId = ZoneId.of(getString("time-zone", zoneId.getId(),
-                    "The TimeZone (ZoneId) to use for scheduling restart times."));
+                    "The time zone (ZoneId) to use."));
         } catch (ZoneRulesException e) {
             BetterWorldStats.getLog().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
         } catch (DateTimeException e) {
