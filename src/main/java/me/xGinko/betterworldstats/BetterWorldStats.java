@@ -44,7 +44,6 @@ public final class BetterWorldStats extends JavaPlugin {
         audiences = BukkitAudiences.create(this);
         logger = ComponentLogger.logger(this.getName());
         metrics = new Metrics(this, 17204);
-
         logger.info("                                                                                ");
         logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
         logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
@@ -79,6 +78,10 @@ public final class BetterWorldStats extends JavaPlugin {
             metrics.shutdown();
             metrics = null;
         }
+        statistics = null;
+        config = null;
+        languageCacheMap = null;
+        logger = null;
     }
 
     public static BetterWorldStats getInstance()  {
