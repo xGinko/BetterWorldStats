@@ -1,8 +1,8 @@
-package me.xGinko.betterworldstats.config;
+package me.xginko.betterworldstats.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.configurationmaster.api.Title;
-import me.xGinko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.BetterWorldStats;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -13,7 +13,7 @@ import java.util.*;
 
 public class Config {
 
-    private final ConfigFile config;
+    private final ConfigFile configFile;
     public final String default_lang;
     public final DecimalFormat filesize_format;
     public final Set<String> paths_to_scan;
@@ -28,10 +28,10 @@ public class Config {
         if (!pluginFolder.exists() && !pluginFolder.mkdir())
             BetterWorldStats.getLog().error("Failed to create plugin folder.");
         // Load config.yml with ConfigMaster
-        this.config = ConfigFile.loadConfig(new File(pluginFolder, "config.yml"));
+        this.configFile = ConfigFile.loadConfig(new File(pluginFolder, "config.yml"));
 
         // Title
-        this.config.setTitle(new Title()
+        this.configFile.setTitle(new Title()
                 .withWidth(92)
                 .addSolidLine()
                 .addLine("           ___      _   _         __      __       _    _ ___ _        _                           ")
@@ -54,8 +54,7 @@ public class Config {
                         "high, its probably because you entered the time in seconds and are therefore missing 3 zeros at the end.");
         ZoneId zoneId = ZoneId.systemDefault();
         try {
-            zoneId = ZoneId.of(getString("time-zone", zoneId.getId(),
-                    "The time zone (ZoneId) to use."));
+            zoneId = ZoneId.of(getString("time-zone", ZoneId.systemDefault().getId(), "The time zone (ZoneId) to use."));
         } catch (ZoneRulesException e) {
             BetterWorldStats.getLog().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
         } catch (DateTimeException e) {
@@ -76,7 +75,7 @@ public class Config {
                 "Whether to log to console when plugin updates filesize.");
 
         // Placeholders
-        this.config.addComment("PlaceholderAPI placeholders:" +
+        this.configFile.addComment("PlaceholderAPI placeholders:" +
                 "\n %worldstats_size%" +
                 "\n %worldstats_spoofsize%" +
                 "\n %worldstats_players%" +
@@ -86,7 +85,7 @@ public class Config {
                 "\n %worldstats_file_count%" +
                 "\n %worldstats_folder_count%" +
                 "\n %worldstats_chunk_file_count%");
-        this.config.addComment("These PAPI placeholders return the same values as in the command:" +
+        this.configFile.addComment("These PAPI placeholders return the same values as in the command:" +
                 "\n %worldstats_days%" +
                 "\n %worldstats_months%" +
                 "\n %worldstats_years%");
@@ -94,64 +93,64 @@ public class Config {
 
     public void saveConfig() {
         try {
-            this.config.save();
+            this.configFile.save();
         } catch (Exception e) {
             BetterWorldStats.getLog().error("Failed to save config file!", e);
         }
     }
 
     public boolean getBoolean(String path, boolean def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getBoolean(path, def);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getBoolean(path, def);
     }
 
     public boolean getBoolean(String path, boolean def) {
-        this.config.addDefault(path, def);
-        return this.config.getBoolean(path, def);
+        this.configFile.addDefault(path, def);
+        return this.configFile.getBoolean(path, def);
     }
 
     public String getString(String path, String def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getString(path, def);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getString(path, def);
     }
 
     public String getString(String path, String def) {
-        this.config.addDefault(path, def);
-        return this.config.getString(path, def);
+        this.configFile.addDefault(path, def);
+        return this.configFile.getString(path, def);
     }
 
     public double getDouble(String path, double def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getDouble(path, def);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getDouble(path, def);
     }
 
     public double getDouble(String path, double def) {
-        this.config.addDefault(path, def);
-        return this.config.getDouble(path, def);
+        this.configFile.addDefault(path, def);
+        return this.configFile.getDouble(path, def);
     }
 
     public int getInt(String path, int def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getInteger(path, def);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getInteger(path, def);
     }
 
     public int getInt(String path, int def) {
-        this.config.addDefault(path, def);
-        return this.config.getInteger(path, def);
+        this.configFile.addDefault(path, def);
+        return this.configFile.getInteger(path, def);
     }
     
     public long getLong(String path, long def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getLong(path, def);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getLong(path, def);
     }
 
     public List<String> getList(String path, List<String> def, String comment) {
-        this.config.addDefault(path, def, comment);
-        return this.config.getStringList(path);
+        this.configFile.addDefault(path, def, comment);
+        return this.configFile.getStringList(path);
     }
 
     public List<String> getList(String path, List<String> def) {
-        this.config.addDefault(path, def);
-        return this.config.getStringList(path);
+        this.configFile.addDefault(path, def);
+        return this.configFile.getStringList(path);
     }
 }

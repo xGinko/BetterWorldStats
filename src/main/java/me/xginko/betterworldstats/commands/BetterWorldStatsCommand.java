@@ -1,23 +1,20 @@
-package me.xGinko.betterworldstats.commands;
+package me.xginko.betterworldstats.commands;
 
-import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.commands.betterworldstats.BetterWorldStatsCmd;
-import me.xGinko.betterworldstats.commands.worldstats.WorldStatsCmd;
-import org.bukkit.command.Command;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.commands.betterworldstats.BetterWorldStatsCmd;
+import me.xginko.betterworldstats.commands.worldstats.WorldStatsCmd;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandMap;
-import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.bukkit.command.TabCompleter;
 
 import java.util.HashSet;
+import java.util.Set;
 
-public interface BetterWorldStatsCommand extends CommandExecutor {
+public interface BetterWorldStatsCommand extends CommandExecutor, TabCompleter {
 
     String label();
-    @Override
-    boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args);
 
-    HashSet<BetterWorldStatsCommand> commands = new HashSet<>();
+    Set<BetterWorldStatsCommand> commands = new HashSet<>();
     static void reloadCommands() {
         commands.clear();
 

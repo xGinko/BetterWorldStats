@@ -1,24 +1,23 @@
-package me.xGinko.betterworldstats.stats;
+package me.xginko.betterworldstats.stats;
 
 import com.google.common.util.concurrent.AtomicDouble;
 import com.tcoded.folialib.impl.ServerImplementation;
-import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.Statistics;
-import me.xGinko.betterworldstats.config.Config;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.config.Config;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FileStats extends Statistics {
+public class FileStats {
 
-    private final ServerImplementation serverImpl;
+    private final ServerImplementation scheduler;
     private final Config config;
     private final AtomicDouble sizeInGB;
     private final AtomicInteger filesTotal, chunkFiles, foldersTotal;
     private long next_possible_check_time_millis = 0L;
 
     public FileStats() {
-        this.serverImpl = BetterWorldStats.getFoliaLib().getImpl();
+        this.scheduler = BetterWorldStats.getFoliaLib().getImpl();
         this.config = BetterWorldStats.getConfiguration();
         this.sizeInGB = new AtomicDouble(0.0);
         this.filesTotal = this.chunkFiles = this.foldersTotal = new AtomicInteger(0);
@@ -30,7 +29,7 @@ public class FileStats extends Statistics {
         // If on cooldown, do nothing
         if (current_time_millis < next_possible_check_time_millis) return;
         // Schedule check async
-        this.serverImpl.runAsync(updateFileSize -> {
+        this.scheduler.runAsync(updateFileSize -> {
             // Reset values so they can be updated next
             this.filesTotal.set(0);
             this.chunkFiles.set(0);
@@ -43,11 +42,11 @@ public class FileStats extends Statistics {
                 BetterWorldStats.getLog().info("Updated world size asynchronously "
                         + "(Real size: " + config.filesize_format.format(totalSize) + "GB, "
                         + "Spoofed size: " + config.filesize_format
-                        .format(totalSize+config.additional_spoof_filesize) + "GB).");
+                        .format(totalSize + config.additional_spoof_filesize) + "GB).");
             }
+            // Set cooldown
+            this.next_possible_check_time_millis = current_time_millis + config.filesize_update_period_millis;
         });
-        // Set cooldown
-        this.next_possible_check_time_millis = current_time_millis + config.filesize_update_period_millis;
     }
 
     public double getSpoofedSize() {

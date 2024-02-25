@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>me.xGinko</groupId>
+    <groupId>me.xginko</groupId>
     <artifactId>BetterWorldStats</artifactId>
     <version>1.10.0</version>
     <packaging>jar</packaging>
@@ -56,6 +56,10 @@
                                 <relocation>
                                     <pattern>net.kyori</pattern>
                                     <shadedPattern>me.xginko.betterworldstats.libs.kyori</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>io.github.thatsmusic99.configurationmaster</pattern>
+                                    <shadedPattern>me.xginko.betterworldstats.libs.configmaster</shadedPattern>
                                 </relocation>
                             </relocations>
                             <filters>
@@ -152,7 +156,7 @@
             <artifactId>FoliaLib</artifactId>
             <version>0.3.1</version>
         </dependency>
-        <!-- Configuration Master for clean config file management -->
+        <!-- ConfigurationMaster for easy config file management -->
         <dependency>
             <groupId>com.github.thatsmusic99</groupId>
             <artifactId>ConfigurationMaster-API</artifactId>

@@ -1,16 +1,19 @@
-package me.xGinko.betterworldstats.commands.worldstats;
+package me.xginko.betterworldstats.commands.worldstats;
 
-import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.Statistics;
-import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
-import me.xGinko.betterworldstats.config.Config;
-import me.xGinko.betterworldstats.utils.KyoriUtil;
-import me.xGinko.betterworldstats.utils.PAPIUtil;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.Statistics;
+import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
+import me.xginko.betterworldstats.config.Config;
+import me.xginko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.utils.PAPIUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Collections;
+import java.util.List;
 
 public class WorldStatsCmd implements BetterWorldStatsCommand {
 
@@ -28,7 +31,12 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public @Nullable List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
             KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
             return true;

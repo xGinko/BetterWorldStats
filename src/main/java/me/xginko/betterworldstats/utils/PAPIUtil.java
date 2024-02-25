@@ -1,4 +1,4 @@
-package me.xGinko.betterworldstats.utils;
+package me.xginko.betterworldstats.utils;
 
 import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;

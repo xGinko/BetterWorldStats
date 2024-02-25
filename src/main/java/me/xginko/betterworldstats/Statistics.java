@@ -1,8 +1,8 @@
-package me.xGinko.betterworldstats;
+package me.xginko.betterworldstats;
 
-import me.xGinko.betterworldstats.stats.FileStats;
-import me.xGinko.betterworldstats.stats.MapAge;
-import me.xGinko.betterworldstats.stats.Players;
+import me.xginko.betterworldstats.stats.FileStats;
+import me.xginko.betterworldstats.stats.MapAge;
+import me.xginko.betterworldstats.stats.Players;
 
 public class Statistics {
 

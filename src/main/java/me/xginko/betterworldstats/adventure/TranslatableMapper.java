@@ -1,4 +1,4 @@
-package me.xGinko.betterworldstats.adventure;
+package me.xginko.betterworldstats.adventure;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;

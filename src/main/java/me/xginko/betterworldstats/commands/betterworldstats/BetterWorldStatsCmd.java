@@ -1,10 +1,10 @@
-package me.xGinko.betterworldstats.commands.betterworldstats;
+package me.xginko.betterworldstats.commands.betterworldstats;
 
-import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
-import me.xGinko.betterworldstats.commands.SubCommand;
-import me.xGinko.betterworldstats.commands.betterworldstats.subcommands.ReloadSubCmd;
-import me.xGinko.betterworldstats.commands.betterworldstats.subcommands.VersionSubCmd;
-import me.xGinko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
+import me.xginko.betterworldstats.commands.SubCommand;
+import me.xginko.betterworldstats.commands.betterworldstats.subcommands.ReloadSubCmd;
+import me.xginko.betterworldstats.commands.betterworldstats.subcommands.VersionSubCmd;
+import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.Command;

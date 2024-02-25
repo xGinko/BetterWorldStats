@@ -1,10 +1,14 @@
-package me.xGinko.betterworldstats;
+package me.xginko.betterworldstats;
 
 import com.tcoded.folialib.FoliaLib;
-import me.xGinko.betterworldstats.commands.BetterWorldStatsCommand;
-import me.xGinko.betterworldstats.config.Config;
-import me.xGinko.betterworldstats.config.LanguageCache;
+import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
+import me.xginko.betterworldstats.config.Config;
+import me.xginko.betterworldstats.config.LanguageCache;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
@@ -26,6 +30,8 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 public final class BetterWorldStats extends JavaPlugin {
+    public static final TextColor COLOR = TextColor.color(0,204,204);
+    public static final Style STYLE = Style.style(COLOR, TextDecoration.BOLD);
 
     private static BetterWorldStats instance;
     private static FoliaLib foliaLib;
@@ -44,19 +50,19 @@ public final class BetterWorldStats extends JavaPlugin {
         audiences = BukkitAudiences.create(this);
         logger = ComponentLogger.logger(this.getName());
         metrics = new Metrics(this, 17204);
-        logger.info("                                                                                ");
-        logger.info("  ___      _   _         __      __       _    _ ___ _        _                 ");
-        logger.info(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ");
-        logger.info(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ");
-        logger.info(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/");
-        logger.info("                                                                                ");
-        logger.info("Loading languages");
+        logger.info(Component.text("                                                                                ").style(STYLE));
+        logger.info(Component.text("  ___      _   _         __      __       _    _ ___ _        _                 ").style(STYLE));
+        logger.info(Component.text(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ").style(STYLE));
+        logger.info(Component.text(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ").style(STYLE));
+        logger.info(Component.text(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(STYLE));
+        logger.info(Component.text("                                                                                ").style(STYLE));
+        logger.info(Component.text("Loading languages").style(STYLE));
         reloadLang();
-        logger.info("Loading config");
+        logger.info(Component.text("Loading config").style(STYLE));
         reloadConfiguration();
-        logger.info("Registering commands");
+        logger.info(Component.text("Registering commands").style(STYLE));
         BetterWorldStatsCommand.reloadCommands();
-        logger.info("Done.");
+        logger.info(Component.text("Done.").style(STYLE));
     }
 
     @Override
@@ -84,27 +90,34 @@ public final class BetterWorldStats extends JavaPlugin {
         logger = null;
     }
 
-    public static BetterWorldStats getInstance()  {
+    public static BetterWorldStats getInstance() {
         return instance;
     }
+
     public static Statistics getStatistics() {
         return statistics;
     }
+
     public static FoliaLib getFoliaLib() {
         return foliaLib;
     }
+
     public static BukkitAudiences getAudiences() {
         return audiences;
     }
+
     public static Config getConfiguration() {
         return config;
     }
+
     public static ComponentLogger getLog() {
         return logger;
     }
+
     public static LanguageCache getLang(CommandSender commandSender) {
         return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);
     }
+
     public static LanguageCache getLang(String lang) {
         if (!config.auto_lang) return languageCacheMap.get(config.default_lang);
         return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang));
@@ -118,8 +131,8 @@ public final class BetterWorldStats extends JavaPlugin {
 
     private void reloadConfiguration() {
         try {
-            config = new Config();
             HandlerList.unregisterAll(this);
+            config = new Config();
             statistics = new Statistics();
             if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
                 if (papiExpansion != null) papiExpansion.unregister();
@@ -138,7 +151,7 @@ public final class BetterWorldStats extends JavaPlugin {
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
                 final String localeString = fileName.substring(fileName.lastIndexOf(File.separator) + 1, fileName.lastIndexOf('.'));
-                logger.info("Found language file for " + localeString);
+                logger.info(Component.text("Found language file for " + localeString).style(STYLE));
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
             final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
@@ -147,7 +160,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 if (langMatcher.find()) {
                     final String localeString = langMatcher.group(1).toLowerCase();
                     if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
-                        logger.info("Found language file for " + localeString);
+                        logger.info(Component.text("Found language file for " + localeString).style(STYLE));
                         languageCacheMap.put(localeString, new LanguageCache(localeString));
                     }
                 }

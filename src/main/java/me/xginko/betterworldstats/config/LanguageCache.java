@@ -1,8 +1,8 @@
-package me.xGinko.betterworldstats.config;
+package me.xginko.betterworldstats.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
-import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.jetbrains.annotations.NotNull;
@@ -25,7 +25,7 @@ public class LanguageCache {
         File parent = langYML.getParentFile();
         if (!parent.exists() && !parent.mkdir())
             BetterWorldStats.getLog().error("Unable to create lang directory.");
-        // Check if the file already exists and save the one from the plugins resources folder if it does not
+        // Check if the file already exists and save the one from the plugin's resources folder if it does not
         if (!langYML.exists())
             plugin.saveResource("lang" + File.separator + lang + ".yml", false);
         // Finally, load the lang file with configmaster
@@ -51,7 +51,7 @@ public class LanguageCache {
         try {
             this.langFile.save();
         } catch (Exception e) {
-            BetterWorldStats.getLog().error("Failed to save language file: "+ langYML.getName(), e);
+            BetterWorldStats.getLog().error("Failed to save language file: " + langYML.getName(), e);
         }
     }
 

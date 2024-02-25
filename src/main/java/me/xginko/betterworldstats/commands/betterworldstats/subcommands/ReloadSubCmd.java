@@ -1,8 +1,8 @@
-package me.xGinko.betterworldstats.commands.betterworldstats.subcommands;
+package me.xginko.betterworldstats.commands.betterworldstats.subcommands;
 
-import me.xGinko.betterworldstats.BetterWorldStats;
-import me.xGinko.betterworldstats.commands.SubCommand;
-import me.xGinko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.commands.SubCommand;
+import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;

@@ -1,4 +1,4 @@
-package me.xGinko.betterworldstats.commands;
+package me.xginko.betterworldstats.commands;
 
 import net.kyori.adventure.text.TextComponent;
 import org.bukkit.command.CommandSender;

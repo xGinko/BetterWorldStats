@@ -1,7 +1,6 @@
 name: BetterWorldStats
 version: ${project.version}
-main: me.xGinko.betterworldstats.BetterWorldStats
-prefix: BetterWorldStats
+main: me.xginko.betterworldstats.BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
 description: ${project.description}
@@ -22,6 +21,7 @@ commands:
 permissions:
   betterworldstats.worldstats:
     description: Permission to use /worldstats
+    default: true
   betterworldstats.version:
     description: Permission to show the plugin version
   betterworldstats.reload:

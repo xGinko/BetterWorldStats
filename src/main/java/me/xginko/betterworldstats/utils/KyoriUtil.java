@@ -1,6 +1,6 @@
-package me.xGinko.betterworldstats.utils;
+package me.xginko.betterworldstats.utils;
 
-import me.xGinko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.BetterWorldStats;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 
