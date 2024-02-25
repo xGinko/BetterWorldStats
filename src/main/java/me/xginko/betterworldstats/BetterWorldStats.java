@@ -4,6 +4,7 @@ import com.tcoded.folialib.FoliaLib;
 import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
+import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
@@ -15,14 +16,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -56,13 +55,13 @@ public final class BetterWorldStats extends JavaPlugin {
         logger.info(Component.text(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ").style(STYLE));
         logger.info(Component.text(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(STYLE));
         logger.info(Component.text("                                                                                ").style(STYLE));
-        logger.info(Component.text("Loading languages").style(STYLE));
+        logger.info("Loading languages");
         reloadLang();
-        logger.info(Component.text("Loading config").style(STYLE));
+        logger.info("Loading config");
         reloadConfiguration();
-        logger.info(Component.text("Registering commands").style(STYLE));
+        logger.info("Registering commands");
         BetterWorldStatsCommand.reloadCommands();
-        logger.info(Component.text("Done.").style(STYLE));
+        logger.info("Done.");
     }
 
     @Override
@@ -114,13 +113,17 @@ public final class BetterWorldStats extends JavaPlugin {
         return logger;
     }
 
+    public static @NotNull LanguageCache getLang(Locale locale) {
+        return getLang(locale.toString().toLowerCase());
+    }
+
     public static LanguageCache getLang(CommandSender commandSender) {
-        return commandSender instanceof Player ? getLang(((Player) commandSender).getLocale()) : getLang(config.default_lang);
+        return commandSender instanceof Player ? getLang(KyoriUtil.getLocale((Player) commandSender)) : getLang(config.default_lang);
     }
 
     public static LanguageCache getLang(String lang) {
-        if (!config.auto_lang) return languageCacheMap.get(config.default_lang);
-        return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang));
+        if (!config.auto_lang) return languageCacheMap.get(config.default_lang.toString().toLowerCase());
+        return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang.toString().toLowerCase()));
     }
 
     public void reloadPlugin() {
@@ -151,7 +154,7 @@ public final class BetterWorldStats extends JavaPlugin {
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
                 final String localeString = fileName.substring(fileName.lastIndexOf(File.separator) + 1, fileName.lastIndexOf('.'));
-                logger.info(Component.text("Found language file for " + localeString).style(STYLE));
+                logger.info("Found language file for " + localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
             final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
@@ -160,7 +163,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 if (langMatcher.find()) {
                     final String localeString = langMatcher.group(1).toLowerCase();
                     if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
-                        logger.info(Component.text("Found language file for " + localeString).style(STYLE));
+                        logger.info("Found language file for " + localeString);
                         languageCacheMap.put(localeString, new LanguageCache(localeString));
                     }
                 }

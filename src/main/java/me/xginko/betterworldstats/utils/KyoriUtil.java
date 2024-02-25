@@ -1,13 +1,21 @@
 package me.xginko.betterworldstats.utils;
 
 import me.xginko.betterworldstats.BetterWorldStats;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import java.util.Locale;
 
 public class KyoriUtil {
 
     public static void sendMessage(CommandSender sender, Component message) {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
+    }
+
+    public static Locale getLocale(Player player) {
+        return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, Locale.US);
     }
 
     public static String translateChatColor(Character symbol, String string) {

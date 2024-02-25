@@ -14,7 +14,7 @@ import java.util.*;
 public class Config {
 
     private final ConfigFile configFile;
-    public final String default_lang;
+    public final Locale default_lang;
     public final DecimalFormat filesize_format;
     public final Set<String> paths_to_scan;
     public final TimeZone timeZone;
@@ -42,8 +42,10 @@ public class Config {
                 .addSolidLine());
 
         // Language
-        this.default_lang = getString("language.default-language", "en_us",
-                "The default language to be used if auto-lang is off or no matching language file was found.").toLowerCase();
+        this.default_lang = Locale.forLanguageTag(
+                getString("general.default-language", "en_us",
+                        "The default language that will be used if auto-language is false or no matching language file was found.")
+                        .replace("_", "-"));
         this.auto_lang = getBoolean("language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
