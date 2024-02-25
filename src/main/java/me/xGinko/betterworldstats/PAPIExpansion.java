@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class PAPIExpansion extends PlaceholderExpansion {
+public final class PAPIExpansion extends PlaceholderExpansion {
 
     private final Statistics statistics;
     private final Config config;

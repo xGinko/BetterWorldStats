@@ -46,7 +46,7 @@ public class VersionSubCmd extends SubCommand {
             version = pluginMeta.getVersion();
             website = pluginMeta.getWebsite();
             author = pluginMeta.getAuthors().get(0);
-        } catch (Throwable versionIncompatible) {
+        } catch (Throwable t) {
             final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
             name = pluginYML.getName();
             version = pluginYML.getVersion();

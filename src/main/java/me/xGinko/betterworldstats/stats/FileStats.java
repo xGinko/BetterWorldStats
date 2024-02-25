@@ -3,12 +3,13 @@ package me.xGinko.betterworldstats.stats;
 import com.google.common.util.concurrent.AtomicDouble;
 import com.tcoded.folialib.impl.ServerImplementation;
 import me.xGinko.betterworldstats.BetterWorldStats;
+import me.xGinko.betterworldstats.Statistics;
 import me.xGinko.betterworldstats.config.Config;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class FileStats {
+public class FileStats extends Statistics {
 
     private final ServerImplementation serverImpl;
     private final Config config;
