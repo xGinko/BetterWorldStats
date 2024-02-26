@@ -15,7 +15,15 @@ public class KyoriUtil {
     }
 
     public static Locale getLocale(Player player) {
-        return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, Locale.US);
+        return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, getFallbackLocale(player));
+    }
+
+    public static Locale getFallbackLocale(Player player) {
+        try {
+            return Locale.forLanguageTag(player.getLocale().replace("_", "-"));
+        } catch (Throwable t) {
+            return Locale.US;
+        }
     }
 
     public static String altColorCodesToMiniMessageTags(Character symbol, String string) {
