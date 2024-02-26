@@ -1,7 +1,8 @@
 package me.xginko.betterworldstats.commands.betterworldstats;
 
-import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
-import me.xginko.betterworldstats.commands.SubCommand;
+import me.xginko.betterworldstats.BetterWorldStats;
+import me.xginko.betterworldstats.commands.BWSCmd;
+import me.xginko.betterworldstats.commands.SubCmd;
 import me.xginko.betterworldstats.commands.betterworldstats.subcommands.ReloadSubCmd;
 import me.xginko.betterworldstats.commands.betterworldstats.subcommands.VersionSubCmd;
 import me.xginko.betterworldstats.utils.KyoriUtil;
@@ -17,14 +18,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabCompleter {
+public class BetterWorldStatsCmd implements BWSCmd, TabCompleter {
 
-    private final List<SubCommand> subCommands;
+    private final List<SubCmd> subCmds;
     private final List<String> tabCompletes;
 
     public BetterWorldStatsCmd() {
-        subCommands = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd());
-        tabCompletes = subCommands.stream().map(SubCommand::getName).collect(Collectors.toList());
+        subCmds = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd());
+        tabCompletes = subCmds.stream().map(SubCmd::getName).collect(Collectors.toList());
     }
 
     @Override
@@ -44,9 +45,9 @@ public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabComplete
             return true;
         }
 
-        for (final SubCommand subCommand : subCommands) {
-            if (args[0].equalsIgnoreCase(subCommand.getName())) {
-                subCommand.perform(sender, args);
+        for (final SubCmd subCmd : subCmds) {
+            if (args[0].equalsIgnoreCase(subCmd.getName())) {
+                subCmd.perform(sender, args);
                 return true;
             }
         }
@@ -56,12 +57,13 @@ public class BetterWorldStatsCmd implements BetterWorldStatsCommand, TabComplete
     }
 
     private void sendCommandOverview(CommandSender sender) {
-        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(NamedTextColor.DARK_AQUA));
-        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").color(NamedTextColor.AQUA));
-        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(NamedTextColor.DARK_AQUA));
-        for (SubCommand subCommand : subCommands) {
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
+        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").style(BetterWorldStats.STYLE));
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
+        for (SubCmd subCmd : subCmds) {
             KyoriUtil.sendMessage(sender,
-                    subCommand.getSyntax().append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(subCommand.getDescription()));
+                    subCmd.getSyntax().append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(subCmd.getDescription()));
         }
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
     }
 }

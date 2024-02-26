@@ -6,6 +6,7 @@ softdepend: [ PlaceholderAPI ]
 description: ${project.description}
 website: ${project.url}
 folia-supported: true
+api-version: '1.13'
 
 commands:
   betterworldstats:

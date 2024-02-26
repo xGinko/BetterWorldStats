@@ -1,7 +1,7 @@
 package me.xginko.betterworldstats;
 
 import com.tcoded.folialib.FoliaLib;
-import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
+import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
 import me.xginko.betterworldstats.utils.KyoriUtil;
@@ -59,7 +59,7 @@ public final class BetterWorldStats extends JavaPlugin {
         logger.info("Loading config");
         reloadConfiguration();
         logger.info("Registering commands");
-        BetterWorldStatsCommand.reloadCommands();
+        BWSCmd.reloadCommands();
         logger.info("Done.");
     }
 
@@ -128,7 +128,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadPlugin() {
         reloadLang();
         reloadConfiguration();
-        BetterWorldStatsCommand.reloadCommands();
+        BWSCmd.reloadCommands();
     }
 
     private void reloadConfiguration() {

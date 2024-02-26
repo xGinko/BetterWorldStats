@@ -2,7 +2,7 @@ package me.xginko.betterworldstats.commands.betterworldstats.subcommands;
 
 import io.papermc.paper.plugin.configuration.PluginMeta;
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.commands.SubCommand;
+import me.xginko.betterworldstats.commands.SubCmd;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
@@ -11,7 +11,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.PluginDescriptionFile;
 
-public class VersionSubCmd extends SubCommand {
+public class VersionSubCmd extends SubCmd {
 
     public VersionSubCmd() {}
 
@@ -27,7 +27,7 @@ public class VersionSubCmd extends SubCommand {
 
     @Override
     public TextComponent getSyntax() {
-        return Component.text("/bws version").color(NamedTextColor.AQUA);
+        return Component.text("/bws version").color(BetterWorldStats.COLOR);
     }
 
     @Override

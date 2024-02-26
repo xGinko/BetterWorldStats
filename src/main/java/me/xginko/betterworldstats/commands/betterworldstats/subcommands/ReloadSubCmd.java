@@ -1,14 +1,14 @@
 package me.xginko.betterworldstats.commands.betterworldstats.subcommands;
 
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.commands.SubCommand;
+import me.xginko.betterworldstats.commands.SubCmd;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.command.CommandSender;
 
-public class ReloadSubCmd extends SubCommand {
+public class ReloadSubCmd extends SubCmd {
 
     public ReloadSubCmd() {}
 
@@ -24,7 +24,7 @@ public class ReloadSubCmd extends SubCommand {
 
     @Override
     public TextComponent getSyntax() {
-        return Component.text("/bws reload").color(NamedTextColor.AQUA);
+        return Component.text("/bws reload").color(BetterWorldStats.COLOR);
     }
 
     @Override

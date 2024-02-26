@@ -10,11 +10,11 @@ import org.bukkit.command.TabCompleter;
 import java.util.HashSet;
 import java.util.Set;
 
-public interface BetterWorldStatsCommand extends CommandExecutor, TabCompleter {
+public interface BWSCmd extends CommandExecutor, TabCompleter {
 
     String label();
 
-    Set<BetterWorldStatsCommand> commands = new HashSet<>();
+    Set<BWSCmd> commands = new HashSet<>();
     static void reloadCommands() {
         commands.clear();
 
@@ -23,7 +23,7 @@ public interface BetterWorldStatsCommand extends CommandExecutor, TabCompleter {
 
         BetterWorldStats plugin = BetterWorldStats.getInstance();
         CommandMap commandMap = plugin.getServer().getCommandMap();
-        for (BetterWorldStatsCommand command : commands) {
+        for (BWSCmd command : commands) {
             plugin.getCommand(command.label()).unregister(commandMap);
             plugin.getCommand(command.label()).setExecutor(command);
         }

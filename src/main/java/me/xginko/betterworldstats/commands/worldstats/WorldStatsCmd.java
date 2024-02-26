@@ -2,7 +2,7 @@ package me.xginko.betterworldstats.commands.worldstats;
 
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.Statistics;
-import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
+import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
@@ -13,7 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collections;
 import java.util.List;
 
-public class WorldStatsCmd implements BetterWorldStatsCommand {
+public class WorldStatsCmd implements BWSCmd {
 
     private final Statistics statistics;
     private final Config config;
