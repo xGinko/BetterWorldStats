@@ -18,7 +18,8 @@ public class KyoriUtil {
         return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, getFallbackLocale(player));
     }
 
-    public static Locale getFallbackLocale(Player player) {
+    @SuppressWarnings("deprecation")
+    private static Locale getFallbackLocale(Player player) {
         try {
             return Locale.forLanguageTag(player.getLocale().replace("_", "-"));
         } catch (Throwable t) {
