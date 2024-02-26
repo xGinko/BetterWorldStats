@@ -19,28 +19,28 @@ public class KyoriUtil {
     }
 
     public static String altColorCodesToMiniMessageTags(Character symbol, String string) {
-        string = string.replaceAll(symbol + "0", "<black>");
-        string = string.replaceAll(symbol + "1", "<dark_blue>");
-        string = string.replaceAll(symbol + "2", "<dark_green>");
-        string = string.replaceAll(symbol + "3", "<dark_aqua>");
-        string = string.replaceAll(symbol + "4", "<dark_red>");
-        string = string.replaceAll(symbol + "5", "<dark_purple>");
-        string = string.replaceAll(symbol + "6", "<gold>");
-        string = string.replaceAll(symbol + "7", "<gray>");
-        string = string.replaceAll(symbol + "8", "<dark_gray>");
-        string = string.replaceAll(symbol + "9", "<blue>");
-        string = string.replaceAll(symbol + "a", "<green>");
-        string = string.replaceAll(symbol + "b", "<aqua>");
-        string = string.replaceAll(symbol + "c", "<red>");
-        string = string.replaceAll(symbol + "d", "<light_purple>");
-        string = string.replaceAll(symbol + "e", "<yellow>");
-        string = string.replaceAll(symbol + "f", "<white>");
-        string = string.replaceAll(symbol + "k", "<obfuscated>");
-        string = string.replaceAll(symbol + "l", "<bold>");
-        string = string.replaceAll(symbol + "m", "<strikethrough>");
-        string = string.replaceAll(symbol + "n", "<underlined>");
-        string = string.replaceAll(symbol + "o", "<italic>");
-        string = string.replaceAll(symbol + "r", "<reset>");
+        string = string.replace(symbol + "0", "<black>");
+        string = string.replace(symbol + "1", "<dark_blue>");
+        string = string.replace(symbol + "2", "<dark_green>");
+        string = string.replace(symbol + "3", "<dark_aqua>");
+        string = string.replace(symbol + "4", "<dark_red>");
+        string = string.replace(symbol + "5", "<dark_purple>");
+        string = string.replace(symbol + "6", "<gold>");
+        string = string.replace(symbol + "7", "<gray>");
+        string = string.replace(symbol + "8", "<dark_gray>");
+        string = string.replace(symbol + "9", "<blue>");
+        string = string.replace(symbol + "a", "<green>");
+        string = string.replace(symbol + "b", "<aqua>");
+        string = string.replace(symbol + "c", "<red>");
+        string = string.replace(symbol + "d", "<light_purple>");
+        string = string.replace(symbol + "e", "<yellow>");
+        string = string.replace(symbol + "f", "<white>");
+        string = string.replace(symbol + "k", "<obfuscated>");
+        string = string.replace(symbol + "l", "<bold>");
+        string = string.replace(symbol + "m", "<strikethrough>");
+        string = string.replace(symbol + "n", "<underlined>");
+        string = string.replace(symbol + "o", "<italic>");
+        string = string.replace(symbol + "r", "<reset>");
         return string;
     }
 }
