@@ -58,7 +58,7 @@ public class BetterWorldStatsCmd implements BWSCmd, TabCompleter {
 
     private void sendCommandOverview(CommandSender sender) {
         KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
-        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").style(BetterWorldStats.STYLE));
+        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").color(BetterWorldStats.COLOR));
         KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
         for (SubCmd subCmd : subCmds) {
             KyoriUtil.sendMessage(sender,
