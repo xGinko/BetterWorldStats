@@ -14,7 +14,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LanguageCache {
-    private static final MiniMessage miniMessage = MiniMessage.miniMessage();
     private final ConfigFile langFile;
     private final String no_permission_serialized;
     private final List<String> world_stats_message_serialized;
@@ -57,7 +56,7 @@ public class LanguageCache {
     }
 
     public Component noPermissionMsg() {
-        return miniMessage.deserialize(PAPIUtil.tryPopulate(no_permission_serialized));
+        return MiniMessage.miniMessage().deserialize(PAPIUtil.tryPopulate(no_permission_serialized));
     }
 
     public List<Component> worldStatsMsg(
@@ -67,7 +66,7 @@ public class LanguageCache {
             String fileCount, String folderCount, String chunkFileCount
     ) {
         return world_stats_message_serialized.stream()
-                .map(line -> miniMessage.deserialize(PAPIUtil.tryPopulate(line
+                .map(line -> MiniMessage.miniMessage().deserialize(PAPIUtil.tryPopulate(line
                         .replace("%years%", years)
                         .replace("%months%", months)
                         .replace("%days%", days)
