@@ -4,6 +4,7 @@ main: me.xginko.betterworldstats.BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
 description: ${project.description}
+website: ${project.url}
 folia-supported: true
 
 commands:

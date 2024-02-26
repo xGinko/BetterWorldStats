@@ -18,7 +18,7 @@ public class KyoriUtil {
         return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, Locale.US);
     }
 
-    public static String translateChatColor(Character symbol, String string) {
+    public static String altColorCodesToMiniMessageTags(Character symbol, String string) {
         string = string.replaceAll(symbol + "0", "<black>");
         string = string.replaceAll(symbol + "1", "<dark_blue>");
         string = string.replaceAll(symbol + "2", "<dark_green>");

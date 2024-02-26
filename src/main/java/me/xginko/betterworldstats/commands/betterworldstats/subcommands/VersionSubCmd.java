@@ -34,7 +34,7 @@ public class VersionSubCmd extends SubCommand {
     @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     public void perform(CommandSender sender, String[] args) {
         if (!sender.hasPermission("betterworldstats.version")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg());
             return;
         }
 

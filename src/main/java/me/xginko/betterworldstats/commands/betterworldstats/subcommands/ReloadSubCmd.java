@@ -30,7 +30,7 @@ public class ReloadSubCmd extends SubCommand {
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (!sender.hasPermission("betterworldstats.reload")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg());
             return;
         }
 

@@ -5,9 +5,7 @@ import me.xginko.betterworldstats.Statistics;
 import me.xginko.betterworldstats.commands.BetterWorldStatsCommand;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.utils.KyoriUtil;
-import me.xginko.betterworldstats.utils.PAPIUtil;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextReplacementConfig;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.Nullable;
@@ -38,54 +36,25 @@ public class WorldStatsCmd implements BetterWorldStatsCommand {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).no_permission);
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg());
             return true;
         }
 
-        final TextReplacementConfig years = TextReplacementConfig.builder()
-                .matchLiteral("%years%").replacement(statistics.mapAge.getYearsPart().toString())
-                .build();
-        final TextReplacementConfig months = TextReplacementConfig.builder()
-                .matchLiteral("%months%").replacement(statistics.mapAge.getMonthsPart().toString())
-                .build();
-        final TextReplacementConfig days = TextReplacementConfig.builder()
-                .matchLiteral("%days%").replacement(statistics.mapAge.getDaysPart().toString())
-                .build();
-        final TextReplacementConfig players = TextReplacementConfig.builder()
-                .matchLiteral("%players%").replacement(Integer.toString(statistics.players.getUniqueJoins()))
-                .build();
-        final TextReplacementConfig fileSize = TextReplacementConfig.builder()
-                .matchLiteral("%size%").replacement(config.filesize_format.format(statistics.fileStats.getTrueSize()))
-                .build();
-        final TextReplacementConfig spoofSize = TextReplacementConfig.builder()
-                .matchLiteral("%spoofsize%").replacement(config.filesize_format.format(statistics.fileStats.getSpoofedSize()))
-                .build();
-        final TextReplacementConfig ageAsDays = TextReplacementConfig.builder()
-                .matchLiteral("%age_in_days%").replacement(statistics.mapAge.asDays().toString())
-                .build();
-        final TextReplacementConfig ageAsMonths = TextReplacementConfig.builder()
-                .matchLiteral("%age_in_months%").replacement(statistics.mapAge.asMonths().toString())
-                .build();
-        final TextReplacementConfig ageAsYears = TextReplacementConfig.builder()
-                .matchLiteral("%age_in_years%").replacement(statistics.mapAge.asYears().toString())
-                .build();
-        final TextReplacementConfig fileCount = TextReplacementConfig.builder()
-                .matchLiteral("%file_count%").replacement(Integer.toString(statistics.fileStats.getFileCount()))
-                .build();
-        final TextReplacementConfig folderCount = TextReplacementConfig.builder()
-                .matchLiteral("%folder_count%").replacement(Integer.toString(statistics.fileStats.getFolderCount()))
-                .build();
-        final TextReplacementConfig chunkFileCount = TextReplacementConfig.builder()
-                .matchLiteral("%chunk_file_count%").replacement(Integer.toString(statistics.fileStats.getChunkFileCount()))
-                .build();
-
-        for (Component line : BetterWorldStats.getLang(sender).world_stats_message) {
-            KyoriUtil.sendMessage(sender, PAPIUtil.tryPopulate(line
-                    .replaceText(years).replaceText(months).replaceText(days)
-                    .replaceText(players).replaceText(fileSize).replaceText(spoofSize)
-                    .replaceText(ageAsDays).replaceText(ageAsMonths).replaceText(ageAsYears)
-                    .replaceText(fileCount).replaceText(folderCount).replaceText(chunkFileCount)
-            ));
+        for (Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
+                statistics.mapAge.getYearsPart().toString(),
+                statistics.mapAge.getMonthsPart().toString(),
+                statistics.mapAge.getDaysPart().toString(),
+                Integer.toString(statistics.players.getUniqueJoins()),
+                config.filesize_format.format(statistics.fileStats.getTrueSize()),
+                config.filesize_format.format(statistics.fileStats.getSpoofedSize()),
+                statistics.mapAge.asDays().toString(),
+                statistics.mapAge.asMonths().toString(),
+                statistics.mapAge.asYears().toString(),
+                Integer.toString(statistics.fileStats.getFileCount()),
+                Integer.toString(statistics.fileStats.getFolderCount()),
+                Integer.toString(statistics.fileStats.getChunkFileCount())
+        )) {
+            KyoriUtil.sendMessage(sender, line);
         }
 
         return true;
