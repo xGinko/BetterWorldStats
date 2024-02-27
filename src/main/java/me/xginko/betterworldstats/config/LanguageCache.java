@@ -27,7 +27,7 @@ public class LanguageCache {
             BetterWorldStats.getLog().error("Unable to create lang directory.");
         // Check if the file already exists and save the one from the plugin's resources folder if it does not
         if (!langYML.exists())
-            plugin.saveResource("lang" + File.separator + lang + ".yml", false);
+            plugin.saveResource("lang/" + lang + ".yml", false);
         // Finally, load the lang file with configmaster
         this.langFile = ConfigFile.loadConfig(langYML);
 

@@ -149,10 +149,10 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(getDataFolder()  + File.separator + "lang");
+            File langDirectory = new File(getDataFolder() + File.separator + "lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
-                final String localeString = fileName.substring(fileName.lastIndexOf(File.separator) + 1, fileName.lastIndexOf('.'));
+                final String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
                 logger.info("Found language file for " + localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
@@ -176,7 +176,7 @@ public final class BetterWorldStats extends JavaPlugin {
         try (final JarFile pluginJarFile = new JarFile(this.getFile())) {
             return pluginJarFile.stream()
                     .map(ZipEntry::getName)
-                    .filter(name -> name.startsWith("lang" + File.separator) && name.endsWith(".yml"))
+                    .filter(name -> name.startsWith("lang/") && name.endsWith(".yml"))
                     .collect(Collectors.toSet());
         } catch (IOException e) {
             logger.error("Failed getting default lang files!", e);
