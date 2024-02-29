@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Locale;
+import java.util.Optional;
 
 public class KyoriUtil {
 
@@ -14,17 +15,18 @@ public class KyoriUtil {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
     }
 
-    public static Locale getLocale(Player player) {
-        return BetterWorldStats.getAudiences().player(player).pointers().getOrDefault(Identity.LOCALE, getFallbackLocale(player));
-    }
-
     @SuppressWarnings("deprecation")
-    private static Locale getFallbackLocale(Player player) {
-        try {
-            return Locale.forLanguageTag(player.getLocale().replace("_", "-"));
-        } catch (Throwable t) {
-            return Locale.US;
+    public static Locale getLocale(CommandSender sender) {
+        if (sender instanceof Player) {
+            final Player player = (Player) sender;
+            final Optional<Locale> locale = BetterWorldStats.getAudiences().player(player).pointers().get(Identity.LOCALE);
+            if (locale.isPresent())
+                return locale.get();
+            try {
+                return Locale.forLanguageTag(player.getLocale().replace("_", "-"));
+            } catch (Throwable ignored) {}
         }
+        return BetterWorldStats.getConfiguration().default_lang;
     }
 
     public static String altColorCodesToMiniMessageTags(Character symbol, String string) {

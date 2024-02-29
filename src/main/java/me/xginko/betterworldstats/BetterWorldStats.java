@@ -13,7 +13,6 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -117,7 +116,7 @@ public final class BetterWorldStats extends JavaPlugin {
     }
 
     public static LanguageCache getLang(CommandSender commandSender) {
-        return commandSender instanceof Player ? getLang(KyoriUtil.getLocale((Player) commandSender)) : getLang(config.default_lang);
+        return getLang(KyoriUtil.getLocale(commandSender));
     }
 
     public static LanguageCache getLang(String lang) {

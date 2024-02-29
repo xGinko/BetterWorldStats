@@ -1,4 +1,4 @@
-package me.xginko.betterworldstats.adventure;
+package me.xginko.betterworldstats.utils;
 
 import com.google.auto.service.AutoService;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
