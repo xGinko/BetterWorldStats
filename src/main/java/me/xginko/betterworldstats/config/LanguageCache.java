@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class LanguageCache {
+
     private final ConfigFile langFile;
     private final String no_permission_serialized;
     private final List<String> world_stats_message_serialized;
@@ -55,11 +56,11 @@ public class LanguageCache {
         }
     }
 
-    public Component noPermissionMsg() {
+    public @NotNull Component noPermissionMsg() {
         return MiniMessage.miniMessage().deserialize(PAPIUtil.tryPopulate(no_permission_serialized));
     }
 
-    public List<Component> worldStatsMsg(
+    public @NotNull List<Component> worldStatsMsg(
             String years, String months, String days,
             String players, String fileSize, String spoofSize,
             String ageAsDays, String ageAsMonths, String ageAsYears,

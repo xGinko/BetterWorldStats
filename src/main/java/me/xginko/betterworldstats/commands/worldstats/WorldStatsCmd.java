@@ -8,6 +8,7 @@ import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
@@ -29,12 +30,12 @@ public class WorldStatsCmd implements BWSCmd {
     }
 
     @Override
-    public @Nullable List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, String[] strings) {
         return Collections.emptyList();
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
             KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg());
             return true;
