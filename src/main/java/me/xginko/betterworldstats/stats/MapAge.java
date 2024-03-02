@@ -3,6 +3,7 @@ package me.xginko.betterworldstats.stats;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import me.xginko.betterworldstats.BetterWorldStats;
+import org.jetbrains.annotations.NotNull;
 
 import java.time.Duration;
 import java.util.Calendar;
@@ -10,8 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class MapAge {
 
-    private final Calendar calendar;
-    private final Cache<CalendarKey, Integer> cache;
+    private final @NotNull Calendar calendar;
+    private final @NotNull Cache<CalendarKey, Integer> cache;
     private enum CalendarKey { DAYS_PART, MONTHS_PART, YEARS_PART, DAYS, MONTHS };
     private final long server_birth_time_millis;
 

@@ -16,8 +16,8 @@ import java.util.List;
 
 public class WorldStatsCmd implements BWSCmd {
 
-    private final Statistics statistics;
-    private final Config config;
+    private final @NotNull Statistics statistics;
+    private final @NotNull Config config;
 
     public WorldStatsCmd() {
         this.statistics = BetterWorldStats.getStatistics();
@@ -41,7 +41,7 @@ public class WorldStatsCmd implements BWSCmd {
             return true;
         }
 
-        for (Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
+        for (final Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
                 sender,
                 statistics.mapAge.getYearsPart().toString(),
                 statistics.mapAge.getMonthsPart().toString(),

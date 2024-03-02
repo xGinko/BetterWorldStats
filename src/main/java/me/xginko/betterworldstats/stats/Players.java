@@ -5,12 +5,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class Players implements Listener {
 
-    private final AtomicInteger uniquePlayers;
+    private final @NotNull AtomicInteger uniquePlayers;
 
     public Players() {
         BetterWorldStats plugin = BetterWorldStats.getInstance();

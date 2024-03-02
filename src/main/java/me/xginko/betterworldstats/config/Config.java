@@ -3,6 +3,7 @@ package me.xginko.betterworldstats.config;
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import io.github.thatsmusic99.configurationmaster.api.Title;
 import me.xginko.betterworldstats.BetterWorldStats;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.text.DecimalFormat;
@@ -13,11 +14,11 @@ import java.util.*;
 
 public class Config {
 
-    private final ConfigFile configFile;
-    public final Locale default_lang;
-    public final DecimalFormat filesize_format;
-    public final Set<String> paths_to_scan;
-    public final TimeZone timeZone;
+    private final @NotNull ConfigFile configFile;
+    public final @NotNull Locale default_lang;
+    public final @NotNull DecimalFormat filesize_format;
+    public final @NotNull Set<String> paths_to_scan;
+    public final @NotNull TimeZone timeZone;
     public final boolean auto_lang, log_is_enabled;
     public final long filesize_update_period_millis, server_birth_time_millis;
     public final double additional_spoof_filesize;

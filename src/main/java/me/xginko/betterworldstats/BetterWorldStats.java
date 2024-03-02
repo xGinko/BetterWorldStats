@@ -15,6 +15,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
@@ -85,41 +86,42 @@ public final class BetterWorldStats extends JavaPlugin {
         config = null;
         languageCacheMap = null;
         logger = null;
+        instance = null;
     }
 
-    public static BetterWorldStats getInstance() {
+    public static @NotNull BetterWorldStats getInstance() {
         return instance;
     }
 
-    public static Statistics getStatistics() {
+    public static @NotNull Statistics getStatistics() {
         return statistics;
     }
 
-    public static FoliaLib getFoliaLib() {
+    public static @NotNull FoliaLib getFoliaLib() {
         return foliaLib;
     }
 
-    public static BukkitAudiences getAudiences() {
+    public static @NotNull BukkitAudiences getAudiences() {
         return audiences;
     }
 
-    public static Config getConfiguration() {
+    public static @NotNull Config getConfiguration() {
         return config;
     }
 
-    public static ComponentLogger getLog() {
+    public static @NotNull ComponentLogger getLog() {
         return logger;
     }
 
-    public static LanguageCache getLang(Locale locale) {
+    public static @NotNull LanguageCache getLang(Locale locale) {
         return getLang(locale.toString().toLowerCase());
     }
 
-    public static LanguageCache getLang(CommandSender commandSender) {
+    public static @NotNull LanguageCache getLang(CommandSender commandSender) {
         return getLang(KyoriUtil.getLocale(commandSender));
     }
 
-    public static LanguageCache getLang(String lang) {
+    public static @NotNull LanguageCache getLang(String lang) {
         if (!config.auto_lang) return languageCacheMap.get(config.default_lang.toString().toLowerCase());
         return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang.toString().toLowerCase()));
     }
@@ -171,7 +173,7 @@ public final class BetterWorldStats extends JavaPlugin {
         }
     }
 
-    private Set<String> getDefaultLanguageFiles() {
+    private @NotNull Set<String> getDefaultLanguageFiles() {
         try (final JarFile pluginJarFile = new JarFile(this.getFile())) {
             return pluginJarFile.stream()
                     .map(ZipEntry::getName)

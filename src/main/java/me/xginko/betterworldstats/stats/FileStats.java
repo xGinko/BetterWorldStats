@@ -4,16 +4,17 @@ import com.google.common.util.concurrent.AtomicDouble;
 import com.tcoded.folialib.impl.ServerImplementation;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.config.Config;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class FileStats {
 
-    private final ServerImplementation scheduler;
-    private final Config config;
-    private final AtomicDouble sizeInGB;
-    private final AtomicInteger filesTotal, chunkFiles, foldersTotal;
+    private final @NotNull ServerImplementation scheduler;
+    private final @NotNull Config config;
+    private final @NotNull AtomicDouble sizeInGB;
+    private final @NotNull AtomicInteger filesTotal, chunkFiles, foldersTotal;
     private long next_possible_check_time_millis = 0L;
 
     public FileStats() {

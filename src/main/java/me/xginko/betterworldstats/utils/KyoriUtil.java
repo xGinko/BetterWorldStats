@@ -5,18 +5,19 @@ import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 import java.util.Optional;
 
 public class KyoriUtil {
 
-    public static void sendMessage(CommandSender sender, Component message) {
+    public static void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
     }
 
     @SuppressWarnings("deprecation")
-    public static Locale getLocale(CommandSender sender) {
+    public static Locale getLocale(@NotNull CommandSender sender) {
         if (sender instanceof Player) {
             final Player player = (Player) sender;
             final Optional<Locale> locale = BetterWorldStats.getAudiences().player(player).pointers().get(Identity.LOCALE);
@@ -29,7 +30,7 @@ public class KyoriUtil {
         return BetterWorldStats.getConfiguration().default_lang;
     }
 
-    public static String altColorCodesToMiniMessageTags(Character symbol, String string) {
+    public static @NotNull String altColorCodesToMiniMessageTags(@NotNull Character symbol, @NotNull String string) {
         string = string.replace(symbol + "0", "<black>");
         string = string.replace(symbol + "1", "<dark_blue>");
         string = string.replace(symbol + "2", "<dark_green>");

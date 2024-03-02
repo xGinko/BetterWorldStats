@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 @AutoService(ComponentLoggerProvider.class)
 @SuppressWarnings("UnstableApiUsage")
 public final class ComponentLoggerProviderImpl implements ComponentLoggerProvider {
-    private static final ANSIComponentSerializer SERIALIZER = ANSIComponentSerializer.builder()
+    private static final @NotNull ANSIComponentSerializer SERIALIZER = ANSIComponentSerializer.builder()
             .flattener(TranslatableMapper.FLATTENER)
             .build();
 

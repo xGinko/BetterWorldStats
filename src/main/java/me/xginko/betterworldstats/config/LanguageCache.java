@@ -17,9 +17,9 @@ import java.util.stream.Collectors;
 
 public class LanguageCache {
 
-    private final ConfigFile langFile;
-    private final String no_permission_serialized;
-    private final List<String> world_stats_message_serialized;
+    private final @NotNull ConfigFile langFile;
+    private final @NotNull String no_permission_serialized;
+    private final @NotNull List<String> world_stats_message_serialized;
 
     public LanguageCache(String lang) throws Exception {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
