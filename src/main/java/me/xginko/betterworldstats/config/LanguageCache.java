@@ -6,6 +6,8 @@ import me.xginko.betterworldstats.utils.KyoriUtil;
 import me.xginko.betterworldstats.utils.PAPIUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
@@ -56,18 +58,27 @@ public class LanguageCache {
         }
     }
 
-    public @NotNull Component noPermissionMsg() {
-        return MiniMessage.miniMessage().deserialize(PAPIUtil.tryPopulate(no_permission_serialized));
+    public @NotNull Component noPermissionMsg(CommandSender sender) {
+        return MiniMessage.builder()
+                .tags(PAPIUtil.papiTagResolver(sender))
+                .tags(TagResolver.standard())
+                .build()
+                .deserialize(no_permission_serialized);
     }
 
     public @NotNull List<Component> worldStatsMsg(
+            CommandSender sender,
             String years, String months, String days,
             String players, String fileSize, String spoofSize,
             String ageAsDays, String ageAsMonths, String ageAsYears,
             String fileCount, String folderCount, String chunkFileCount
     ) {
+        final MiniMessage miniMessage = MiniMessage.builder()
+                .tags(PAPIUtil.papiTagResolver(sender))
+                .tags(TagResolver.standard())
+                .build();
         return world_stats_message_serialized.stream()
-                .map(line -> MiniMessage.miniMessage().deserialize(PAPIUtil.tryPopulate(line
+                .map(line -> miniMessage.deserialize(line
                         .replace("%years%", years)
                         .replace("%months%", months)
                         .replace("%days%", days)
@@ -80,7 +91,7 @@ public class LanguageCache {
                         .replace("%file_count%", fileCount)
                         .replace("%folder_count%", folderCount)
                         .replace("%chunk_file_count%", chunkFileCount)
-                )))
+                ))
                 .collect(Collectors.toList());
     }
 

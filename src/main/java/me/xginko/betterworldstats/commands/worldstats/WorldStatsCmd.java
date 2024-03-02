@@ -37,11 +37,12 @@ public class WorldStatsCmd implements BWSCmd {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg());
+            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
             return true;
         }
 
         for (Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
+                sender,
                 statistics.mapAge.getYearsPart().toString(),
                 statistics.mapAge.getMonthsPart().toString(),
                 statistics.mapAge.getDaysPart().toString(),
