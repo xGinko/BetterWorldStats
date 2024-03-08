@@ -97,13 +97,11 @@ public class LanguageCache {
 
     private @NotNull String getTranslation(@NotNull String path, @NotNull String defaultTranslation) {
         this.langFile.addDefault(path, defaultTranslation);
-        return KyoriUtil.altColorCodesToMiniMessageTags('&', this.langFile.getString(path, defaultTranslation));
+        return KyoriUtil.translateChatColor(this.langFile.getString(path, defaultTranslation));
     }
 
     private @NotNull List<String> getListTranslation(@NotNull String path, @NotNull String... defaultTranslation) {
         this.langFile.addDefault(path, Arrays.asList(defaultTranslation));
-        return this.langFile.getStringList(path).stream()
-                .map(line -> KyoriUtil.altColorCodesToMiniMessageTags('&', line))
-                .collect(Collectors.toList());
+        return this.langFile.getStringList(path).stream().map(KyoriUtil::translateChatColor).collect(Collectors.toList());
     }
 }

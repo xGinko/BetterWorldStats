@@ -102,57 +102,57 @@ public class Config {
         }
     }
 
-    public boolean getBoolean(String path, boolean def, String comment) {
+    public boolean getBoolean(@NotNull String path, boolean def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getBoolean(path, def);
     }
 
-    public boolean getBoolean(String path, boolean def) {
+    public boolean getBoolean(@NotNull String path, boolean def) {
         this.configFile.addDefault(path, def);
         return this.configFile.getBoolean(path, def);
     }
 
-    public String getString(String path, String def, String comment) {
+    public @NotNull String getString(@NotNull String path, @NotNull String def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getString(path, def);
     }
 
-    public String getString(String path, String def) {
+    public @NotNull String getString(@NotNull String path, @NotNull String def) {
         this.configFile.addDefault(path, def);
         return this.configFile.getString(path, def);
     }
 
-    public double getDouble(String path, double def, String comment) {
+    public double getDouble(@NotNull String path, double def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getDouble(path, def);
     }
 
-    public double getDouble(String path, double def) {
+    public double getDouble(@NotNull String path, double def) {
         this.configFile.addDefault(path, def);
         return this.configFile.getDouble(path, def);
     }
 
-    public int getInt(String path, int def, String comment) {
+    public int getInt(@NotNull String path, int def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getInteger(path, def);
     }
 
-    public int getInt(String path, int def) {
+    public int getInt(@NotNull String path, int def) {
         this.configFile.addDefault(path, def);
         return this.configFile.getInteger(path, def);
     }
     
-    public long getLong(String path, long def, String comment) {
+    public long getLong(@NotNull String path, long def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getLong(path, def);
     }
 
-    public List<String> getList(String path, List<String> def, String comment) {
+    public @NotNull List<String> getList(@NotNull String path, @NotNull List<String> def, @NotNull String comment) {
         this.configFile.addDefault(path, def, comment);
         return this.configFile.getStringList(path);
     }
 
-    public List<String> getList(String path, List<String> def) {
+    public @NotNull List<String> getList(@NotNull String path, @NotNull List<String> def) {
         this.configFile.addDefault(path, def);
         return this.configFile.getStringList(path);
     }

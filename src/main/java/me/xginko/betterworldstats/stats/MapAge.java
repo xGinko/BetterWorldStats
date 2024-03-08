@@ -30,7 +30,7 @@ public class MapAge {
         this.calendar.setTimeInMillis(this.getMillisSinceBirth());
     }
 
-    public Integer getDaysPart() {
+    public @NotNull Integer getDaysPart() {
         Integer daysPart = this.cache.getIfPresent(CalendarKey.DAYS_PART);
         if (daysPart == null) {
             this.updateCalendar();
@@ -40,7 +40,7 @@ public class MapAge {
         return daysPart;
     }
 
-    public Integer getMonthsPart() {
+    public @NotNull Integer getMonthsPart() {
         Integer monthsPart = this.cache.getIfPresent(CalendarKey.MONTHS_PART);
         if (monthsPart == null) {
             this.updateCalendar();
@@ -50,7 +50,7 @@ public class MapAge {
         return monthsPart;
     }
 
-    public Integer getYearsPart() {
+    public @NotNull Integer getYearsPart() {
         Integer yearsPart = this.cache.getIfPresent(CalendarKey.YEARS_PART);
         if (yearsPart == null) {
             this.updateCalendar();
@@ -60,7 +60,7 @@ public class MapAge {
         return yearsPart;
     }
 
-    public Integer asDays() {
+    public @NotNull Integer asDays() {
         Integer daysAmount = this.cache.getIfPresent(CalendarKey.DAYS);
         if (daysAmount == null) {
             this.updateCalendar();
@@ -70,7 +70,7 @@ public class MapAge {
         return daysAmount;
     }
 
-    public Integer asMonths() {
+    public @NotNull Integer asMonths() {
         Integer monthsAmount = this.cache.getIfPresent(CalendarKey.MONTHS);
         if (monthsAmount == null) {
             monthsAmount = (this.getYearsPart() * 12) + this.getMonthsPart();
@@ -79,7 +79,7 @@ public class MapAge {
         return monthsAmount;
     }
 
-    public Integer asYears() {
+    public @NotNull Integer asYears() {
         return this.getYearsPart();
     }
 }

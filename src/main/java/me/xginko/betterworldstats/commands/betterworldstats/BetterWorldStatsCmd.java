@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -20,8 +21,8 @@ import java.util.stream.Collectors;
 
 public class BetterWorldStatsCmd implements BWSCmd, TabCompleter {
 
-    private final List<SubCmd> subCmds;
-    private final List<String> tabCompletes;
+    private final @NotNull List<SubCmd> subCmds;
+    private final @NotNull List<String> tabCompletes;
 
     public BetterWorldStatsCmd() {
         subCmds = Arrays.asList(new ReloadSubCmd(), new VersionSubCmd());
@@ -34,7 +35,7 @@ public class BetterWorldStatsCmd implements BWSCmd, TabCompleter {
     }
 
     @Override
-    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         return args.length == 1 ? tabCompletes : Collections.emptyList();
     }
 

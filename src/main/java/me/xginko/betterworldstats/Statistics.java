@@ -3,12 +3,13 @@ package me.xginko.betterworldstats;
 import me.xginko.betterworldstats.stats.FileStats;
 import me.xginko.betterworldstats.stats.MapAge;
 import me.xginko.betterworldstats.stats.Players;
+import org.jetbrains.annotations.NotNull;
 
 public class Statistics {
 
-    public final MapAge mapAge;
-    public final FileStats fileStats;
-    public final Players players;
+    public final @NotNull MapAge mapAge;
+    public final @NotNull FileStats fileStats;
+    public final @NotNull Players players;
 
     public Statistics() {
         this.fileStats = new FileStats();

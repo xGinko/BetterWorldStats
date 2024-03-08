@@ -8,8 +8,8 @@ import org.jetbrains.annotations.Nullable;
 
 public final class PAPIExpansion extends PlaceholderExpansion {
 
-    private final Statistics statistics;
-    private final Config config;
+    private final @NotNull Statistics statistics;
+    private final @NotNull Config config;
 
     PAPIExpansion() {
         this.statistics = BetterWorldStats.getStatistics();
