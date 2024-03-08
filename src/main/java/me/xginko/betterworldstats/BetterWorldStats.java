@@ -46,7 +46,7 @@ public final class BetterWorldStats extends JavaPlugin {
         instance = this;
         foliaLib = new FoliaLib(this);
         audiences = BukkitAudiences.create(this);
-        logger = ComponentLogger.logger(this.getName());
+        logger = ComponentLogger.logger(getLogger().getName());
         metrics = new Metrics(this, 17204);
         logger.info(Component.text("                                                                                ").style(STYLE));
         logger.info(Component.text("  ___      _   _         __      __       _    _ ___ _        _                 ").style(STYLE));
@@ -150,7 +150,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(getDataFolder() + File.separator + "lang");
+            File langDirectory = new File(getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
             for (String fileName : getDefaultLanguageFiles()) {
                 final String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
@@ -169,7 +169,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 }
             }
         } catch (Exception e) {
-            logger.error("Error loading language files! Language files will not reload to avoid errors, make sure to correct this before restarting the server!", e);
+            logger.error("Error loading language files!", e);
         }
     }
 

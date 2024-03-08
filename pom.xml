@@ -11,7 +11,7 @@
 
     <name>BetterWorldStats</name>
     <description>Show stats about server age, map size and unique player joins on your minecraft server.</description>
-    <url>modrinth.com/plugin/betterworldstats</url>
+    <url>https://www.modrinth.com/plugin/betterworldstats</url>
 
     <properties>
         <java.version>1.8</java.version>

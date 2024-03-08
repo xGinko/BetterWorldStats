@@ -21,16 +21,16 @@ public class LanguageCache {
     private final @NotNull String no_permission_serialized;
     private final @NotNull List<String> world_stats_message_serialized;
 
-    public LanguageCache(String lang) throws Exception {
+    public LanguageCache(String language) throws Exception {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
-        File langYML = new File(plugin.getDataFolder() + File.separator + "lang", lang + ".yml");
+        File langYML = new File(plugin.getDataFolder() + "/lang", language + ".yml");
         // Check if the lang folder has already been created
         File parent = langYML.getParentFile();
         if (!parent.exists() && !parent.mkdir())
             BetterWorldStats.getLog().error("Unable to create lang directory.");
         // Check if the file already exists and save the one from the plugin's resources folder if it does not
         if (!langYML.exists())
-            plugin.saveResource("lang/" + lang + ".yml", false);
+            plugin.saveResource("lang/" + language + ".yml", false);
         // Finally, load the lang file with configmaster
         this.langFile = ConfigFile.loadConfig(langYML);
 
