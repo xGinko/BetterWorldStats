@@ -99,10 +99,6 @@
             <id>configmaster-repo</id>
             <url>https://ci.pluginwiki.us/plugin/repository/everything/</url>
         </repository>
-        <repository>
-            <id>folialib-repo</id>
-            <url>https://nexuslite.gcnt.net/repos/other/</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -131,21 +127,19 @@
             <version>24.1.0</version>
         </dependency>
         <!-- Adventure for more configuration freedom in lang files -->
-        <dependency>
-            <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-plain</artifactId>
-            <version>4.16.0</version>
-        </dependency>
+        <!-- Bukkit Implementation -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-platform-bukkit</artifactId>
             <version>4.3.2</version>
         </dependency>
+        <!-- MiniMessage. This is what does the lang file to fancy text conversion -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-minimessage</artifactId>
             <version>4.16.0</version>
         </dependency>
+        <!-- Component serializers. -->
         <dependency>
             <groupId>net.kyori</groupId>
             <artifactId>adventure-text-serializer-ansi</artifactId>
@@ -153,19 +147,19 @@
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-logger-slf4j</artifactId>
+            <artifactId>adventure-text-serializer-legacy</artifactId>
             <version>4.16.0</version>
         </dependency>
         <dependency>
             <groupId>net.kyori</groupId>
-            <artifactId>adventure-text-serializer-legacy</artifactId>
+            <artifactId>adventure-text-serializer-plain</artifactId>
             <version>4.16.0</version>
         </dependency>
-        <!-- Folia compatibility -->
+        <!-- Logger that supports printing stylized components to console -->
         <dependency>
-            <groupId>com.tcoded</groupId>
-            <artifactId>FoliaLib</artifactId>
-            <version>0.3.1</version>
+            <groupId>net.kyori</groupId>
+            <artifactId>adventure-text-logger-slf4j</artifactId>
+            <version>4.16.0</version>
         </dependency>
         <!-- ConfigurationMaster for easy config file management -->
         <dependency>

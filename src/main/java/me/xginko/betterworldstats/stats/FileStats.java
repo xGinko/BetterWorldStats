@@ -1,112 +1,98 @@
 package me.xginko.betterworldstats.stats;
 
-import com.google.common.util.concurrent.AtomicDouble;
-import com.tcoded.folialib.impl.ServerImplementation;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.config.Config;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicLong;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class FileStats {
 
-    private final @NotNull ServerImplementation scheduler;
     private final @NotNull Config config;
-    private final @NotNull AtomicDouble sizeInGB;
-    private final @NotNull AtomicInteger filesTotal, chunkFiles, foldersTotal;
-    private long next_possible_check_time_millis = 0L;
+    private final @NotNull AtomicReference<ScanResult> recentScan;
+    private final @NotNull AtomicLong cooldown;
 
     public FileStats() {
-        this.scheduler = BetterWorldStats.getFoliaLib().getImpl();
         this.config = BetterWorldStats.getConfiguration();
-        this.sizeInGB = new AtomicDouble(0.0);
-        this.filesTotal = this.chunkFiles = this.foldersTotal = new AtomicInteger(0);
-        this.updateAsync(); // Check on init so values aren't 0 on first request
+        this.recentScan = new AtomicReference<>(new ScanResult(config.paths_to_scan));
+        this.cooldown = new AtomicLong(System.currentTimeMillis() + config.filesize_update_period_millis);
     }
 
-    private void updateAsync() {
-        final long current_time_millis = System.currentTimeMillis();
-        // If on cooldown, do nothing
-        if (current_time_millis < next_possible_check_time_millis) return;
-        // Schedule check async
-        this.scheduler.runAsync(updateFileSize -> {
-            // Reset values so they can be updated next
-            this.filesTotal.set(0);
-            this.chunkFiles.set(0);
-            this.foldersTotal.set(0);
-            // Get total size, updating other stats in the process
-            final double totalSize = this.getTotalSizeInGB();
-            this.sizeInGB.set(totalSize);
-            // Log
-            if (config.log_is_enabled) {
-                BetterWorldStats.getLog().info("Updated world size asynchronously "
-                        + "(Real size: " + config.filesize_format.format(totalSize) + "GB, "
-                        + "Spoofed size: " + config.filesize_format
-                        .format(totalSize + config.additional_spoof_filesize) + "GB).");
-            }
-            // Set cooldown
-            this.next_possible_check_time_millis = current_time_millis + config.filesize_update_period_millis;
-        });
-    }
-
-    public double getSpoofedSize() {
-        return this.getTrueSize() + config.additional_spoof_filesize;
-    }
-
-    public double getTrueSize() {
-        this.updateAsync();
-        return this.sizeInGB.get();
-    }
-
-    private double getTotalSizeInGB() {
-        long byteSize = 0L;
-        for (String path : config.paths_to_scan) {
-            byteSize += this.getByteSize(new File(path));
+    private void onRequest() {
+        if (cooldown.get() <= System.currentTimeMillis()) {
+            CompletableFuture.supplyAsync(() -> {
+                cooldown.set(System.currentTimeMillis() + config.filesize_update_period_millis);
+                return new ScanResult(config.paths_to_scan);
+            }).thenAccept(recentScan::set);
         }
-        return byteSize / 1048576.0D / 1000.0D;
     }
 
-    private long getByteSize(File file) {
-        long bytes = 0L;
-        if (file.isFile()) {
-            this.filesTotal.getAndIncrement(); // Count file
-            if (file.getName().endsWith(".mca")) { // Check if is chunk file
-                final File parent = file.getParentFile();
-                if (parent.isDirectory() && parent.getName().toLowerCase().contains("region")) {
-                    this.chunkFiles.getAndIncrement();
+    public String getSize() {
+        onRequest();
+        return config.filesize_format.format(recentScan.get().sizeInGB);
+    }
+
+    public String getSpoofedSize() {
+        onRequest();
+        return config.filesize_format.format(recentScan.get().sizeInGB + config.additional_spoof_filesize);
+    }
+
+    public String getFolderCount() {
+        onRequest();
+        return Integer.toString(recentScan.get().foldersTotal);
+    }
+
+    public String getFileCount() {
+        onRequest();
+        return Integer.toString(recentScan.get().filesTotal);
+    }
+
+    public String getChunkFileCount() {
+        onRequest();
+        return Integer.toString(recentScan.get().chunkFilesTotal);
+    }
+
+    private static class ScanResult {
+        public final double sizeInGB;
+        public int filesTotal, chunkFilesTotal, foldersTotal;
+
+        protected ScanResult(@NotNull Iterable<String> paths_to_scan) {
+            this.filesTotal = this.chunkFilesTotal = this.foldersTotal = 0;
+            long byteSize = 0L;
+            for (String path : paths_to_scan)
+                byteSize += this.getByteSize(new File(path));
+            this.sizeInGB = byteSize / 1048576.0D / 1000.0D;
+        }
+
+        private long getByteSize(File file) {
+            long bytes = 0L;
+            if (file.isFile()) {
+                this.filesTotal++; // Count file
+                if (file.getName().endsWith(".mca")) { // Check if is chunk file
+                    final File parent = file.getParentFile();
+                    if (parent.isDirectory() && parent.getName().toLowerCase().contains("region")) {
+                        this.chunkFilesTotal++;
+                    }
+                }
+                bytes += file.length();
+                return bytes;
+            }
+            if (file.isDirectory()) {
+                this.foldersTotal++; // Count folder
+                try {
+                    File[] subFiles = file.listFiles();
+                    assert subFiles != null;
+                    for (File subFile : subFiles) {
+                        bytes += this.getByteSize(subFile);
+                    }
+                } catch (SecurityException e) {
+                    BetterWorldStats.getLog().error("Could not read directory '"+file.getPath()+"'.", e);
                 }
             }
-            bytes += file.length();
             return bytes;
         }
-        if (file.isDirectory()) {
-            this.foldersTotal.getAndIncrement(); // Count folder
-            try {
-                File[] subFiles = file.listFiles();
-                assert subFiles != null;
-                for (File subFile : subFiles) {
-                    bytes += this.getByteSize(subFile);
-                }
-            } catch (SecurityException e) {
-                BetterWorldStats.getLog().error("Could not read directory '"+file.getPath()+"' because access was denied.", e);
-            }
-        }
-        return bytes;
-    }
-
-    public int getFolderCount() {
-        this.updateAsync();
-        return this.foldersTotal.get();
-    }
-
-    public int getFileCount() {
-        this.updateAsync();
-        return this.filesTotal.get();
-    }
-
-    public int getChunkFileCount() {
-        this.updateAsync();
-        return this.chunkFiles.get();
     }
 }

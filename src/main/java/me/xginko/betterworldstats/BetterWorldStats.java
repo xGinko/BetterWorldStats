@@ -1,6 +1,5 @@
 package me.xginko.betterworldstats;
 
-import com.tcoded.folialib.FoliaLib;
 import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
@@ -32,7 +31,6 @@ public final class BetterWorldStats extends JavaPlugin {
     public static final Style STYLE = Style.style(COLOR, TextDecoration.BOLD);
 
     private static BetterWorldStats instance;
-    private static FoliaLib foliaLib;
     private static Map<String, LanguageCache> languageCacheMap;
     private static Config config;
     private static Statistics statistics;
@@ -44,7 +42,6 @@ public final class BetterWorldStats extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        foliaLib = new FoliaLib(this);
         audiences = BukkitAudiences.create(this);
         logger = ComponentLogger.logger(getLogger().getName());
         metrics = new Metrics(this, 17204);
@@ -66,10 +63,6 @@ public final class BetterWorldStats extends JavaPlugin {
     @Override
     public void onDisable() {
         HandlerList.unregisterAll(this);
-        if (foliaLib != null) {
-            foliaLib.getImpl().cancelAllTasks();
-            foliaLib = null;
-        }
         if (audiences != null) {
             audiences.close();
             audiences = null;
@@ -95,10 +88,6 @@ public final class BetterWorldStats extends JavaPlugin {
 
     public static @NotNull Statistics getStatistics() {
         return statistics;
-    }
-
-    public static @NotNull FoliaLib getFoliaLib() {
-        return foliaLib;
     }
 
     public static @NotNull BukkitAudiences getAudiences() {

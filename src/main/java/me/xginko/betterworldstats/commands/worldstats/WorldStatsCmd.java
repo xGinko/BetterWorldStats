@@ -46,15 +46,15 @@ public class WorldStatsCmd implements BWSCmd {
                 statistics.mapAge.getYearsPart().toString(),
                 statistics.mapAge.getMonthsPart().toString(),
                 statistics.mapAge.getDaysPart().toString(),
-                Integer.toString(statistics.players.getUniqueJoins()),
-                config.filesize_format.format(statistics.fileStats.getTrueSize()),
-                config.filesize_format.format(statistics.fileStats.getSpoofedSize()),
+                statistics.players.getUniqueJoins(),
+                statistics.fileStats.getSize(),
+                statistics.fileStats.getSpoofedSize(),
                 statistics.mapAge.asDays().toString(),
                 statistics.mapAge.asMonths().toString(),
                 statistics.mapAge.asYears().toString(),
-                Integer.toString(statistics.fileStats.getFileCount()),
-                Integer.toString(statistics.fileStats.getFolderCount()),
-                Integer.toString(statistics.fileStats.getChunkFileCount())
+                statistics.fileStats.getFileCount(),
+                statistics.fileStats.getFolderCount(),
+                statistics.fileStats.getChunkFileCount()
         )) {
             KyoriUtil.sendMessage(sender, line);
         }

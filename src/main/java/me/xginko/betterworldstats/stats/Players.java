@@ -26,7 +26,7 @@ public class Players implements Listener {
         }
     }
 
-    public int getUniqueJoins() {
-        return this.uniquePlayers.get();
+    public String getUniqueJoins() {
+        return uniquePlayers.toString();
     }
 }
