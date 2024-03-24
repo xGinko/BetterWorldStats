@@ -44,16 +44,12 @@
                         <configuration>
                             <relocations>
                                 <relocation>
-                                    <pattern>org.bstats</pattern>
-                                    <shadedPattern>me.xginko.betterworldstats.libs.bstats</shadedPattern>
-                                </relocation>
-                                <relocation>
-                                    <pattern>com.tcoded.folialib</pattern>
-                                    <shadedPattern>me.xginko.betterworldstats.libs.folialib</shadedPattern>
-                                </relocation>
-                                <relocation>
                                     <pattern>com.github.benmanes.caffeine</pattern>
                                     <shadedPattern>me.xginko.betterworldstats.libs.caffeine</shadedPattern>
+                                </relocation>
+                                <relocation>
+                                    <pattern>org.bstats</pattern>
+                                    <shadedPattern>me.xginko.betterworldstats.libs.bstats</shadedPattern>
                                 </relocation>
                                 <relocation>
                                     <pattern>net.kyori</pattern>
