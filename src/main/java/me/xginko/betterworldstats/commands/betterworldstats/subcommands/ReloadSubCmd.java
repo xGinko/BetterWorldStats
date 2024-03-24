@@ -35,9 +35,7 @@ public class ReloadSubCmd extends SubCmd {
         }
 
         KyoriUtil.sendMessage(sender, Component.text("Reloading BetterWorldStats...").color(NamedTextColor.WHITE));
-        BetterWorldStats.getFoliaLib().getImpl().runNextTick(reload -> {
-            BetterWorldStats.getInstance().reloadPlugin();
-            KyoriUtil.sendMessage(sender, Component.text("Reload complete.").color(NamedTextColor.GREEN));
-        });
+        BetterWorldStats.getInstance().reloadPlugin();
+        KyoriUtil.sendMessage(sender, Component.text("Reload complete.").color(NamedTextColor.GREEN));
     }
 }

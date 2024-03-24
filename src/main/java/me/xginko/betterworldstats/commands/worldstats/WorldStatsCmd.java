@@ -17,11 +17,9 @@ import java.util.List;
 public class WorldStatsCmd implements BWSCmd {
 
     private final @NotNull Statistics statistics;
-    private final @NotNull Config config;
 
     public WorldStatsCmd() {
         this.statistics = BetterWorldStats.getStatistics();
-        this.config = BetterWorldStats.getConfiguration();
     }
 
     @Override
