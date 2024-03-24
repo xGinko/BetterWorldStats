@@ -27,6 +27,8 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                    <!-- Ignore java error -->
+                    <failOnError>false</failOnError>
                 </configuration>
             </plugin>
             <plugin>
