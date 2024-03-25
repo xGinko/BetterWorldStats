@@ -19,7 +19,7 @@ public class KyoriUtil {
     public static @NotNull Locale getLocale(@NotNull CommandSender sender) {
         if (sender instanceof Player) {
             return BetterWorldStats.getAudiences().player((Player) sender).pointers().get(Identity.LOCALE)
-                    .orElseGet(() -> BetterWorldStats.getConfiguration().default_lang);
+                    .orElse(BetterWorldStats.getConfiguration().default_lang);
         } else {
             return BetterWorldStats.getConfiguration().default_lang;
         }
