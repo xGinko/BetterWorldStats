@@ -16,16 +16,13 @@ public class KyoriUtil {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
     }
 
-    @SuppressWarnings("deprecation")
     public static @NotNull Locale getLocale(@NotNull CommandSender sender) {
         if (sender instanceof Player) {
-            try {
-                final Player player = (Player) sender;
-                final Optional<Locale> locale = BetterWorldStats.getAudiences().player(player).pointers().get(Identity.LOCALE);
-                return locale.orElseGet(() -> Locale.forLanguageTag(player.getLocale().replace("_", "-")));
-            } catch (Throwable ignored) {}
+            return BetterWorldStats.getAudiences().player((Player) sender).pointers().get(Identity.LOCALE)
+                    .orElseGet(() -> BetterWorldStats.getConfiguration().default_lang);
+        } else {
+            return BetterWorldStats.getConfiguration().default_lang;
         }
-        return BetterWorldStats.getConfiguration().default_lang;
     }
 
     public static @NotNull String translateChatColor(@NotNull String string) {
