@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 
 public final class BetterWorldStats extends JavaPlugin {
-    public static final TextColor COLOR = TextColor.color(0,204,204);
+    public static final TextColor COLOR = TextColor.color(0,204,34);
     public static final Style STYLE = Style.style(COLOR, TextDecoration.BOLD);
 
     private static BetterWorldStats instance;
@@ -45,12 +45,15 @@ public final class BetterWorldStats extends JavaPlugin {
         audiences = BukkitAudiences.create(this);
         logger = ComponentLogger.logger(getLogger().getName());
         metrics = new Metrics(this, 17204);
-        logger.info(Component.text("                                                                                ").style(STYLE));
-        logger.info(Component.text("  ___      _   _         __      __       _    _ ___ _        _                 ").style(STYLE));
-        logger.info(Component.text(" | _ ) ___| |_| |_ ___ _ \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___         ").style(STYLE));
-        logger.info(Component.text(" | _ \\/ -_)  _|  _/ -_) '_\\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<    ").style(STYLE));
-        logger.info(Component.text(" |___/\\___|\\__|\\__\\___|_|  \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(STYLE));
-        logger.info(Component.text("                                                                                ").style(STYLE));
+        logger.info(Component.text("                                             ").style(STYLE));
+        logger.info(Component.text("    ___      _   _                           ").style(STYLE));
+        logger.info(Component.text("   | _ ) ___| |_| |_ ___ _ _                 ").style(STYLE));
+        logger.info(Component.text("   | _ \\/ -_)  _|  _/ -_) '_|                ").style(STYLE));
+        logger.info(Component.text(" __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(STYLE));
+        logger.info(Component.text(" \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(STYLE));
+        logger.info(Component.text("  \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(STYLE));
+        logger.info(Component.text("   \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(STYLE));
+        logger.info(Component.text("                                             ").style(STYLE));
         logger.info("Loading languages");
         reloadLang();
         logger.info("Loading config");
