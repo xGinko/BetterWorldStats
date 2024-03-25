@@ -7,8 +7,8 @@ import net.kyori.adventure.text.serializer.ansi.ANSIComponentSerializer;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.LoggerFactory;
 
-@AutoService(ComponentLoggerProvider.class)
 @SuppressWarnings("UnstableApiUsage")
+@AutoService(ComponentLoggerProvider.class)
 public final class ComponentLoggerProviderImpl implements ComponentLoggerProvider {
     private static final @NotNull ANSIComponentSerializer SERIALIZER = ANSIComponentSerializer.builder()
             .flattener(TranslatableMapper.FLATTENER)
