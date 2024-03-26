@@ -24,10 +24,10 @@ public final class PAPIUtil {
     }
 
     public static @NotNull TagResolver papiTagResolver(@Nullable CommandSender sender) {
-        return TagResolver.resolver("papi", (argumentQueue, context) -> {
-            final String papiPlaceholder = argumentQueue.popOr("papi tag requires an argument").value();
-            final String parsedPlaceholder = tryParse(sender, '%' + papiPlaceholder + '%');
-            return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder));
-        });
+        return TagResolver.resolver("papi", (argumentQueue, context) -> Tag.selfClosingInserting(
+                LegacyComponentSerializer.legacySection().deserialize(
+                        tryParse(sender, '%' + argumentQueue.popOr("papi tag requires an argument").value() + '%')
+                )
+        ));
     }
 }
