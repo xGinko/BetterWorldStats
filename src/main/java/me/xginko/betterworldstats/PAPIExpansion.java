@@ -9,11 +9,9 @@ import org.jetbrains.annotations.Nullable;
 public final class PAPIExpansion extends PlaceholderExpansion {
 
     private final @NotNull Statistics statistics;
-    private final @NotNull Config config;
 
     PAPIExpansion() {
         this.statistics = BetterWorldStats.getStatistics();
-        this.config = BetterWorldStats.getConfiguration();
         this.register();
     }
 
@@ -58,8 +56,10 @@ public final class PAPIExpansion extends PlaceholderExpansion {
                 return statistics.fileStats.getFileCount();
             case "folder_count":
                 return statistics.fileStats.getFolderCount();
-            case "chunk_file_count":
-                return statistics.fileStats.getChunkFileCount();
+            case "chunk_count":
+                return statistics.fileStats.getChunkCount();
+            case "entity_count":
+                return statistics.fileStats.getEntityCount();
             case "players":
                 return statistics.players.getUniqueJoins();
             case "days":

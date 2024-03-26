@@ -37,7 +37,8 @@ public class LanguageCache {
         this.langFile.addComment(
                 "Command Placeholders:" +
                 "\n %size%        | %spoofsize%     | %players%      | %years%      | %months%       | %days%" +
-                "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_file_count%"
+                "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_count%" +
+                "\n %entity_count% "
         );
 
         this.world_stats_message_serialized = getListTranslation("stats-message",
@@ -71,7 +72,8 @@ public class LanguageCache {
             String years, String months, String days,
             String players, String fileSize, String spoofSize,
             String ageAsDays, String ageAsMonths, String ageAsYears,
-            String fileCount, String folderCount, String chunkFileCount
+            String fileCount, String folderCount, String chunkCount,
+            String entityCount
     ) {
         final MiniMessage miniMessage = MiniMessage.builder()
                 .tags(TagResolver.standard())
@@ -90,7 +92,8 @@ public class LanguageCache {
                         .replace("%age_in_years%", ageAsYears)
                         .replace("%file_count%", fileCount)
                         .replace("%folder_count%", folderCount)
-                        .replace("%chunk_file_count%", chunkFileCount)
+                        .replace("%chunk_count%", chunkCount)
+                        .replace("%entity_count%", entityCount)
                 ))
                 .collect(Collectors.toList());
     }

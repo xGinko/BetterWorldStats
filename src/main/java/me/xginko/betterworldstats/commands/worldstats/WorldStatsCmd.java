@@ -51,7 +51,8 @@ public class WorldStatsCmd implements BWSCmd {
                 statistics.mapAge.asYears().toString(),
                 statistics.fileStats.getFileCount(),
                 statistics.fileStats.getFolderCount(),
-                statistics.fileStats.getChunkFileCount()
+                statistics.fileStats.getChunkCount(),
+                statistics.fileStats.getEntityCount()
         )) {
             KyoriUtil.sendMessage(sender, line);
         }

@@ -2,32 +2,48 @@ package me.xginko.betterworldstats.stats;
 
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.config.Config;
+import net.kyori.adventure.text.Component;
+import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FileStats {
 
     private final @NotNull Config config;
     private final @NotNull AtomicReference<ScanResult> scan_result;
-    private final @NotNull AtomicBoolean scan_lock;
+    private boolean scanning = false;
 
     public FileStats() {
         this.config = BetterWorldStats.getConfiguration();
         this.scan_result = new AtomicReference<>();
-        this.scan_lock = new AtomicBoolean();
         this.refresh();
     }
 
     private void refresh() {
-        if (System.currentTimeMillis() > scan_result.get().expiration_time_millis && scan_lock.getAndSet(true)) {
-            CompletableFuture.supplyAsync(() -> new ScanResult(config.paths_to_scan, config.filesize_update_period_millis))
-                    .thenAccept(scan_result::set)
-                    .thenRun(() -> scan_lock.set(false));
+        if (System.currentTimeMillis() <= scan_result.get().expiration_time_millis || scanning) {
+            return;
         }
+
+        scanning = true;
+
+        CompletableFuture.supplyAsync(() -> new ScanResult(config.paths_to_scan, config.filesize_update_period_millis)).thenAccept(result -> {
+            scan_result.set(result);
+            scanning = false;
+            if (config.log_is_enabled) {
+                BetterWorldStats.getLog().info(Component.text(
+                        "Updated file stats asynchronously.").color(BetterWorldStats.COLOR));
+                BetterWorldStats.getLog().info(Component.text(
+                        "Size: " + config.filesize_format.format(result.size_in_gb) + "GB, " +
+                                "files: " + result.file_count + ", " +
+                                "folders: " + result.folder_count + ", " +
+                                "chunks: " + result.chunk_count + ", " +
+                                "entities: " + result.entity_count
+                ).color(BetterWorldStats.COLOR));
+            }
+        });
     }
 
     public String getSize() {
@@ -50,23 +66,35 @@ public class FileStats {
         return Integer.toString(scan_result.get().file_count);
     }
 
-    public String getChunkFileCount() {
+    public String getChunkCount() {
         refresh();
-        return Integer.toString(scan_result.get().region_file_count);
+        return Integer.toString(scan_result.get().chunk_count);
+    }
+
+    public String getEntityCount() {
+        refresh();
+        return Integer.toString(scan_result.get().entity_count);
     }
 
     private static class ScanResult {
 
         public final long expiration_time_millis;
         public final double size_in_gb;
-        public int file_count, region_file_count, folder_count;
+        public int file_count, folder_count, chunk_count, entity_count;
 
         protected ScanResult(@NotNull Iterable<String> paths_to_scan, long cooldow_millis) {
-            this.file_count = this.region_file_count = this.folder_count = 0;
+            this.file_count = this.chunk_count = this.folder_count = 0;
+
             long byteSize = 0L;
             for (String path : paths_to_scan)
                 byteSize += this.getByteSize(new File(path));
             this.size_in_gb = byteSize / 1048576.0D / 1000.0D;
+
+            for (final World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
+                this.chunk_count += world.getChunkCount();
+                this.entity_count += world.getEntityCount();
+            }
+
             this.expiration_time_millis = System.currentTimeMillis() + cooldow_millis;
         }
 
@@ -88,13 +116,6 @@ public class FileStats {
 
             else if (file.isFile()) {
                 this.file_count++;
-                // Check if it is a region file
-                if (file.getName().endsWith(".mca")) {
-                    final File parent = file.getParentFile();
-                    if (parent.isDirectory() && parent.getName().toLowerCase().contains("region")) {
-                        this.region_file_count++;
-                    }
-                }
                 bytes += file.length();
             }
 
