@@ -22,8 +22,8 @@ repositories {
 
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("me.clip:placeholderapi:2.11.5")
     implementation("org.bstats:bstats-bukkit:3.0.2")
-    implementation("me.clip:placeholderapi:2.11.5")
 
     implementation("net.kyori:adventure-platform-bukkit:4.3.2")
     implementation("net.kyori:adventure-text-minimessage:4.16.0")
@@ -69,6 +69,10 @@ tasks {
                 )
             )
         }
+    }
+
+    build.configure {
+        dependsOn("shadowJar")
     }
 
     shadowJar {
