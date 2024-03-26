@@ -6,28 +6,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class FileStats {
 
     private final @NotNull Config config;
     private final @NotNull AtomicReference<ScanResult> scan_result;
-    private boolean scanLock = false;
+    private final @NotNull AtomicBoolean scan_lock;
 
     public FileStats() {
         this.config = BetterWorldStats.getConfiguration();
         this.scan_result = new AtomicReference<>();
+        this.scan_lock = new AtomicBoolean();
         this.refresh();
     }
 
     private void refresh() {
-        if (System.currentTimeMillis() > scan_result.get().time_millis + config.filesize_update_period_millis) {
-            if (!scanLock) {
-                CompletableFuture.supplyAsync(() -> new ScanResult(config.paths_to_scan))
-                        .thenAccept(scan_result::set)
-                        .thenRun(() -> this.scanLock = false);
-                scanLock = true;
-            }
+        if (System.currentTimeMillis() > scan_result.get().expiration_time_millis && scan_lock.getAndSet(true)) {
+            CompletableFuture.supplyAsync(() -> new ScanResult(config.paths_to_scan, config.filesize_update_period_millis))
+                    .thenAccept(scan_result::set)
+                    .thenRun(() -> scan_lock.set(false));
         }
     }
 
@@ -58,17 +57,17 @@ public class FileStats {
 
     private static class ScanResult {
 
+        public final long expiration_time_millis;
         public final double size_in_gb;
         public int file_count, region_file_count, folder_count;
-        public long time_millis;
 
-        protected ScanResult(@NotNull Iterable<String> paths_to_scan) {
+        protected ScanResult(@NotNull Iterable<String> paths_to_scan, long cooldow_millis) {
             this.file_count = this.region_file_count = this.folder_count = 0;
             long byteSize = 0L;
             for (String path : paths_to_scan)
                 byteSize += this.getByteSize(new File(path));
             this.size_in_gb = byteSize / 1048576.0D / 1000.0D;
-            this.time_millis = System.currentTimeMillis();
+            this.expiration_time_millis = System.currentTimeMillis() + cooldow_millis;
         }
 
         private long getByteSize(File file) {
