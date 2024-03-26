@@ -36,22 +36,17 @@ public class VersionSubCmd extends SubCmd {
             return;
         }
 
-        String name, version, website, author;
         final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
-        name = pluginYML.getName();
-        version = pluginYML.getVersion();
-        website = pluginYML.getWebsite();
-        author = pluginYML.getAuthors().get(0);
 
         KyoriUtil.sendMessage(sender, Component.newline()
                 .append(
-                        Component.text(name + " " + version)
+                        Component.text(pluginYML.getName() + " " + pluginYML.getVersion())
                                 .color(NamedTextColor.GOLD)
-                                .clickEvent(ClickEvent.openUrl(website))
+                                .clickEvent(ClickEvent.openUrl(pluginYML.getWebsite()))
                 )
                 .append(Component.text(" by ").color(NamedTextColor.GRAY))
                 .append(
-                        Component.text(author)
+                        Component.text(pluginYML.getAuthors().get(0))
                                 .color(NamedTextColor.WHITE)
                                 .clickEvent(ClickEvent.openUrl("https://github.com/xGinko"))
                 )

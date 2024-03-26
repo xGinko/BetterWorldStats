@@ -36,7 +36,6 @@ public final class PAPIExpansion extends PlaceholderExpansion {
     }
 
     @Override
-    @SuppressWarnings({"deprecation"})
     public @NotNull String getVersion() {
         return BetterWorldStats.getInstance().getDescription().getVersion();
     }

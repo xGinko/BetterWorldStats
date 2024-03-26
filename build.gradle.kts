@@ -22,6 +22,7 @@ repositories {
 
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
+    compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("me.clip:placeholderapi:2.11.5")
 
     implementation("net.kyori:adventure-platform-bukkit:4.3.2")
@@ -32,7 +33,7 @@ dependencies {
 
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.1")
-    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
+    implementation("com.github.ben-manes.caffeine:caffeine:2.9.3") // 2.X for Java 8 targets
 }
 
 group = "me.xginko.betterworldstats"
@@ -64,8 +65,8 @@ tasks {
         archiveFileName.set("BetterWorldStats-${version}.jar")
         relocate("net.kyori", "me.xginko.betterworldstats.libs.kyori")
         relocate("org.bstats", "me.xginko.betterworldstats.libs.bstats")
-        relocate("io.github.thatsmusic99.configurationmaster", "me.xginko.betterworldstats.libs.configmaster")
         relocate("com.github.benmanes.caffeine", "me.xginko.betterworldstats.libs.caffeine")
+        relocate("io.github.thatsmusic99.configurationmaster", "me.xginko.betterworldstats.libs.configmaster")
     }
 
     processResources {
