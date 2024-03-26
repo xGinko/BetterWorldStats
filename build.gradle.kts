@@ -23,15 +23,14 @@ repositories {
 dependencies {
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.5")
-    implementation("org.bstats:bstats-bukkit:3.0.2")
 
     implementation("net.kyori:adventure-platform-bukkit:4.3.2")
     implementation("net.kyori:adventure-text-minimessage:4.16.0")
     implementation("net.kyori:adventure-text-serializer-ansi:4.16.0")
     implementation("net.kyori:adventure-text-serializer-legacy:4.16.0")
-    implementation("net.kyori:adventure-text-serializer-plain:4.16.0")
     implementation("net.kyori:adventure-text-logger-slf4j:4.16.0")
 
+    implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.1")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3")
 }
@@ -57,6 +56,18 @@ tasks {
         options.encoding = "UTF-8"
     }
 
+    build.configure {
+        dependsOn("shadowJar")
+    }
+
+    shadowJar {
+        archiveFileName.set("BetterWorldStats-${version}.jar")
+        relocate("net.kyori", "me.xginko.betterworldstats.libs.kyori")
+        relocate("org.bstats", "me.xginko.betterworldstats.libs.bstats")
+        relocate("io.github.thatsmusic99.configurationmaster", "me.xginko.betterworldstats.libs.configmaster")
+        relocate("com.github.benmanes.caffeine", "me.xginko.betterworldstats.libs.caffeine")
+    }
+
     processResources {
         filesMatching("plugin.yml") {
             expand(
@@ -68,17 +79,5 @@ tasks {
                 )
             )
         }
-    }
-
-    build.configure {
-        dependsOn("shadowJar")
-    }
-
-    shadowJar {
-        archiveFileName.set("BetterWorldStats-${version}.jar")
-        relocate("net.kyori", "me.xginko.betterworldstats.libs.kyori")
-        relocate("org.bstats", "me.xginko.betterworldstats.libs.bstats")
-        relocate("io.github.thatsmusic99.configurationmaster", "me.xginko.betterworldstats.libs.configmaster")
-        relocate("com.github.benmanes.caffeine", "me.xginko.betterworldstats.libs.caffeine")
     }
 }

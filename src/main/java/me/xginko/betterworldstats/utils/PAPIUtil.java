@@ -11,9 +11,13 @@ import org.jetbrains.annotations.Nullable;
 
 public final class PAPIUtil {
 
-    private static @NotNull String tryParse(@Nullable Player player, @NotNull String input) {
+    private static @NotNull String tryParse(@Nullable CommandSender sender, @NotNull String input) {
         try {
-            return PlaceholderAPI.setPlaceholders(player, input);
+            if (sender instanceof Player) {
+                return PlaceholderAPI.setPlaceholders((Player) sender, input);
+            } else {
+                return PlaceholderAPI.setPlaceholders(null, input);
+            }
         } catch (Throwable t) {
             return input;
         }
@@ -22,7 +26,7 @@ public final class PAPIUtil {
     public static @NotNull TagResolver papiTagResolver(@Nullable CommandSender sender) {
         return TagResolver.resolver("papi", (argumentQueue, context) -> {
             final String papiPlaceholder = argumentQueue.popOr("papi tag requires an argument").value();
-            final String parsedPlaceholder = tryParse(sender instanceof Player ? (Player) sender : null, '%' + papiPlaceholder + '%');
+            final String parsedPlaceholder = tryParse(sender, '%' + papiPlaceholder + '%');
             return Tag.selfClosingInserting(LegacyComponentSerializer.legacySection().deserialize(parsedPlaceholder));
         });
     }
