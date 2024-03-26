@@ -61,8 +61,8 @@ public class LanguageCache {
 
     public @NotNull Component noPermissionMsg(CommandSender sender) {
         return MiniMessage.builder()
-                .tags(TagResolver.standard())
                 .tags(PAPIUtil.papiTagResolver(sender))
+                .tags(TagResolver.standard())
                 .build()
                 .deserialize(no_permission_serialized);
     }
@@ -76,8 +76,8 @@ public class LanguageCache {
             String entityCount
     ) {
         final MiniMessage miniMessage = MiniMessage.builder()
-                .tags(TagResolver.standard())
                 .tags(PAPIUtil.papiTagResolver(sender))
+                .tags(TagResolver.standard())
                 .build();
         return world_stats_message_serialized.stream()
                 .map(line -> miniMessage.deserialize(line
