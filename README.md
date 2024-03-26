@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div align="center">
 <img src="https://raw.githubusercontent.com/xGinko/BetterWorldStats/main/logo.png" alt="BetterWorldStats" height="150">
 
 ## BetterWorldStats
