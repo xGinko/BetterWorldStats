@@ -1,10 +1,10 @@
-name: BetterWorldStats
-version: ${project.version}
+name: "${name}"
+version: ${version}
 main: me.xginko.betterworldstats.BetterWorldStats
 authors: [ xGinko ]
 softdepend: [ PlaceholderAPI ]
-description: ${project.description}
-website: ${project.url}
+description: ${description}
+website: ${url}
 folia-supported: true
 api-version: '1.13'
 
@@ -20,6 +20,7 @@ commands:
     usage: /<command>
     aliases:
       - stats
+
 permissions:
   betterworldstats.worldstats:
     description: Permission to use /worldstats

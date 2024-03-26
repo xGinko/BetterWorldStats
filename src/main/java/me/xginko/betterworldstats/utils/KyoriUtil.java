@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
-import java.util.Optional;
 
 public class KyoriUtil {
 

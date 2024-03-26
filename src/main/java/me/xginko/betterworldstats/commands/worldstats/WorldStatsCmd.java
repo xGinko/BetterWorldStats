@@ -3,7 +3,6 @@ package me.xginko.betterworldstats.commands.worldstats;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.Statistics;
 import me.xginko.betterworldstats.commands.BWSCmd;
-import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
