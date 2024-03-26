@@ -4,6 +4,10 @@ plugins {
     id("xyz.jpenilla.run-paper") version "2.2.3"
 }
 
+group = "me.xginko.betterworldstats"
+version = "1.10.0"
+description = "Show stats about server age, map size and unique player joins on your minecraft server."
+
 repositories {
     mavenCentral()
 
@@ -36,12 +40,6 @@ dependencies {
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3") // 2.X for Java 8 targets
 }
 
-group = "me.xginko.betterworldstats"
-version = "1.10.0"
-description = "Show stats about server age, map size and unique player joins on your minecraft server."
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
-
 runPaper.folia.registerTask();
 
 tasks {
@@ -50,7 +48,8 @@ tasks {
     }
 
     compileJava {
-        options.encoding = "UTF-8"
+        options.encoding = Charsets.UTF_8.name()
+        options.release.set(8)
     }
 
     javadoc {
