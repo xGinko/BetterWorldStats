@@ -21,7 +21,7 @@ repositories {
 }
 
 dependencies {
-    compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("me.clip:placeholderapi:2.11.5")
 
@@ -40,8 +40,8 @@ dependencies {
 group = "me.xginko.betterworldstats"
 version = "1.10.0"
 description = "Show stats about server age, map size and unique player joins on your minecraft server."
-java.sourceCompatibility = JavaVersion.VERSION_17
-java.targetCompatibility = JavaVersion.VERSION_17
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 runPaper.folia.registerTask();
 

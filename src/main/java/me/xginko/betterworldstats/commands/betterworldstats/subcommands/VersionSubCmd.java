@@ -1,6 +1,5 @@
 package me.xginko.betterworldstats.commands.betterworldstats.subcommands;
 
-import io.papermc.paper.plugin.configuration.PluginMeta;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.commands.SubCmd;
 import me.xginko.betterworldstats.utils.KyoriUtil;
@@ -31,7 +30,6 @@ public class VersionSubCmd extends SubCmd {
     }
 
     @Override
-    @SuppressWarnings({"deprecation", "UnstableApiUsage"})
     public void perform(CommandSender sender, String[] args) {
         if (!sender.hasPermission("betterworldstats.version")) {
             KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
@@ -39,20 +37,11 @@ public class VersionSubCmd extends SubCmd {
         }
 
         String name, version, website, author;
-
-        try {
-            final PluginMeta pluginMeta = BetterWorldStats.getInstance().getPluginMeta();
-            name = pluginMeta.getName();
-            version = pluginMeta.getVersion();
-            website = pluginMeta.getWebsite();
-            author = pluginMeta.getAuthors().get(0);
-        } catch (Throwable t) {
-            final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
-            name = pluginYML.getName();
-            version = pluginYML.getVersion();
-            website = pluginYML.getWebsite();
-            author = pluginYML.getAuthors().get(0);
-        }
+        final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
+        name = pluginYML.getName();
+        version = pluginYML.getVersion();
+        website = pluginYML.getWebsite();
+        author = pluginYML.getAuthors().get(0);
 
         KyoriUtil.sendMessage(sender, Component.newline()
                 .append(

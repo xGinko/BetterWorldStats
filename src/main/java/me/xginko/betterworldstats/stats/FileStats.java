@@ -40,8 +40,7 @@ public class FileStats {
                                 "files: " + result.file_count + ", " +
                                 "folders: " + result.folder_count + ", " +
                                 "chunks: " + result.chunk_count + ", " +
-                                "entities: " + result.entity_count
-                ).color(BetterWorldStats.COLOR));
+                                "entities: " + result.entity_count).color(BetterWorldStats.COLOR));
             }
         });
     }
@@ -82,7 +81,7 @@ public class FileStats {
         public final double size_in_gb;
         public int file_count, folder_count, chunk_count, entity_count;
 
-        protected ScanResult(@NotNull Iterable<String> paths_to_scan, long cooldow_millis) {
+        protected ScanResult(@NotNull Iterable<String> paths_to_scan, long cooldown_millis) {
             this.file_count = this.chunk_count = this.folder_count = 0;
 
             long byteSize = 0L;
@@ -95,7 +94,7 @@ public class FileStats {
                 this.entity_count += world.getEntityCount();
             }
 
-            this.expiration_time_millis = System.currentTimeMillis() + cooldow_millis;
+            this.expiration_time_millis = System.currentTimeMillis() + cooldown_millis;
         }
 
         private long getByteSize(File file) {

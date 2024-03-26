@@ -9,7 +9,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Locale;
 
-public class KyoriUtil {
+public final class KyoriUtil {
 
     public static void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
