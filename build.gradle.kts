@@ -40,8 +40,8 @@ dependencies {
 group = "me.xginko.betterworldstats"
 version = "1.10.0"
 description = "Show stats about server age, map size and unique player joins on your minecraft server."
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
+java.sourceCompatibility = JavaVersion.VERSION_17
+java.targetCompatibility = JavaVersion.VERSION_17
 
 runPaper.folia.registerTask();
 
