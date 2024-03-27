@@ -24,12 +24,7 @@ public class Config {
     public final double additional_spoof_filesize;
 
     public Config() throws Exception {
-        // Create plugin folder first if it does not exist yet
-        File pluginFolder = BetterWorldStats.getInstance().getDataFolder();
-        if (!pluginFolder.exists() && !pluginFolder.mkdir())
-            BetterWorldStats.getLog().error("Failed to create plugin folder.");
-        // Load config.yml with ConfigMaster
-        this.configFile = ConfigFile.loadConfig(new File(pluginFolder, "config.yml"));
+        this.configFile = ConfigFile.loadConfig(new File(BetterWorldStats.getInstance().getDataFolder(), "config.yml"));
 
         // Title
         this.configFile.setTitle(new Title()

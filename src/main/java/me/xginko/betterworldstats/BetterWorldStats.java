@@ -48,6 +48,13 @@ public final class BetterWorldStats extends JavaPlugin {
         logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(KyoriUtil.GUPPIE_GREEN_BOLD));
         logger.info(Component.text("                                              ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
 
+        try {
+            getDataFolder().mkdirs();
+        } catch (Throwable t) {
+            logger.error("Failed to create plugin folder!", t);
+            getServer().getPluginManager().disablePlugin(this);
+        }
+
         logger.info("Loading languages");
         reloadLang();
         logger.info("Loading config");
