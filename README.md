@@ -14,7 +14,7 @@ These statistics can be accessed via the /worldstats command and PlaceholderAPI 
 
 [![BetterWorldStats](https://bstats.org/signatures/bukkit/BetterWorldStats.svg)](https://bstats.org/plugin/bukkit/BetterWorldStats/17204)
 
-### Supports Paper & Folia from 1.12.2 - 1.20.4.
+### Supports Spigot, Paper & Folia from 1.12.2 - 1.20.4.
 
 </div>
 

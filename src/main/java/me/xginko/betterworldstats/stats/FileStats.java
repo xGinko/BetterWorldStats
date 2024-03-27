@@ -1,5 +1,6 @@
 package me.xginko.betterworldstats.stats;
 
+import io.papermc.lib.PaperLib;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.config.Config;
 import net.kyori.adventure.text.Component;
@@ -48,9 +49,11 @@ public class FileStats {
             }
         });
 
-        for (final World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
-            this.chunk_count.addAndGet(world.getChunkCount());
-            this.entity_count.addAndGet(world.getEntityCount());
+        if (PaperLib.isPaper()) {
+            for (final World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
+                this.chunk_count.addAndGet(world.getChunkCount());
+                this.entity_count.addAndGet(world.getEntityCount());
+            }
         }
     }
 
@@ -76,12 +79,12 @@ public class FileStats {
 
     public String getChunkCount() {
         refresh();
-        return chunk_count.toString();
+        return PaperLib.isPaper() ? chunk_count.toString() : "unsupported";
     }
 
     public String getEntityCount() {
         refresh();
-        return entity_count.toString();
+        return PaperLib.isPaper() ? entity_count.toString() : "unsupported";
     }
 
     private static class FileScanResult {
