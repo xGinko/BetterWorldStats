@@ -22,7 +22,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class BetterWorldStats extends JavaPlugin {
-    private static final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
+
     private static BetterWorldStats instance;
     private static Map<String, LanguageCache> languageCacheMap;
     private static Config config;
@@ -135,7 +135,7 @@ public final class BetterWorldStats extends JavaPlugin {
         try {
             File langDirectory = new File(getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
-            Set<String> locales = new HashSet<>();
+            SortedSet<String> locales = new TreeSet<>();
             locales.addAll(getDefaultLocales(getFile()));
             locales.addAll(getPresentLocales(langDirectory));
             for (String localeString : locales) {
@@ -146,6 +146,8 @@ public final class BetterWorldStats extends JavaPlugin {
             logger.error("Error loading language files!", t);
         }
     }
+
+    private static final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
 
     private @NotNull Set<String> getDefaultLocales(File jarFile) {
         try (final JarFile pluginJarFile = new JarFile(jarFile)) {
