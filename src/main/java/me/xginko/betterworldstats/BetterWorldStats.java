@@ -144,6 +144,13 @@ public final class BetterWorldStats extends JavaPlugin {
             }
         } catch (Throwable t) {
             logger.error("Error loading language files!", t);
+        } finally {
+            if (languageCacheMap.isEmpty()) {
+                logger.error("Unable to load translations. Disabling.");
+                getServer().getPluginManager().disablePlugin(this);
+            } else {
+                logger.info("Loaded " + languageCacheMap.size() + " translations");
+            }
         }
     }
 
