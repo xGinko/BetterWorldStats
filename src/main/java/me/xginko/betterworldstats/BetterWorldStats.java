@@ -4,7 +4,6 @@ import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
 import me.xginko.betterworldstats.hooks.BWSHook;
-import me.xginko.betterworldstats.hooks.PAPIExpansion;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
@@ -15,7 +14,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.util.*;
 import java.util.jar.JarFile;
