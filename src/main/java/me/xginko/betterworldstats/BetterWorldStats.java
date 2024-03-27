@@ -3,16 +3,14 @@ package me.xginko.betterworldstats;
 import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
+import me.xginko.betterworldstats.hooks.BWSHook;
+import me.xginko.betterworldstats.hooks.PAPIExpansion;
 import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
-import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,36 +22,34 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
 
 public final class BetterWorldStats extends JavaPlugin {
-    public static final TextColor COLOR = TextColor.color(0,204,34);
-    public static final Style STYLE = Style.style(COLOR, TextDecoration.BOLD);
-
+    private static final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
     private static BetterWorldStats instance;
     private static Map<String, LanguageCache> languageCacheMap;
     private static Config config;
     private static Statistics statistics;
-    private static PAPIExpansion papiExpansion;
     private static BukkitAudiences audiences;
     private static ComponentLogger logger;
-    private static Metrics metrics;
+    private static Metrics bStats;
 
     @Override
     public void onEnable() {
         instance = this;
         audiences = BukkitAudiences.create(this);
         logger = ComponentLogger.logger(getLogger().getName());
-        metrics = new Metrics(this, 17204);
-        logger.info(Component.text("                                              ").style(STYLE));
-        logger.info(Component.text("     ___      _   _                           ").style(STYLE));
-        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ").style(STYLE));
-        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ").style(STYLE));
-        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(STYLE));
-        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(STYLE));
-        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(STYLE));
-        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(STYLE));
-        logger.info(Component.text("                                              ").style(STYLE));
+        bStats = new Metrics(this, 17204);
+
+        logger.info(Component.text("                                              ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("     ___      _   _                           ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("                                              ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+
         logger.info("Loading languages");
         reloadLang();
         logger.info("Loading config");
@@ -65,20 +61,19 @@ public final class BetterWorldStats extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        HandlerList.unregisterAll(this);
+        BWSHook.HOOKS.forEach(BWSHook::unHook);
+        if (statistics != null) {
+            statistics.shutdown();
+            statistics = null;
+        }
         if (audiences != null) {
             audiences.close();
             audiences = null;
         }
-        if (papiExpansion != null) {
-            papiExpansion.unregister();
-            papiExpansion = null;
+        if (bStats != null) {
+            bStats.shutdown();
+            bStats = null;
         }
-        if (metrics != null) {
-            metrics.shutdown();
-            metrics = null;
-        }
-        statistics = null;
         config = null;
         languageCacheMap = null;
         logger = null;
@@ -126,13 +121,11 @@ public final class BetterWorldStats extends JavaPlugin {
 
     private void reloadConfiguration() {
         try {
-            if (statistics != null) statistics.shutdown();
+            if (statistics != null)
+                statistics.shutdown();
             config = new Config();
             statistics = new Statistics();
-            if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {
-                if (papiExpansion != null) papiExpansion.unregister();
-                papiExpansion = new PAPIExpansion();
-            }
+            BWSHook.reloadHooks();
             config.saveConfig();
         } catch (Exception e) {
             logger.error("Failed loading config!", e);
@@ -144,35 +137,44 @@ public final class BetterWorldStats extends JavaPlugin {
         try {
             File langDirectory = new File(getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
-            for (String fileName : getDefaultLanguageFiles()) {
-                final String localeString = fileName.substring(fileName.lastIndexOf('/') + 1, fileName.lastIndexOf('.'));
+            Set<String> locales = new HashSet<>();
+            locales.addAll(getDefaultLocales(getFile()));
+            locales.addAll(getPresentLocales(langDirectory));
+            for (String localeString : locales) {
                 logger.info("Found language file for " + localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
-            final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
-            for (File langFile : langDirectory.listFiles()) {
-                final Matcher langMatcher = langPattern.matcher(langFile.getName());
-                if (langMatcher.find()) {
-                    final String localeString = langMatcher.group(1).toLowerCase();
-                    if (!languageCacheMap.containsKey(localeString)) { // make sure it wasn't a default file that we already loaded
-                        logger.info("Found language file for " + localeString);
-                        languageCacheMap.put(localeString, new LanguageCache(localeString));
-                    }
-                }
-            }
-        } catch (Exception e) {
-            logger.error("Error loading language files!", e);
+        } catch (Throwable t) {
+            logger.error("Error loading language files!", t);
         }
     }
 
-    private @NotNull Set<String> getDefaultLanguageFiles() {
-        try (final JarFile pluginJarFile = new JarFile(this.getFile())) {
+    private @NotNull Set<String> getDefaultLocales(File jarFile) {
+        try (final JarFile pluginJarFile = new JarFile(jarFile)) {
             return pluginJarFile.stream()
-                    .map(ZipEntry::getName)
-                    .filter(name -> name.startsWith("lang/") && name.endsWith(".yml"))
+                    .map(zipEntry -> {
+                        Matcher matcher = langPattern.matcher(zipEntry.getName());
+                        return matcher.find() ? matcher.group(1) : null;
+                    })
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toSet());
-        } catch (IOException e) {
-            logger.error("Failed getting default lang files!", e);
+        } catch (Throwable t) {
+            logger.error("Failed getting default lang files!", t);
+            return Collections.emptySet();
+        }
+    }
+
+    private @NotNull Set<String> getPresentLocales(File folder) {
+        try {
+            return Arrays.stream(Objects.requireNonNull(folder.listFiles()))
+                    .map(file -> {
+                        Matcher matcher = langPattern.matcher(file.getName());
+                        return matcher.find() ? matcher.group(1) : null;
+                    })
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toSet());
+        } catch (Throwable t) {
+            logger.error("Failed getting lang files from plugin folder!", t);
             return Collections.emptySet();
         }
     }

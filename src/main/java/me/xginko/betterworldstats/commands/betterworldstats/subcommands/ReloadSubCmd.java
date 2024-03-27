@@ -24,7 +24,7 @@ public class ReloadSubCmd extends SubCmd {
 
     @Override
     public TextComponent getSyntax() {
-        return Component.text("/bws reload").color(BetterWorldStats.COLOR);
+        return Component.text("/bws reload").color(KyoriUtil.GUPPIE_GREEN);
     }
 
     @Override

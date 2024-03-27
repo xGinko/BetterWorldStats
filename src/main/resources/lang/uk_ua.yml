@@ -3,10 +3,10 @@
 # %months%
 # %days%
 # %size%
-# %players%
+# %playerStats%
 stats-message:
   - '<dark_aqua>-----------------------------------------------------'
-  - ' <grey>Цей сервер відвідало <gold>%players% гравців <grey> за увесь час'
+  - ' <grey>Цей сервер відвідало <gold>%playerStats% гравців <grey> за увесь час'
   - ' <grey>Цьому світу <gold>%years% років<grey>, <gold>%months% місяць<grey> та <gold>%days% день'
   - ' <grey>Світ вісить <gold>%size% гігабайт'
   - '<dark_aqua>-----------------------------------------------------'

@@ -3,6 +3,9 @@ package me.xginko.betterworldstats.utils;
 import me.xginko.betterworldstats.BetterWorldStats;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -10,6 +13,9 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Locale;
 
 public final class KyoriUtil {
+
+    public static final TextColor GUPPIE_GREEN = TextColor.color(0,255,128);
+    public static final Style GUPPIE_GREEN_BOLD = Style.style(GUPPIE_GREEN, TextDecoration.BOLD);
 
     public static void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
         BetterWorldStats.getAudiences().sender(sender).sendMessage(message);

@@ -3,10 +3,10 @@
 # %months%
 # %days%
 # %size%
-# %players%
+# %playerStats%
 stats-message:
   - '<dark_aqua>-----------------------------------------------------'
-  - ' <grey>En en Server Spawnearon <gold>%players% Jugador(s)<grey> Al menos una vez'
+  - ' <grey>En en Server Spawnearon <gold>%playerStats% Jugador(s)<grey> Al menos una vez'
   - ' <grey>El Mapa Tiene <gold>%years% Años(s)<grey>, <gold>%months% Meses(s)<grey> y <gold>%days% Dias(s)<grey> De antiguedad'
   - ' <grey>El Mundo (Comprimido) Es un total a <gold>%size% GB'
   - '<dark_aqua>-----------------------------------------------------'

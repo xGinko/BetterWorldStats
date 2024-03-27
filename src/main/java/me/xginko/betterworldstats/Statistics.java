@@ -1,24 +1,23 @@
 package me.xginko.betterworldstats;
 
-import me.xginko.betterworldstats.stats.FileStats;
-import me.xginko.betterworldstats.stats.MapAge;
-import me.xginko.betterworldstats.stats.Players;
-import org.bukkit.event.HandlerList;
+import me.xginko.betterworldstats.stats.WorldStats;
+import me.xginko.betterworldstats.stats.BirthCalendar;
+import me.xginko.betterworldstats.stats.PlayerStats;
 import org.jetbrains.annotations.NotNull;
 
-public class Statistics {
+public final class Statistics {
 
-    public final @NotNull MapAge mapAge;
-    public final @NotNull FileStats fileStats;
-    public final @NotNull Players players;
+    public final @NotNull BirthCalendar birthCalendar;
+    public final @NotNull WorldStats worldStats;
+    public final @NotNull PlayerStats playerStats;
 
     public Statistics() {
-        this.fileStats = new FileStats();
-        this.mapAge = new MapAge();
-        this.players = new Players();
+        this.worldStats = new WorldStats();
+        this.birthCalendar = new BirthCalendar();
+        this.playerStats = new PlayerStats();
     }
 
     public void shutdown() {
-        HandlerList.unregisterAll(players);
+        playerStats.disable();
     }
 }

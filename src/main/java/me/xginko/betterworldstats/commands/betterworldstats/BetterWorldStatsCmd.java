@@ -1,6 +1,5 @@
 package me.xginko.betterworldstats.commands.betterworldstats;
 
-import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.commands.SubCmd;
 import me.xginko.betterworldstats.commands.betterworldstats.subcommands.ReloadSubCmd;
@@ -58,11 +57,11 @@ public class BetterWorldStatsCmd implements BWSCmd, TabCompleter {
     }
 
     private void sendCommandOverview(CommandSender sender) {
-        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
-        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").color(BetterWorldStats.COLOR));
-        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(KyoriUtil.GUPPIE_GREEN));
+        KyoriUtil.sendMessage(sender, Component.text("BetterWorldStats Commands").color(KyoriUtil.GUPPIE_GREEN));
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(KyoriUtil.GUPPIE_GREEN));
         for (SubCmd subCmd : subCmds) KyoriUtil.sendMessage(sender,
                 subCmd.getSyntax().append(Component.text(" - ").color(NamedTextColor.DARK_GRAY)).append(subCmd.getDescription()));
-        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(BetterWorldStats.COLOR));
+        KyoriUtil.sendMessage(sender, Component.text("-----------------------------------------------------").color(KyoriUtil.GUPPIE_GREEN));
     }
 }

@@ -3,6 +3,7 @@ package me.xginko.betterworldstats.stats;
 import io.papermc.lib.PaperLib;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.config.Config;
+import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
@@ -12,14 +13,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-public class FileStats {
+public class WorldStats {
 
     private final @NotNull Config config;
     private final @NotNull AtomicReference<FileScanResult> scan_result;
     private final @NotNull AtomicInteger chunk_count, entity_count;
     private boolean scanning = false;
 
-    public FileStats() {
+    public WorldStats() {
         this.config = BetterWorldStats.getConfiguration();
         this.scan_result = new AtomicReference<>();
         this.chunk_count = new AtomicInteger();
@@ -39,13 +40,13 @@ public class FileStats {
             scanning = false;
             if (config.log_is_enabled) {
                 BetterWorldStats.getLog().info(Component.text(
-                        "Updated file stats asynchronously.").color(BetterWorldStats.COLOR));
+                        "Updated file stats asynchronously.").color(KyoriUtil.GUPPIE_GREEN));
                 BetterWorldStats.getLog().info(Component.text(
                         "Size: " + config.filesize_format.format(result.size_in_gb) + "GB, " +
                                 "files: " + result.file_count + ", " +
                                 "folders: " + result.folder_count + ", " +
                                 "chunks: " + chunk_count + ", " +
-                                "entities: " + entity_count).color(BetterWorldStats.COLOR));
+                                "entities: " + entity_count).color(KyoriUtil.GUPPIE_GREEN));
             }
         });
 

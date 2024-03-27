@@ -36,14 +36,14 @@ public class LanguageCache {
 
         this.langFile.addComment(
                 "Command Placeholders:" +
-                "\n %size%        | %spoofsize%     | %players%      | %years%      | %months%       | %days%" +
+                "\n %size%        | %spoofsize%     | %playerStats%      | %years%      | %months%       | %days%" +
                 "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_count%" +
                 "\n %entity_count% "
         );
 
         this.world_stats_message_serialized = getListTranslation("stats-message",
                 "<dark_aqua>-----------------------------------------------------",
-                " <gray>The server has spawned <gold>%players% player(s)<gray> at least once",
+                " <gray>The server has spawned <gold>%playerStats% player(s)<gray> at least once",
                 " <gray>The map is <gold>%years% year(s)<gray>, <gold>%months% month(s)<gray> and <gold>%days% day(s)<gray> old",
                 " <gray>The world is a total of <gold>%size% GB",
                 "<dark_aqua>-----------------------------------------------------"
@@ -60,11 +60,7 @@ public class LanguageCache {
     }
 
     public @NotNull Component noPermissionMsg(CommandSender sender) {
-        return MiniMessage.builder()
-                .tags(PAPIUtil.papiTagResolver(sender))
-                .tags(TagResolver.standard())
-                .build()
-                .deserialize(no_permission_serialized);
+        return MiniMessage.miniMessage().deserialize(no_permission_serialized, PAPIUtil.papiTagResolver(sender));
     }
 
     public @NotNull List<Component> worldStatsMsg(
@@ -75,25 +71,22 @@ public class LanguageCache {
             String fileCount, String folderCount, String chunkCount,
             String entityCount
     ) {
-        final MiniMessage miniMessage = MiniMessage.builder()
-                .tags(PAPIUtil.papiTagResolver(sender))
-                .tags(TagResolver.standard())
-                .build();
         return world_stats_message_serialized.stream()
-                .map(line -> miniMessage.deserialize(line
-                        .replace("%years%", years)
-                        .replace("%months%", months)
-                        .replace("%days%", days)
-                        .replace("%players%", players)
-                        .replace("%size%", fileSize)
-                        .replace("%spoofsize%", spoofSize)
-                        .replace("%age_in_days%", ageAsDays)
-                        .replace("%age_in_months%", ageAsMonths)
-                        .replace("%age_in_years%", ageAsYears)
-                        .replace("%file_count%", fileCount)
-                        .replace("%folder_count%", folderCount)
-                        .replace("%chunk_count%", chunkCount)
-                        .replace("%entity_count%", entityCount)
+                .map(line -> MiniMessage.miniMessage().deserialize(
+                        line.replace("%years%", years)
+                                .replace("%months%", months)
+                                .replace("%days%", days)
+                                .replace("%playerStats%", players)
+                                .replace("%size%", fileSize)
+                                .replace("%spoofsize%", spoofSize)
+                                .replace("%age_in_days%", ageAsDays)
+                                .replace("%age_in_months%", ageAsMonths)
+                                .replace("%age_in_years%", ageAsYears)
+                                .replace("%file_count%", fileCount)
+                                .replace("%folder_count%", folderCount)
+                                .replace("%chunk_count%", chunkCount)
+                                .replace("%entity_count%", entityCount),
+                        PAPIUtil.papiTagResolver(sender)
                 ))
                 .collect(Collectors.toList());
     }

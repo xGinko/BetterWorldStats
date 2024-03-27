@@ -26,7 +26,7 @@ public class VersionSubCmd extends SubCmd {
 
     @Override
     public TextComponent getSyntax() {
-        return Component.text("/bws version").color(BetterWorldStats.COLOR);
+        return Component.text("/bws version").color(KyoriUtil.GUPPIE_GREEN);
     }
 
     @Override

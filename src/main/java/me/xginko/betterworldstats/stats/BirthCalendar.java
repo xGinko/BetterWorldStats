@@ -9,14 +9,14 @@ import java.time.Duration;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
-public class MapAge {
+public class BirthCalendar {
 
     private final @NotNull Calendar calendar;
     private final @NotNull Cache<CalendarKey, Integer> cache;
     private enum CalendarKey { DAYS_PART, MONTHS_PART, YEARS_PART, DAYS, MONTHS };
     private final long server_birth_time_millis;
 
-    public MapAge() {
+    public BirthCalendar() {
         this.calendar = Calendar.getInstance(BetterWorldStats.getConfiguration().timeZone);
         this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
         this.server_birth_time_millis = BetterWorldStats.getConfiguration().server_birth_time_millis;

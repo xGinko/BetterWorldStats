@@ -27,8 +27,8 @@ repositories {
 }
 
 dependencies {
-    compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("org.jetbrains:annotations:24.1.0")
+    compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.5")
 
     implementation("net.kyori:adventure-platform-bukkit:4.3.2")

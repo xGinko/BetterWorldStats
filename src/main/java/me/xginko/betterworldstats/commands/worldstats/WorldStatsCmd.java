@@ -40,19 +40,19 @@ public class WorldStatsCmd implements BWSCmd {
 
         for (final Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
                 sender,
-                statistics.mapAge.getYearsPart().toString(),
-                statistics.mapAge.getMonthsPart().toString(),
-                statistics.mapAge.getDaysPart().toString(),
-                statistics.players.getUniqueJoins(),
-                statistics.fileStats.getSize(),
-                statistics.fileStats.getSpoofedSize(),
-                statistics.mapAge.asDays().toString(),
-                statistics.mapAge.asMonths().toString(),
-                statistics.mapAge.asYears().toString(),
-                statistics.fileStats.getFileCount(),
-                statistics.fileStats.getFolderCount(),
-                statistics.fileStats.getChunkCount(),
-                statistics.fileStats.getEntityCount()
+                statistics.birthCalendar.getYearsPart().toString(),
+                statistics.birthCalendar.getMonthsPart().toString(),
+                statistics.birthCalendar.getDaysPart().toString(),
+                statistics.playerStats.getUniqueJoins(),
+                statistics.worldStats.getSize(),
+                statistics.worldStats.getSpoofedSize(),
+                statistics.birthCalendar.asDays().toString(),
+                statistics.birthCalendar.asMonths().toString(),
+                statistics.birthCalendar.asYears().toString(),
+                statistics.worldStats.getFileCount(),
+                statistics.worldStats.getFolderCount(),
+                statistics.worldStats.getChunkCount(),
+                statistics.worldStats.getEntityCount()
         )) {
             KyoriUtil.sendMessage(sender, line);
         }
