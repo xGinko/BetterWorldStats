@@ -29,11 +29,15 @@ public class WorldStats {
     }
 
     private void refresh() {
-        if (scan_result.get() != null && (System.currentTimeMillis() <= scan_result.get().expiration_time_millis || scanning)) {
+        if (scanning) {
             return;
         }
 
-        scanning = true;
+        if (scan_result.get() != null && scan_result.get().expiration_time_millis > System.currentTimeMillis()) {
+            return;
+        }
+
+        scanning = true; // Mark as scanning to avoid scheduling another check while there is already one running
 
         CompletableFuture.supplyAsync(() -> new FileScanResult(config.paths_to_scan, config.filesize_update_period_millis)).thenAccept(result -> {
             scan_result.set(result);
