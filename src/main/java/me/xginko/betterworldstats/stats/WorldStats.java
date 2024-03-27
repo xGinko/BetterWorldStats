@@ -7,6 +7,7 @@ import me.xginko.betterworldstats.utils.KyoriUtil;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.concurrent.CompletableFuture;
@@ -18,7 +19,7 @@ public class WorldStats {
     private final @NotNull Config config;
     private final @NotNull AtomicReference<FileScanResult> scan_result;
     private final @NotNull AtomicInteger chunk_count, entity_count;
-    private boolean scanning = false;
+    private @Nullable CompletableFuture<Void> runningScan;
 
     public WorldStats() {
         this.config = BetterWorldStats.getConfiguration();
@@ -29,30 +30,29 @@ public class WorldStats {
     }
 
     private void refresh() {
-        if (scanning) {
-            return;
-        }
-
         if (scan_result.get() != null && scan_result.get().expiration_time_millis > System.currentTimeMillis()) {
             return;
         }
 
-        scanning = true; // Mark as scanning to avoid scheduling another check while there is already one running
+        if (runningScan != null && !runningScan.isDone() && !runningScan.isCompletedExceptionally() && !runningScan.isCancelled()) {
+            return;
+        }
 
-        CompletableFuture.supplyAsync(() -> new FileScanResult(config.paths_to_scan, config.filesize_update_period_millis)).thenAccept(result -> {
-            scan_result.set(result);
-            scanning = false;
-            if (config.log_is_enabled) {
-                BetterWorldStats.getLog().info(Component.text(
-                        "Updated file stats asynchronously.").color(KyoriUtil.GUPPIE_GREEN));
-                BetterWorldStats.getLog().info(Component.text(
-                        "Size: " + config.filesize_format.format(result.size_in_gb) + "GB, " +
-                                "files: " + result.file_count + ", " +
-                                "folders: " + result.folder_count + ", " +
-                                "chunks: " + chunk_count + ", " +
-                                "entities: " + entity_count).color(KyoriUtil.GUPPIE_GREEN));
-            }
-        });
+        this.runningScan = CompletableFuture
+                .supplyAsync(() -> new FileScanResult(config.paths_to_scan, config.filesize_update_period_millis))
+                .thenAccept(result -> {
+                    scan_result.set(result);
+                    if (config.log_is_enabled) {
+                        BetterWorldStats.getLog().info(Component.text(
+                                "Updated file stats asynchronously.").color(KyoriUtil.GUPPIE_GREEN));
+                        BetterWorldStats.getLog().info(Component.text(
+                                "Size: " + config.filesize_format.format(result.size_in_gb) + "GB, " +
+                                        "files: " + result.file_count + ", " +
+                                        "folders: " + result.folder_count + ", " +
+                                        "chunks: " + chunk_count + ", " +
+                                        "entities: " + entity_count).color(KyoriUtil.GUPPIE_GREEN));
+                    }
+                });
 
         if (PaperLib.isPaper()) {
             for (final World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
