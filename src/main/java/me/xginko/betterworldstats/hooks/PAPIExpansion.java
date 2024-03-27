@@ -3,7 +3,6 @@ package me.xginko.betterworldstats.hooks;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.Statistics;
-import me.xginko.betterworldstats.hooks.BWSHook;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -43,7 +42,7 @@ public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook
 
     @Override
     public @NotNull String getIdentifier() {
-        return BetterWorldStats.getLog().getName();
+        return "worldstats";
     }
 
     @Override
