@@ -3,6 +3,7 @@ package me.xginko.betterworldstats;
 import me.xginko.betterworldstats.stats.FileStats;
 import me.xginko.betterworldstats.stats.MapAge;
 import me.xginko.betterworldstats.stats.Players;
+import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
 public class Statistics {
@@ -15,5 +16,9 @@ public class Statistics {
         this.fileStats = new FileStats();
         this.mapAge = new MapAge();
         this.players = new Players();
+    }
+
+    public void shutdown() {
+        HandlerList.unregisterAll(players);
     }
 }

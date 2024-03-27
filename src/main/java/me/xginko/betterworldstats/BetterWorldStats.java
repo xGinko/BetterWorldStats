@@ -126,7 +126,7 @@ public final class BetterWorldStats extends JavaPlugin {
 
     private void reloadConfiguration() {
         try {
-            HandlerList.unregisterAll(this);
+            if (statistics != null) statistics.shutdown();
             config = new Config();
             statistics = new Statistics();
             if (getServer().getPluginManager().isPluginEnabled("PlaceholderAPI")) {

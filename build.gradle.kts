@@ -7,6 +7,8 @@ plugins {
 group = "me.xginko.betterworldstats"
 version = "1.10.0"
 description = "Show stats about server age, map size and unique player joins on your minecraft server."
+java.sourceCompatibility = JavaVersion.VERSION_1_8
+java.targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
@@ -49,7 +51,6 @@ tasks {
 
     compileJava {
         options.encoding = Charsets.UTF_8.name()
-        options.release.set(8)
     }
 
     javadoc {
