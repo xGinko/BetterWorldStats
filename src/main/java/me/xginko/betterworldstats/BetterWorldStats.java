@@ -164,11 +164,9 @@ public final class BetterWorldStats extends JavaPlugin {
             Files.createDirectories(langDirectory.toPath());
             final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             return Stream.concat(pluginJar.stream().map(ZipEntry::getName), Arrays.stream(langDirectory.listFiles()).map(File::getName))
-                    .map(name -> {
-                        final Matcher matcher = langPattern.matcher(name);
-                        return matcher.find() ? matcher.group(1) : null;
-                    })
-                    .filter(Objects::nonNull)
+                    .map(langPattern::matcher)
+                    .filter(Matcher::find)
+                    .map(matcher -> matcher.group(1))
                     .collect(Collectors.toCollection(TreeSet::new));
         } catch (Throwable t) {
             logger.error("Failed querying for available translations!", t);
