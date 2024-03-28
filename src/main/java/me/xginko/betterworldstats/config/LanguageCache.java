@@ -6,7 +6,6 @@ import me.xginko.betterworldstats.utils.KyoriUtil;
 import me.xginko.betterworldstats.utils.PAPIUtil;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
 import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 
@@ -76,7 +75,7 @@ public class LanguageCache {
                         line.replace("%years%", years)
                                 .replace("%months%", months)
                                 .replace("%days%", days)
-                                .replace("%playerStats%", players)
+                                .replace("%players%", players)
                                 .replace("%size%", fileSize)
                                 .replace("%spoofsize%", spoofSize)
                                 .replace("%age_in_days%", ageAsDays)
