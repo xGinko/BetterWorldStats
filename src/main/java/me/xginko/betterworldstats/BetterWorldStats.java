@@ -20,6 +20,8 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+import java.util.zip.ZipEntry;
 
 public final class BetterWorldStats extends JavaPlugin {
 
@@ -140,12 +142,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void reloadLang() {
         languageCacheMap = new HashMap<>();
         try {
-            File langDirectory = new File(getDataFolder() + "/lang");
-            Files.createDirectories(langDirectory.toPath());
-            SortedSet<String> locales = new TreeSet<>();
-            locales.addAll(getDefaultLocales(getFile()));
-            locales.addAll(getPresentLocales(langDirectory));
-            for (String localeString : locales) {
+            for (String localeString : getAvailableTranslations()) {
                 logger.info("Found language file for " + localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
@@ -161,35 +158,23 @@ public final class BetterWorldStats extends JavaPlugin {
         }
     }
 
-    private static final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
-
-    private @NotNull Set<String> getDefaultLocales(File jarFile) {
-        try (final JarFile pluginJarFile = new JarFile(jarFile)) {
-            return pluginJarFile.stream()
-                    .map(zipEntry -> {
-                        Matcher matcher = langPattern.matcher(zipEntry.getName());
+    private List<String> getAvailableTranslations() {
+        try (final JarFile pluginJar = new JarFile(getFile())) {
+            final File langDirectory = new File(getDataFolder() + "/lang");
+            Files.createDirectories(langDirectory.toPath());
+            final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
+            return Stream.concat(pluginJar.stream().map(ZipEntry::getName), Arrays.stream(langDirectory.listFiles()).map(File::getName))
+                    .distinct()
+                    .map(name -> {
+                        final Matcher matcher = langPattern.matcher(name);
                         return matcher.find() ? matcher.group(1) : null;
                     })
                     .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
+                    .sorted()
+                    .collect(Collectors.toList());
         } catch (Throwable t) {
-            logger.error("Failed getting default lang files!", t);
-            return Collections.emptySet();
-        }
-    }
-
-    private @NotNull Set<String> getPresentLocales(File folder) {
-        try {
-            return Arrays.stream(Objects.requireNonNull(folder.listFiles()))
-                    .map(file -> {
-                        Matcher matcher = langPattern.matcher(file.getName());
-                        return matcher.find() ? matcher.group(1) : null;
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toSet());
-        } catch (Throwable t) {
-            logger.error("Failed getting lang files from plugin folder!", t);
-            return Collections.emptySet();
+            logger.error("Failed querying for available translations!", t);
+            return Collections.emptyList();
         }
     }
 }
