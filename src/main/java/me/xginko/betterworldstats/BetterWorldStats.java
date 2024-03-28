@@ -158,23 +158,21 @@ public final class BetterWorldStats extends JavaPlugin {
         }
     }
 
-    private List<String> getAvailableTranslations() {
+    private SortedSet<String> getAvailableTranslations() {
         try (final JarFile pluginJar = new JarFile(getFile())) {
             final File langDirectory = new File(getDataFolder() + "/lang");
             Files.createDirectories(langDirectory.toPath());
             final Pattern langPattern = Pattern.compile("([a-z]{1,3}_[a-z]{1,3})(\\.yml)", Pattern.CASE_INSENSITIVE);
             return Stream.concat(pluginJar.stream().map(ZipEntry::getName), Arrays.stream(langDirectory.listFiles()).map(File::getName))
-                    .distinct()
                     .map(name -> {
                         final Matcher matcher = langPattern.matcher(name);
                         return matcher.find() ? matcher.group(1) : null;
                     })
                     .filter(Objects::nonNull)
-                    .sorted()
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toCollection(TreeSet::new));
         } catch (Throwable t) {
             logger.error("Failed querying for available translations!", t);
-            return Collections.emptyList();
+            return new TreeSet<>();
         }
     }
 }
