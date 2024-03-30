@@ -35,14 +35,14 @@ public class LanguageCache {
 
         this.langFile.addComment(
                 "Command Placeholders:" +
-                "\n %size%        | %spoofsize%     | %playerStats%      | %years%      | %months%       | %days%" +
+                "\n %size%        | %spoofsize%     | %players%      | %years%      | %months%       | %days%" +
                 "\n %age_in_days% | %age_in_months% | %age_in_years% | %file_count% | %folder_count% | %chunk_count%" +
                 "\n %entity_count% "
         );
 
         this.world_stats_message_serialized = getListTranslation("stats-message",
                 "<dark_aqua>-----------------------------------------------------",
-                " <gray>The server has spawned <gold>%playerStats% player(s)<gray> at least once",
+                " <gray>The server has spawned <gold>%players% player(s)<gray> at least once",
                 " <gray>The map is <gold>%years% year(s)<gray>, <gold>%months% month(s)<gray> and <gold>%days% day(s)<gray> old",
                 " <gray>The world is a total of <gold>%size% GB",
                 "<dark_aqua>-----------------------------------------------------"

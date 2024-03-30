@@ -1,12 +1,6 @@
-# Placeholders:
-# %years%
-# %months%
-# %days%
-# %size%
-# %playerStats%
 stats-message:
   - '<dark_aqua>-----------------------------------------------------'
-  - ' <grey>The server has spawned <gold>%playerStats% player(s)<grey> at least once'
+  - ' <grey>The server has spawned <gold>%players% player(s)<grey> at least once'
   - ' <grey>The map is <gold>%years% year(s)<grey>, <gold>%months% month(s)<grey> and <gold>%days% day(s)<grey> old'
   - ' <grey>The world (with compression) is a total of <gold>%size% GB'
   - '<dark_aqua>-----------------------------------------------------'

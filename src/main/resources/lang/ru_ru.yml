@@ -1,12 +1,6 @@
-# Placeholders:
-# %years%
-# %months%
-# %days%
-# %size%
-# %playerStats%
 stats-message:
   - '<dark_aqua>-----------------------------------------------------'
-  - ' <grey>Этот сервер посетило <gold>%playerStats% игрок(ов)<grey> за всё время'
+  - ' <grey>Этот сервер посетило <gold>%players% игрок(ов)<grey> за всё время'
   - ' <grey>Этому миру <gold>%years% год<grey>, <gold>%months% месяц<grey> и <gold>%days% день'
   - ' <grey>Мир весит <gold>%size% гигабайт'
   - '<dark_aqua>-----------------------------------------------------'
