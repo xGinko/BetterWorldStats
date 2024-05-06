@@ -1,7 +1,7 @@
 stats-message:
   - '<dark_aqua>-----------------------------------------------------'
-  - ' <grey>这个服务器有 <gold>%players% 个玩家加入过'
-  - ' <grey>该地图大小已有 <gold>%years% 年 <gold>%months% 月 <gold>%days% 日<grey> 之久'
-  - ' <grey>该世界大小已经达到了 <gold>%size% GB'
+  - ' <grey>服务器总进入人数: <gold>%players%'
+  - ' <grey>地图存在时长: <gold>%years% 年 <gold>%months% 月 <gold>%days% 日'
+  - ' <grey>世界占用空间: <gold>%size% GB'
   - '<dark_aqua>-----------------------------------------------------'
 no-permission: "<red>你没有权限执行该命令!"
