@@ -17,9 +17,9 @@ public class BirthCalendar {
     private final long server_birth_time_millis;
 
     public BirthCalendar() {
-        this.calendar = Calendar.getInstance(BetterWorldStats.getConfiguration().timeZone);
+        this.calendar = Calendar.getInstance(BetterWorldStats.config().timeZone);
         this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
-        this.server_birth_time_millis = BetterWorldStats.getConfiguration().server_birth_time_millis;
+        this.server_birth_time_millis = BetterWorldStats.config().server_birth_time_millis;
     }
 
     private long getMillisSinceBirth() {
@@ -27,59 +27,50 @@ public class BirthCalendar {
     }
 
     private void updateCalendar() {
-        this.calendar.setTimeInMillis(this.getMillisSinceBirth());
+        calendar.setTimeInMillis(getMillisSinceBirth());
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public @NotNull Integer getDaysPart() {
-        Integer daysPart = this.cache.getIfPresent(CalendarKey.DAYS_PART);
-        if (daysPart == null) {
-            this.updateCalendar();
-            daysPart = Math.max(this.calendar.get(Calendar.DAY_OF_MONTH) - 1, 0);
-            this.cache.put(CalendarKey.DAYS_PART, daysPart);
-        }
-        return daysPart;
+        return cache.get(CalendarKey.DAYS_PART, k -> {
+            updateCalendar();
+            return Math.max(calendar.get(Calendar.DAY_OF_MONTH) - 1, 0);
+        });
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public @NotNull Integer getMonthsPart() {
-        Integer monthsPart = this.cache.getIfPresent(CalendarKey.MONTHS_PART);
-        if (monthsPart == null) {
-            this.updateCalendar();
-            monthsPart = Math.max(this.calendar.get(Calendar.MONTH), 0);
-            this.cache.put(CalendarKey.MONTHS_PART, monthsPart);
-        }
-        return monthsPart;
+        return cache.get(CalendarKey.MONTHS_PART, k -> {
+            updateCalendar();
+            return Math.max(calendar.get(Calendar.MONTH), 0);
+        });
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public @NotNull Integer getYearsPart() {
-        Integer yearsPart = this.cache.getIfPresent(CalendarKey.YEARS_PART);
-        if (yearsPart == null) {
-            this.updateCalendar();
-            yearsPart = Math.max(this.calendar.get(Calendar.YEAR) - 1970, 0);
-            this.cache.put(CalendarKey.YEARS_PART, yearsPart);
-        }
-        return yearsPart;
+        return cache.get(CalendarKey.YEARS_PART, k -> {
+            updateCalendar();
+            return Math.max(calendar.get(Calendar.YEAR) - 1970, 0);
+        });
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public @NotNull Integer asDays() {
-        Integer daysAmount = this.cache.getIfPresent(CalendarKey.DAYS);
-        if (daysAmount == null) {
-            this.updateCalendar();
-            daysAmount = (int) TimeUnit.MILLISECONDS.toDays(this.getMillisSinceBirth());
-            this.cache.put(CalendarKey.DAYS, daysAmount);
-        }
-        return daysAmount;
+        return cache.get(CalendarKey.DAYS, k -> {
+            updateCalendar();
+            return (int) TimeUnit.MILLISECONDS.toDays(getMillisSinceBirth());
+        });
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public @NotNull Integer asMonths() {
-        Integer monthsAmount = this.cache.getIfPresent(CalendarKey.MONTHS);
-        if (monthsAmount == null) {
-            monthsAmount = (this.getYearsPart() * 12) + this.getMonthsPart();
-            this.cache.put(CalendarKey.MONTHS, monthsAmount);
-        }
-        return monthsAmount;
+        return cache.get(CalendarKey.MONTHS, k -> {
+            updateCalendar();
+            return (getYearsPart() * 12) + getMonthsPart();
+        });
     }
 
     public @NotNull Integer asYears() {
-        return this.getYearsPart();
+        return getYearsPart();
     }
 }

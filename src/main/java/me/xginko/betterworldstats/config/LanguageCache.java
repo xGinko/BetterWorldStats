@@ -2,8 +2,8 @@ package me.xginko.betterworldstats.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.utils.KyoriUtil;
-import me.xginko.betterworldstats.utils.PAPIUtil;
+import me.xginko.betterworldstats.hooks.PAPIExpansion;
+import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.command.CommandSender;
@@ -23,13 +23,10 @@ public class LanguageCache {
     public LanguageCache(String language) throws Exception {
         BetterWorldStats plugin = BetterWorldStats.getInstance();
         File langYML = new File(plugin.getDataFolder() + "/lang", language + ".yml");
-        // Check if the lang folder has already been created
-        File parent = langYML.getParentFile();
-        if (!parent.exists() && !parent.mkdir())
-            BetterWorldStats.getLog().error("Unable to create lang directory.");
         // Check if the file already exists and save the one from the plugin's resources folder if it does not
-        if (!langYML.exists())
+        if (!langYML.exists()) {
             plugin.saveResource("lang/" + language + ".yml", false);
+        }
         // Finally, load the lang file with configmaster
         this.langFile = ConfigFile.loadConfig(langYML);
 
@@ -54,12 +51,12 @@ public class LanguageCache {
         try {
             this.langFile.save();
         } catch (Exception e) {
-            BetterWorldStats.getLog().error("Failed to save language file: " + langYML.getName(), e);
+            BetterWorldStats.logger().error("Failed to save language file: " + langYML.getName(), e);
         }
     }
 
     public @NotNull Component noPermissionMsg(CommandSender sender) {
-        return MiniMessage.miniMessage().deserialize(no_permission_serialized, PAPIUtil.papiTagResolver(sender));
+        return MiniMessage.miniMessage().deserialize(no_permission_serialized, PAPIExpansion.papiTagResolver(sender));
     }
 
     public @NotNull List<Component> worldStatsMsg(
@@ -85,18 +82,18 @@ public class LanguageCache {
                                 .replace("%folder_count%", folderCount)
                                 .replace("%chunk_count%", chunkCount)
                                 .replace("%entity_count%", entityCount),
-                        PAPIUtil.papiTagResolver(sender)
+                        PAPIExpansion.papiTagResolver(sender)
                 ))
                 .collect(Collectors.toList());
     }
 
     private @NotNull String getTranslation(@NotNull String path, @NotNull String defaultTranslation) {
         this.langFile.addDefault(path, defaultTranslation);
-        return KyoriUtil.translateChatColor(this.langFile.getString(path, defaultTranslation));
+        return Util.replaceAmpersand(this.langFile.getString(path, defaultTranslation));
     }
 
     private @NotNull List<String> getListTranslation(@NotNull String path, @NotNull String... defaultTranslation) {
         this.langFile.addDefault(path, Arrays.asList(defaultTranslation));
-        return this.langFile.getStringList(path).stream().map(KyoriUtil::translateChatColor).collect(Collectors.toList());
+        return this.langFile.getStringList(path).stream().map(Util::replaceAmpersand).collect(Collectors.toList());
     }
 }

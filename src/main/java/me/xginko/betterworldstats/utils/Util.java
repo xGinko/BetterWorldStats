@@ -1,36 +1,23 @@
 package me.xginko.betterworldstats.utils;
 
 import me.xginko.betterworldstats.BetterWorldStats;
-import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Locale;
-
-public final class KyoriUtil {
+public final class Util {
 
     public static final TextColor GUPPIE_GREEN = TextColor.color(0,255,128);
     public static final Style GUPPIE_GREEN_BOLD = Style.style(GUPPIE_GREEN, TextDecoration.BOLD);
 
     public static void sendMessage(@NotNull CommandSender sender, @NotNull Component message) {
-        BetterWorldStats.getAudiences().sender(sender).sendMessage(message);
+        BetterWorldStats.audiences().sender(sender).sendMessage(message);
     }
 
-    public static @NotNull Locale getLocale(@NotNull CommandSender sender) {
-        if (sender instanceof Player) {
-            return BetterWorldStats.getAudiences().player((Player) sender).pointers().get(Identity.LOCALE)
-                    .orElse(BetterWorldStats.getConfiguration().default_lang);
-        } else {
-            return BetterWorldStats.getConfiguration().default_lang;
-        }
-    }
-
-    public static @NotNull String translateChatColor(@NotNull String string) {
+    public static @NotNull String replaceAmpersand(@NotNull String string) {
         string = string.replace("&0", "<black>");
         string = string.replace("&1", "<dark_blue>");
         string = string.replace("&2", "<dark_green>");

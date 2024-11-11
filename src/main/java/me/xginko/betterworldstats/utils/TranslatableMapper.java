@@ -21,10 +21,7 @@ public enum TranslatableMapper implements BiConsumer<TranslatableComponent, Cons
             .build();
 
     @Override
-    public void accept(
-            final @NotNull TranslatableComponent translatableComponent,
-            final @NotNull Consumer<Component> componentConsumer
-    ) {
+    public void accept(final @NotNull TranslatableComponent translatableComponent, final @NotNull Consumer<Component> componentConsumer) {
         for (final Translator source : GlobalTranslator.translator().sources()) {
             if (source instanceof TranslationRegistry && ((TranslationRegistry) source).contains(translatableComponent.key())) {
                 componentConsumer.accept(GlobalTranslator.render(translatableComponent, Locale.getDefault()));
@@ -33,7 +30,9 @@ public enum TranslatableMapper implements BiConsumer<TranslatableComponent, Cons
         }
 
         final @Nullable String fallback = translatableComponent.fallback();
-        if (fallback == null) return;
+        if (fallback == null) {
+            return;
+        }
 
         for (final Translator source : GlobalTranslator.translator().sources()) {
             if (source instanceof TranslationRegistry && ((TranslationRegistry) source).contains(fallback)) {

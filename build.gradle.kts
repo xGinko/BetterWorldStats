@@ -1,14 +1,12 @@
 plugins {
     java
-    id("com.github.johnrengelman.shadow") version "8.1.1"
-    id("xyz.jpenilla.run-paper") version "2.2.3"
+    id("com.gradleup.shadow") version ("8.3.2")
+    id("xyz.jpenilla.run-paper") version ("2.3.1")
 }
 
 group = "me.xginko.betterworldstats"
-version = "1.10.2"
+version = "1.11.0"
 description = "Show stats about server age, map size and unique player joins on your minecraft server."
-java.sourceCompatibility = JavaVersion.VERSION_1_8
-java.targetCompatibility = JavaVersion.VERSION_1_8
 
 repositories {
     mavenCentral()
@@ -27,15 +25,16 @@ repositories {
 }
 
 dependencies {
-    compileOnly("org.jetbrains:annotations:24.1.0")
     compileOnly("com.destroystokyo.paper:paper-api:1.12.2-R0.1-SNAPSHOT")
     compileOnly("me.clip:placeholderapi:2.11.5")
+    compileOnly("org.jetbrains:annotations:24.1.0")
 
-    implementation("net.kyori:adventure-platform-bukkit:4.3.2")
-    implementation("net.kyori:adventure-text-minimessage:4.16.0")
-    implementation("net.kyori:adventure-text-serializer-ansi:4.16.0")
-    implementation("net.kyori:adventure-text-serializer-legacy:4.16.0")
-    implementation("net.kyori:adventure-text-logger-slf4j:4.16.0")
+    implementation("net.kyori:adventure-api:4.17.0")
+    implementation("net.kyori:adventure-text-minimessage:4.17.0")
+    implementation("net.kyori:adventure-text-serializer-ansi:4.17.0")
+    implementation("net.kyori:adventure-text-serializer-legacy:4.17.0")
+    implementation("net.kyori:adventure-text-logger-slf4j:4.17.0")
+    implementation("net.kyori:adventure-platform-bukkit:4.3.4")
 
     implementation("io.papermc:paperlib:1.0.8")
     implementation("org.bstats:bstats-bukkit:3.0.2")
@@ -45,9 +44,13 @@ dependencies {
 
 runPaper.folia.registerTask();
 
+java.toolchain {
+    languageVersion = JavaLanguageVersion.of(8)
+}
+
 tasks {
     runServer {
-        minecraftVersion("1.20.4")
+        minecraftVersion("1.20.6")
     }
 
     compileJava {

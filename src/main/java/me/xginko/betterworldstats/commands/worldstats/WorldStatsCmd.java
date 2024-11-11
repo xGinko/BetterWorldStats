@@ -1,9 +1,8 @@
 package me.xginko.betterworldstats.commands.worldstats;
 
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.Statistics;
 import me.xginko.betterworldstats.commands.BWSCmd;
-import me.xginko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -14,12 +13,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class WorldStatsCmd implements BWSCmd {
-
-    private final @NotNull Statistics statistics;
-
-    public WorldStatsCmd() {
-        this.statistics = BetterWorldStats.getStatistics();
-    }
 
     @Override
     public String label() {
@@ -34,28 +27,30 @@ public class WorldStatsCmd implements BWSCmd {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         if (!sender.hasPermission("betterworldstats.worldstats")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
+            Util.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
             return true;
         }
 
-        for (final Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
-                sender,
-                statistics.birthCalendar.getYearsPart().toString(),
-                statistics.birthCalendar.getMonthsPart().toString(),
-                statistics.birthCalendar.getDaysPart().toString(),
-                statistics.playerStats.getUniqueJoins(),
-                statistics.worldStats.getSize(),
-                statistics.worldStats.getSpoofedSize(),
-                statistics.birthCalendar.asDays().toString(),
-                statistics.birthCalendar.asMonths().toString(),
-                statistics.birthCalendar.asYears().toString(),
-                statistics.worldStats.getFileCount(),
-                statistics.worldStats.getFolderCount(),
-                statistics.worldStats.getChunkCount(),
-                statistics.worldStats.getEntityCount()
-        )) {
-            KyoriUtil.sendMessage(sender, line);
-        }
+        BetterWorldStats.statistics().get().thenAccept(statistics -> {
+            for (final Component line : BetterWorldStats.getLang(sender).worldStatsMsg(
+                    sender,
+                    statistics.birthCalendar.getYearsPart().toString(),
+                    statistics.birthCalendar.getMonthsPart().toString(),
+                    statistics.birthCalendar.getDaysPart().toString(),
+                    statistics.playerStats.getUniqueJoins(),
+                    statistics.worldStats.getSize(),
+                    statistics.worldStats.getSpoofedSize(),
+                    statistics.birthCalendar.asDays().toString(),
+                    statistics.birthCalendar.asMonths().toString(),
+                    statistics.birthCalendar.asYears().toString(),
+                    statistics.worldStats.getFileCount(),
+                    statistics.worldStats.getFolderCount(),
+                    statistics.worldStats.getChunkCount(),
+                    statistics.worldStats.getEntityCount()
+            )) {
+                Util.sendMessage(sender, line);
+            }
+        });
 
         return true;
     }

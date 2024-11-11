@@ -2,7 +2,7 @@ package me.xginko.betterworldstats.commands.betterworldstats.subcommands;
 
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.commands.SubCmd;
-import me.xginko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
@@ -26,19 +26,19 @@ public class VersionSubCmd extends SubCmd {
 
     @Override
     public TextComponent getSyntax() {
-        return Component.text("/bws version").color(KyoriUtil.GUPPIE_GREEN);
+        return Component.text("/bws version").color(Util.GUPPIE_GREEN);
     }
 
     @Override
     public void perform(CommandSender sender, String[] args) {
         if (!sender.hasPermission("betterworldstats.version")) {
-            KyoriUtil.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
+            Util.sendMessage(sender, BetterWorldStats.getLang(sender).noPermissionMsg(sender));
             return;
         }
 
         final PluginDescriptionFile pluginYML = BetterWorldStats.getInstance().getDescription();
 
-        KyoriUtil.sendMessage(sender, Component.newline()
+        Util.sendMessage(sender, Component.newline()
                 .append(
                         Component.text(pluginYML.getName() + " " + pluginYML.getVersion())
                                 .color(NamedTextColor.GOLD)

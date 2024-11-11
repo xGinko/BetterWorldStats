@@ -3,9 +3,12 @@ package me.xginko.betterworldstats;
 import me.xginko.betterworldstats.stats.WorldStats;
 import me.xginko.betterworldstats.stats.BirthCalendar;
 import me.xginko.betterworldstats.stats.PlayerStats;
+import me.xginko.betterworldstats.utils.Disableable;
 import org.jetbrains.annotations.NotNull;
 
-public final class Statistics {
+import java.util.concurrent.CompletableFuture;
+
+public final class Statistics implements Disableable {
 
     public final @NotNull BirthCalendar birthCalendar;
     public final @NotNull WorldStats worldStats;
@@ -17,7 +20,12 @@ public final class Statistics {
         this.playerStats = new PlayerStats();
     }
 
-    public void shutdown() {
+    @Override
+    public void disable() {
         playerStats.disable();
+    }
+
+    public CompletableFuture<Statistics> get() {
+        return worldStats.get().thenApply(stats -> this);
     }
 }

@@ -4,7 +4,8 @@ import me.xginko.betterworldstats.commands.BWSCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
 import me.xginko.betterworldstats.hooks.BWSHook;
-import me.xginko.betterworldstats.utils.KyoriUtil;
+import me.xginko.betterworldstats.utils.Util;
+import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.logger.slf4j.ComponentLogger;
@@ -36,33 +37,29 @@ public final class BetterWorldStats extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        audiences = BukkitAudiences.create(this);
+        audiences = BukkitAudiences.create(instance);
         logger = ComponentLogger.logger(getLogger().getName());
-        bStats = new Metrics(this, 17204);
+        bStats = new Metrics(instance, 17204);
 
-        logger.info(Component.text("                                              ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("     ___      _   _                           ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(KyoriUtil.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("                                              ").style(KyoriUtil.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("                                              ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("     ___      _   _                           ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("                                              ").style(Util.GUPPIE_GREEN_BOLD));
 
-        try {
-            getDataFolder().mkdirs();
-        } catch (Throwable t) {
-            logger.error("Failed to create plugin folder!", t);
-            getServer().getPluginManager().disablePlugin(this);
-        }
-
-        logger.info("Loading languages");
+        logger.info("Loading translations");
         reloadLang();
+
         logger.info("Loading config");
         reloadConfiguration();
+
         logger.info("Registering commands");
         BWSCmd.reloadCommands();
+
         logger.info("Done.");
     }
 
@@ -70,7 +67,7 @@ public final class BetterWorldStats extends JavaPlugin {
     public void onDisable() {
         BWSHook.HOOKS.forEach(BWSHook::unHook);
         if (statistics != null) {
-            statistics.shutdown();
+            statistics.disable();
             statistics = null;
         }
         if (audiences != null) {
@@ -91,19 +88,19 @@ public final class BetterWorldStats extends JavaPlugin {
         return instance;
     }
 
-    public static @NotNull Statistics getStatistics() {
+    public static @NotNull Statistics statistics() {
         return statistics;
     }
 
-    public static @NotNull BukkitAudiences getAudiences() {
+    public static @NotNull BukkitAudiences audiences() {
         return audiences;
     }
 
-    public static @NotNull Config getConfiguration() {
+    public static @NotNull Config config() {
         return config;
     }
 
-    public static @NotNull ComponentLogger getLog() {
+    public static @NotNull ComponentLogger logger() {
         return logger;
     }
 
@@ -112,7 +109,7 @@ public final class BetterWorldStats extends JavaPlugin {
     }
 
     public static @NotNull LanguageCache getLang(CommandSender commandSender) {
-        return getLang(KyoriUtil.getLocale(commandSender));
+        return getLang(audiences.sender(commandSender).pointers().get(Identity.LOCALE).orElse(config.default_lang));
     }
 
     public static @NotNull LanguageCache getLang(String lang) {
@@ -129,7 +126,7 @@ public final class BetterWorldStats extends JavaPlugin {
     private void reloadConfiguration() {
         try {
             if (statistics != null)
-                statistics.shutdown();
+                statistics.disable();
             config = new Config();
             statistics = new Statistics();
             BWSHook.reloadHooks();
@@ -143,7 +140,7 @@ public final class BetterWorldStats extends JavaPlugin {
         languageCacheMap = new HashMap<>();
         try {
             for (String localeString : getAvailableTranslations()) {
-                logger.info("Found language file for " + localeString);
+                logger.info("Found language file for {}", localeString);
                 languageCacheMap.put(localeString, new LanguageCache(localeString));
             }
         } catch (Throwable t) {
@@ -153,7 +150,7 @@ public final class BetterWorldStats extends JavaPlugin {
                 logger.error("Unable to load translations. Disabling.");
                 getServer().getPluginManager().disablePlugin(this);
             } else {
-                logger.info("Loaded " + languageCacheMap.size() + " translations");
+                logger.info("Loaded {} translations", languageCacheMap.size());
             }
         }
     }

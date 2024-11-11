@@ -24,7 +24,7 @@ public class PlayerStats implements Listener, Disableable {
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     private void onPlayerJoin(PlayerJoinEvent event) {
         if (!event.getPlayer().hasPlayedBefore()) {
-            this.uniquePlayers.getAndIncrement();
+            uniquePlayers.getAndIncrement();
         }
     }
 

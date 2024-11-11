@@ -1,8 +1,13 @@
 package me.xginko.betterworldstats.hooks;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.xginko.betterworldstats.BetterWorldStats;
 import me.xginko.betterworldstats.Statistics;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -12,7 +17,7 @@ public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook
     private final @NotNull Statistics statistics;
 
     PAPIExpansion() {
-        this.statistics = BetterWorldStats.getStatistics();
+        this.statistics = BetterWorldStats.statistics();
     }
 
     @Override
@@ -82,5 +87,25 @@ public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook
             default:
                 return null;
         }
+    }
+
+    private static @NotNull String tryParse(@Nullable CommandSender sender, @NotNull String input) {
+        try {
+            if (sender instanceof Player) {
+                return PlaceholderAPI.setPlaceholders((Player) sender, input);
+            } else {
+                return PlaceholderAPI.setPlaceholders(null, input);
+            }
+        } catch (Throwable t) {
+            return input;
+        }
+    }
+
+    public static @NotNull TagResolver papiTagResolver(@Nullable CommandSender sender) {
+        return TagResolver.resolver("papi", (argumentQueue, context) -> Tag.selfClosingInserting(
+                LegacyComponentSerializer.legacySection().deserialize(
+                        tryParse(sender, '%' + argumentQueue.popOr("papi tag requires an argument").value() + '%')
+                )
+        ));
     }
 }

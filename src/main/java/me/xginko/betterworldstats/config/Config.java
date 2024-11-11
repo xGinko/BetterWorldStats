@@ -19,11 +19,12 @@ public class Config {
     public final @NotNull DecimalFormat filesize_format;
     public final @NotNull Set<String> paths_to_scan;
     public final @NotNull TimeZone timeZone;
-    public final boolean auto_lang, log_is_enabled;
     public final long filesize_update_period_millis, server_birth_time_millis;
     public final double additional_spoof_filesize;
+    public final boolean auto_lang, log_is_enabled;
 
     public Config() throws Exception {
+        // Load config.yml with ConfigMaster
         this.configFile = ConfigFile.loadConfig(new File(BetterWorldStats.getInstance().getDataFolder(), "config.yml"));
 
         // Title
@@ -57,9 +58,9 @@ public class Config {
         try {
             zoneId = ZoneId.of(getString("time-zone", ZoneId.systemDefault().getId(), "The time zone (ZoneId) to use."));
         } catch (ZoneRulesException e) {
-            BetterWorldStats.getLog().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
+            BetterWorldStats.logger().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
         } catch (DateTimeException e) {
-            BetterWorldStats.getLog().warn("Configured timezone has an invalid format. Using system default zone '"+zoneId+"'");
+            BetterWorldStats.logger().warn("Configured timezone has an invalid format. Using system default zone '"+zoneId+"'");
         }
         this.timeZone = TimeZone.getTimeZone(zoneId);
         this.filesize_update_period_millis = getInt("filesize-update-period-in-seconds", 3600,
@@ -97,7 +98,7 @@ public class Config {
         try {
             this.configFile.save();
         } catch (Exception e) {
-            BetterWorldStats.getLog().error("Failed to save config file!", e);
+            BetterWorldStats.logger().error("Failed to save config file!", e);
         }
     }
 
