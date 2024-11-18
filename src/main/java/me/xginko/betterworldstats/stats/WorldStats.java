@@ -1,120 +1,121 @@
 package me.xginko.betterworldstats.stats;
 
-import io.papermc.lib.PaperLib;
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.config.Config;
+import me.xginko.betterworldstats.utils.Disableable;
 import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.World;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import space.arim.morepaperlib.scheduling.ScheduledTask;
 
 import java.io.File;
-import java.util.concurrent.CompletableFuture;
+import java.time.Duration;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class WorldStats {
+public class WorldStats implements Runnable, Disableable {
 
-    private final @NotNull Config config;
-    private @Nullable FileScanResult scan_result;
-    private int chunk_count, entity_count;
-    private boolean scanning = false;
+    private static final boolean CAN_GET_CHUNK_COUNT, CAN_GET_ENTITY_COUNT;
+
+    static {
+        CAN_GET_CHUNK_COUNT = Util.hasMethod(World.class, "getChunkCount");
+        CAN_GET_ENTITY_COUNT = Util.hasMethod(World.class, "getEntityCount");
+    }
+
+    private final ScheduledTask scheduledScan;
+    private final AtomicInteger chunkCount, entityCount;
+    private @Nullable FileScanResult fileScanResult;
 
     public WorldStats() {
-        this.config = BetterWorldStats.config();
+        this.chunkCount = new AtomicInteger();
+        this.entityCount = new AtomicInteger();
+        this.scheduledScan = BetterWorldStats.scheduling().asyncScheduler().runAtFixedRate(this,
+                Duration.ofMillis(1L), Duration.ofMillis(BetterWorldStats.config().filesizeUpdatePeriodMillis));
     }
 
-    private boolean shouldScan() {
-        return !scanning && (scan_result == null || System.currentTimeMillis() >= scan_result.expiration_time_millis);
+    @Override
+    public void disable() {
+        scheduledScan.cancel();
     }
 
-    public CompletableFuture<WorldStats> get() {
-        return shouldScan() ? runScan() : CompletableFuture.completedFuture(this);
-    }
+    @Override
+    public void run() {
+        if (CAN_GET_ENTITY_COUNT || CAN_GET_CHUNK_COUNT) {
+            BetterWorldStats.scheduling().globalRegionalScheduler().run(() -> { // Needs to be sync
+                chunkCount.set(0);
+                entityCount.set(0);
+                for (World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
+                    if (CAN_GET_CHUNK_COUNT)
+                        chunkCount.addAndGet(world.getChunkCount());
+                    if (CAN_GET_ENTITY_COUNT)
+                        entityCount.addAndGet(world.getEntityCount());
+                }
+            });
+        }
 
-    private CompletableFuture<WorldStats> runScan() {
-        return CompletableFuture
-                .supplyAsync(() -> {
-                    scanning = true;
-                    return new FileScanResult(config.paths_to_scan, config.filesize_update_period_millis);
-                })
-                .thenApply(result -> {
-                    scan_result = result;
-                    if (config.log_is_enabled) {
-                        BetterWorldStats.logger().info(Component.text(
-                                "Updated file stats asynchronously.").color(Util.GUPPIE_GREEN));
-                        BetterWorldStats.logger().info(Component.text(
-                                "Size: " + config.filesize_format.format(result.size_in_gb) + "GB, " +
-                                        "files: " + result.file_count + ", " +
-                                        "folders: " + result.folder_count + ", " +
-                                        "chunks: " + chunk_count + ", " +
-                                        "entities: " + entity_count).color(Util.GUPPIE_GREEN));
-                    }
-                    if (PaperLib.isPaper()) {
-                        for (final World world : BetterWorldStats.getInstance().getServer().getWorlds()) {
-                            chunk_count += world.getChunkCount();
-                            entity_count += world.getEntityCount();
-                        }
-                    }
-                    scanning = false;
-                    return this;
-                });
+        fileScanResult = new FileScanResult(BetterWorldStats.config().scanPaths, BetterWorldStats.config().filesizeUpdatePeriodMillis);
+
+        if (BetterWorldStats.config().doLogging) {
+            BetterWorldStats.logger().info(Component.text("Updated file stats asynchronously.", Util.GUPPIE_GREEN));
+            BetterWorldStats.logger().info(Component.text(
+                    "Size: " + BetterWorldStats.config().filesizeFormat.format(fileScanResult.sizeInGb) + "GB, " +
+                            "files: " + fileScanResult.fileCount + ", " +
+                            "folders: " + fileScanResult.folderCount + ", " +
+                            "chunks: " + chunkCount + ", " +
+                            "entities: " + entityCount, Util.GUPPIE_GREEN));
+        }
     }
 
     public String getSize() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return config.filesize_format.format(scan_result.size_in_gb);
+        return BetterWorldStats.config().filesizeFormat.format(fileScanResult.sizeInGb);
     }
 
     public String getSpoofedSize() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return config.filesize_format.format(scan_result.size_in_gb + config.additional_spoof_filesize);
+        return BetterWorldStats.config().filesizeFormat
+                .format(fileScanResult.sizeInGb + BetterWorldStats.config().additionalSpoofFilesize);
     }
 
     public String getFolderCount() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return Integer.toString(scan_result.folder_count);
+        return Integer.toString(fileScanResult.folderCount);
     }
 
     public String getFileCount() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return Integer.toString(scan_result.file_count);
+        return Integer.toString(fileScanResult.fileCount);
     }
 
     public String getChunkCount() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return PaperLib.isPaper() ? Integer.toString(chunk_count) : "unsupported";
+        return CAN_GET_CHUNK_COUNT ? chunkCount.toString() : "unsupported";
     }
 
     public String getEntityCount() {
-        if (shouldScan()) runScan();
-        if (scan_result == null) return "";
+        if (fileScanResult == null) return "";
 
-        return PaperLib.isPaper() ? Integer.toString(entity_count) : "unsupported";
+        return CAN_GET_ENTITY_COUNT ? entityCount.toString() : "unsupported";
     }
 
     private static class FileScanResult {
 
         public final long expiration_time_millis;
-        public final double size_in_gb;
-        public int file_count, folder_count;
+        public final double sizeInGb;
+        public int fileCount, folderCount;
 
         protected FileScanResult(@NotNull Iterable<String> paths_to_scan, long cooldown_millis) {
-            this.file_count = this.folder_count = 0;
+            this.fileCount = this.folderCount = 0;
             long byteSize = 0L;
             for (String path : paths_to_scan) {
                 byteSize += this.getByteSize(new File(path));
             }
-            this.size_in_gb = byteSize / 1048576.0D / 1000.0D;
+            this.sizeInGb = byteSize / 1048576.0D / 1000.0D;
             this.expiration_time_millis = System.currentTimeMillis() + cooldown_millis;
         }
 
@@ -122,7 +123,7 @@ public class WorldStats {
             long bytes = 0L;
 
             if (file.isDirectory()) {
-                this.folder_count++;
+                this.folderCount++;
                 try {
                     File[] subFiles = file.listFiles();
                     for (File subFile : subFiles) {
@@ -134,7 +135,7 @@ public class WorldStats {
             }
 
             else if (file.isFile()) {
-                this.file_count++;
+                this.fileCount++;
                 bytes += file.length();
             }
 

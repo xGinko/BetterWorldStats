@@ -1,12 +1,18 @@
 package me.xginko.betterworldstats.utils;
 
+import me.clip.placeholderapi.PlaceholderAPI;
 import me.xginko.betterworldstats.BetterWorldStats;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.minimessage.tag.Tag;
+import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public final class Util {
 
@@ -41,5 +47,30 @@ public final class Util {
         string = string.replace("&o", "<italic>");
         string = string.replace("&r", "<reset>");
         return string;
+    }
+
+    public static boolean hasMethod(Class<?> holderClass, String methodName, Class<?>... parameterClasses) {
+        try {
+            holderClass.getMethod(methodName, parameterClasses);
+            return true;
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+    }
+
+    private static @NotNull String tryParse(@Nullable CommandSender sender, @NotNull String input) {
+        try {
+            return sender instanceof Player ? PlaceholderAPI.setPlaceholders((Player)sender, input) : PlaceholderAPI.setPlaceholders(null, input);
+        } catch (Throwable t) {
+            return input;
+        }
+    }
+
+    public static @NotNull TagResolver papiTagResolver(@Nullable CommandSender sender) {
+        return TagResolver.resolver("papi", (argumentQueue, context) -> Tag.selfClosingInserting(
+                LegacyComponentSerializer.legacySection().deserialize(
+                        tryParse(sender, '%' + argumentQueue.popOr("papi tag requires an argument").value() + '%')
+                )
+        ));
     }
 }

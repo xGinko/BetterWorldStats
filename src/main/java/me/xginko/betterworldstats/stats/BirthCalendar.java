@@ -19,7 +19,7 @@ public class BirthCalendar {
     public BirthCalendar() {
         this.calendar = Calendar.getInstance(BetterWorldStats.config().timeZone);
         this.cache = Caffeine.newBuilder().expireAfterWrite(Duration.ofMinutes(1)).build();
-        this.server_birth_time_millis = BetterWorldStats.config().server_birth_time_millis;
+        this.server_birth_time_millis = BetterWorldStats.config().serverBirthTimeMillis;
     }
 
     private long getMillisSinceBirth() {

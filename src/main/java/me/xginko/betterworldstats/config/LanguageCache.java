@@ -2,7 +2,6 @@ package me.xginko.betterworldstats.config;
 
 import io.github.thatsmusic99.configurationmaster.api.ConfigFile;
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.hooks.PAPIExpansion;
 import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
@@ -51,12 +50,12 @@ public class LanguageCache {
         try {
             this.langFile.save();
         } catch (Exception e) {
-            BetterWorldStats.logger().error("Failed to save language file: " + langYML.getName(), e);
+            BetterWorldStats.logger().error("Failed to save language file: {}", langYML.getName(), e);
         }
     }
 
     public @NotNull Component noPermissionMsg(CommandSender sender) {
-        return MiniMessage.miniMessage().deserialize(no_permission_serialized, PAPIExpansion.papiTagResolver(sender));
+        return MiniMessage.miniMessage().deserialize(no_permission_serialized, Util.papiTagResolver(sender));
     }
 
     public @NotNull List<Component> worldStatsMsg(
@@ -68,8 +67,8 @@ public class LanguageCache {
             String entityCount
     ) {
         return world_stats_message_serialized.stream()
-                .map(line -> MiniMessage.miniMessage().deserialize(
-                        line.replace("%years%", years)
+                .map(line -> MiniMessage.miniMessage().deserialize(line
+                                .replace("%years%", years)
                                 .replace("%months%", months)
                                 .replace("%days%", days)
                                 .replace("%players%", players)
@@ -82,7 +81,7 @@ public class LanguageCache {
                                 .replace("%folder_count%", folderCount)
                                 .replace("%chunk_count%", chunkCount)
                                 .replace("%entity_count%", entityCount),
-                        PAPIExpansion.papiTagResolver(sender)
+                        Util.papiTagResolver(sender)
                 ))
                 .collect(Collectors.toList());
     }

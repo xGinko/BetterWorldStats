@@ -1,9 +1,12 @@
 package me.xginko.betterworldstats;
 
-import me.xginko.betterworldstats.commands.BWSCmd;
+import me.xginko.betterworldstats.commands.betterworldstats.BetterWorldStatsCmd;
+import me.xginko.betterworldstats.commands.worldstats.WorldStatsCmd;
 import me.xginko.betterworldstats.config.Config;
 import me.xginko.betterworldstats.config.LanguageCache;
 import me.xginko.betterworldstats.hooks.BWSHook;
+import me.xginko.betterworldstats.utils.Disableable;
+import me.xginko.betterworldstats.utils.PluginPermission;
 import me.xginko.betterworldstats.utils.Util;
 import net.kyori.adventure.identity.Identity;
 import net.kyori.adventure.platform.bukkit.BukkitAudiences;
@@ -13,10 +16,18 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+import space.arim.morepaperlib.MorePaperLib;
+import space.arim.morepaperlib.commands.CommandRegistration;
+import space.arim.morepaperlib.scheduling.GracefulScheduling;
 
 import java.io.File;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -27,9 +38,12 @@ import java.util.zip.ZipEntry;
 public final class BetterWorldStats extends JavaPlugin {
 
     private static BetterWorldStats instance;
-    private static Map<String, LanguageCache> languageCacheMap;
-    private static Config config;
     private static Statistics statistics;
+    private static Config config;
+    private static Map<String, LanguageCache> languageCacheMap;
+
+    private static CommandRegistration commandRegistration;
+    private static GracefulScheduling scheduling;
     private static BukkitAudiences audiences;
     private static ComponentLogger logger;
     private static Metrics bStats;
@@ -37,19 +51,22 @@ public final class BetterWorldStats extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        MorePaperLib morePaperLib = new MorePaperLib(instance);
+        commandRegistration = morePaperLib.commandRegistration();
+        scheduling = morePaperLib.scheduling();
         audiences = BukkitAudiences.create(instance);
         logger = ComponentLogger.logger(getLogger().getName());
         bStats = new Metrics(instance, 17204);
 
-        logger.info(Component.text("                                              ").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("     ___      _   _                           ").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/").style(Util.GUPPIE_GREEN_BOLD));
-        logger.info(Component.text("                                              ").style(Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("                                              ", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("     ___      _   _                           ", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ ) ___| |_| |_ ___ _ _                 ", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    | _ \\/ -_)  _|  _/ -_) '_|                ", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  __|___/\\___|\\__|\\__\\___|_|_ _        _      ", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("  \\ \\    / /__ _ _| |__| / __| |_ __ _| |_ ___", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("   \\ \\/\\/ / _ \\ '_| / _` \\__ \\  _/ _` |  _(_-<", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("    \\_/\\_/\\___/_| |_\\__,_|___/\\__\\__,_|\\__/__/", Util.GUPPIE_GREEN_BOLD));
+        logger.info(Component.text("                                              ", Util.GUPPIE_GREEN_BOLD));
 
         logger.info("Loading translations");
         reloadLang();
@@ -57,18 +74,31 @@ public final class BetterWorldStats extends JavaPlugin {
         logger.info("Loading config");
         reloadConfiguration();
 
+        logger.info("Registering permissions");
+        PluginPermission.registerAll();
+
         logger.info("Registering commands");
-        BWSCmd.reloadCommands();
+        new BetterWorldStatsCmd().enable();
+        new WorldStatsCmd().enable();
 
         logger.info("Done.");
     }
 
     @Override
     public void onDisable() {
-        BWSHook.HOOKS.forEach(BWSHook::unHook);
+        PluginPermission.unregisterAll();
+        BWSHook.HOOKS.forEach(Disableable::disable);
         if (statistics != null) {
             statistics.disable();
             statistics = null;
+        }
+        if (languageCacheMap != null) {
+            languageCacheMap.clear();
+            languageCacheMap = null;
+        }
+        if (scheduling != null) {
+            scheduling.cancelGlobalTasks();
+            scheduling = null;
         }
         if (audiences != null) {
             audiences.close();
@@ -78,10 +108,10 @@ public final class BetterWorldStats extends JavaPlugin {
             bStats.shutdown();
             bStats = null;
         }
-        config = null;
-        languageCacheMap = null;
-        logger = null;
+        commandRegistration = null;
         instance = null;
+        config = null;
+        logger = null;
     }
 
     public static @NotNull BetterWorldStats getInstance() {
@@ -104,23 +134,30 @@ public final class BetterWorldStats extends JavaPlugin {
         return logger;
     }
 
+    public static CommandRegistration commandRegistration() {
+        return commandRegistration;
+    }
+
+    public static GracefulScheduling scheduling() {
+        return scheduling;
+    }
+
     public static @NotNull LanguageCache getLang(Locale locale) {
         return getLang(locale.toString().toLowerCase());
     }
 
-    public static @NotNull LanguageCache getLang(CommandSender commandSender) {
-        return getLang(audiences.sender(commandSender).pointers().get(Identity.LOCALE).orElse(config.default_lang));
+    public static @NotNull LanguageCache getLang(CommandSender sender) {
+        return getLang(audiences.sender(sender).pointers().get(Identity.LOCALE).orElse(config.defaultLang));
     }
 
     public static @NotNull LanguageCache getLang(String lang) {
-        if (!config.auto_lang) return languageCacheMap.get(config.default_lang.toString().toLowerCase());
-        return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.default_lang.toString().toLowerCase()));
+        if (!config.autoLang) return languageCacheMap.get(config.defaultLang.toString().toLowerCase());
+        return languageCacheMap.getOrDefault(lang.replace("-", "_"), languageCacheMap.get(config.defaultLang.toString().toLowerCase()));
     }
 
     public void reloadPlugin() {
         reloadLang();
         reloadConfiguration();
-        BWSCmd.reloadCommands();
     }
 
     private void reloadConfiguration() {

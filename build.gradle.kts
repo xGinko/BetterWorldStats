@@ -22,6 +22,10 @@ repositories {
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/") {
         name = "placeholderapi"
     }
+
+    maven("https://mvn-repo.arim.space/lesser-gpl3/") {
+        name = "arim-mvn-lgpl3"
+    }
 }
 
 dependencies {
@@ -36,8 +40,8 @@ dependencies {
     implementation("net.kyori:adventure-text-logger-slf4j:4.17.0")
     implementation("net.kyori:adventure-platform-bukkit:4.3.4")
 
-    implementation("io.papermc:paperlib:1.0.8")
     implementation("org.bstats:bstats-bukkit:3.0.2")
+    implementation("space.arim.morepaperlib:morepaperlib:0.4.3")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3") // 2.X for Java 8 targets
     implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.1")
 }
@@ -68,8 +72,8 @@ tasks {
     shadowJar {
         archiveFileName.set("BetterWorldStats-${version}.jar")
         relocate("net.kyori", "me.xginko.betterworldstats.libs.kyori")
-        relocate("io.papermc.lib", "me.xginko.betterworldstats.libs.paperlib")
         relocate("org.bstats", "me.xginko.betterworldstats.libs.bstats")
+        relocate("space.arim.morepaperlib", "me.xginko.betterworldstats.libs.morepaperlib")
         relocate("com.github.benmanes.caffeine", "me.xginko.betterworldstats.libs.caffeine")
         relocate("io.github.thatsmusic99.configurationmaster", "me.xginko.betterworldstats.libs.configmaster")
     }

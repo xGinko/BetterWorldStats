@@ -15,13 +15,13 @@ import java.util.*;
 public class Config {
 
     private final @NotNull ConfigFile configFile;
-    public final @NotNull Locale default_lang;
-    public final @NotNull DecimalFormat filesize_format;
-    public final @NotNull Set<String> paths_to_scan;
+    public final @NotNull Locale defaultLang;
+    public final @NotNull DecimalFormat filesizeFormat;
+    public final @NotNull Set<String> scanPaths;
     public final @NotNull TimeZone timeZone;
-    public final long filesize_update_period_millis, server_birth_time_millis;
-    public final double additional_spoof_filesize;
-    public final boolean auto_lang, log_is_enabled;
+    public final long filesizeUpdatePeriodMillis, serverBirthTimeMillis;
+    public final double additionalSpoofFilesize;
+    public final boolean autoLang, doLogging;
 
     public Config() throws Exception {
         // Load config.yml with ConfigMaster
@@ -42,15 +42,15 @@ public class Config {
                 .addSolidLine());
 
         // Language
-        this.default_lang = Locale.forLanguageTag(
+        this.defaultLang = Locale.forLanguageTag(
                 getString("general.default-language", "en_us",
                         "The default language that will be used if auto-language is false or no matching language file was found.")
                         .replace("_", "-"));
-        this.auto_lang = getBoolean("language.auto-language", true,
+        this.autoLang = getBoolean("language.auto-language", true,
                 "Enable / Disable locale based messages.");
 
         // Settings
-        this.server_birth_time_millis = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(),
+        this.serverBirthTimeMillis = getLong("server-birth-epoch-unix-timestamp", System.currentTimeMillis(),
                 "Use a tool like https://www.unixtimestamp.com/ to convert your server launch date to the correct format.\n" +
                         "This option expects you to enter the timestamp in millis. If you have issues with your server age being way too\n" +
                         "high, its probably because you entered the time in seconds and are therefore missing 3 zeros at the end.");
@@ -58,22 +58,22 @@ public class Config {
         try {
             zoneId = ZoneId.of(getString("time-zone", ZoneId.systemDefault().getId(), "The time zone (ZoneId) to use."));
         } catch (ZoneRulesException e) {
-            BetterWorldStats.logger().warn("Configured timezone could not be found. Using system default zone '"+zoneId+"'");
+            BetterWorldStats.logger().warn("Configured timezone could not be found. Using system default zone '{}'", zoneId);
         } catch (DateTimeException e) {
-            BetterWorldStats.logger().warn("Configured timezone has an invalid format. Using system default zone '"+zoneId+"'");
+            BetterWorldStats.logger().warn("Configured timezone has an invalid format. Using system default zone '{}'", zoneId);
         }
         this.timeZone = TimeZone.getTimeZone(zoneId);
-        this.filesize_update_period_millis = getInt("filesize-update-period-in-seconds", 3600,
+        this.filesizeUpdatePeriodMillis = getInt("filesize-update-period-in-seconds", 3600,
                 "The update period at which the file size is checked.") * 1000L;
-        this.filesize_format = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
-        this.paths_to_scan = new HashSet<>(getList("worlds", Arrays.asList(
+        this.filesizeFormat = new DecimalFormat(getString("filesize-format-pattern", "#.##"));
+        this.scanPaths = new HashSet<>(getList("worlds", Arrays.asList(
                 "./world/region",
                 "./world_nether/DIM-1/region",
                 "./world_the_end/DIM1/region"
         ), "The files to scan. The path you're in is the folder where your server.jar is located."));
-        this.additional_spoof_filesize = getDouble("spoof-size", 0.0,
+        this.additionalSpoofFilesize = getDouble("spoof-size", 0.0,
                 "How many GB should be added on top of the actual filesize. Useful if you deleted useless chunks.");
-        this.log_is_enabled = getBoolean("enable-console-log", false,
+        this.doLogging = getBoolean("enable-console-log", false,
                 "Whether to log to console when plugin updates filesize.");
 
         // Placeholders

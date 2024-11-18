@@ -1,24 +1,12 @@
 package me.xginko.betterworldstats.hooks;
 
-import me.clip.placeholderapi.PlaceholderAPI;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.xginko.betterworldstats.BetterWorldStats;
-import me.xginko.betterworldstats.Statistics;
-import net.kyori.adventure.text.minimessage.tag.Tag;
-import net.kyori.adventure.text.minimessage.tag.resolver.TagResolver;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook {
-
-    private final @NotNull Statistics statistics;
-
-    PAPIExpansion() {
-        this.statistics = BetterWorldStats.statistics();
-    }
 
     @Override
     public String pluginName() {
@@ -26,17 +14,17 @@ public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook
     }
 
     @Override
-    public boolean canHook() {
+    public boolean shouldEnable() {
         return BetterWorldStats.getInstance().getServer().getPluginManager().isPluginEnabled(pluginName());
     }
 
     @Override
-    public void hook() {
+    public void enable() {
         register();
     }
 
     @Override
-    public void unHook() {
+    public void disable() {
         unregister();
     }
 
@@ -59,53 +47,33 @@ public final class PAPIExpansion extends PlaceholderExpansion implements BWSHook
     public @Nullable String onPlaceholderRequest(Player player, @NotNull String identifier) {
         switch (identifier) {
             case "size":
-                return statistics.worldStats.getSize();
+                return BetterWorldStats.statistics().worldStats.getSize();
             case "spoofsize":
-                return statistics.worldStats.getSpoofedSize();
+                return BetterWorldStats.statistics().worldStats.getSpoofedSize();
             case "file_count":
-                return statistics.worldStats.getFileCount();
+                return BetterWorldStats.statistics().worldStats.getFileCount();
             case "folder_count":
-                return statistics.worldStats.getFolderCount();
+                return BetterWorldStats.statistics().worldStats.getFolderCount();
             case "chunk_count":
-                return statistics.worldStats.getChunkCount();
+                return BetterWorldStats.statistics().worldStats.getChunkCount();
             case "entity_count":
-                return statistics.worldStats.getEntityCount();
+                return BetterWorldStats.statistics().worldStats.getEntityCount();
             case "playerStats":
-                return statistics.playerStats.getUniqueJoins();
+                return BetterWorldStats.statistics().playerStats.getUniqueJoins();
             case "days":
-                return statistics.birthCalendar.getDaysPart().toString();
+                return BetterWorldStats.statistics().birthCalendar.getDaysPart().toString();
             case "months":
-                return statistics.birthCalendar.getMonthsPart().toString();
+                return BetterWorldStats.statistics().birthCalendar.getMonthsPart().toString();
             case "years":
-                return statistics.birthCalendar.getYearsPart().toString();
+                return BetterWorldStats.statistics().birthCalendar.getYearsPart().toString();
             case "age_in_days":
-                return statistics.birthCalendar.asDays().toString();
+                return BetterWorldStats.statistics().birthCalendar.asDays().toString();
             case "age_in_months":
-                return statistics.birthCalendar.asMonths().toString();
+                return BetterWorldStats.statistics().birthCalendar.asMonths().toString();
             case "age_in_years":
-                return statistics.birthCalendar.asYears().toString();
+                return BetterWorldStats.statistics().birthCalendar.asYears().toString();
             default:
                 return null;
         }
-    }
-
-    private static @NotNull String tryParse(@Nullable CommandSender sender, @NotNull String input) {
-        try {
-            if (sender instanceof Player) {
-                return PlaceholderAPI.setPlaceholders((Player) sender, input);
-            } else {
-                return PlaceholderAPI.setPlaceholders(null, input);
-            }
-        } catch (Throwable t) {
-            return input;
-        }
-    }
-
-    public static @NotNull TagResolver papiTagResolver(@Nullable CommandSender sender) {
-        return TagResolver.resolver("papi", (argumentQueue, context) -> Tag.selfClosingInserting(
-                LegacyComponentSerializer.legacySection().deserialize(
-                        tryParse(sender, '%' + argumentQueue.popOr("papi tag requires an argument").value() + '%')
-                )
-        ));
     }
 }

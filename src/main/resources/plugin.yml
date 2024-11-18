@@ -7,25 +7,3 @@ description: ${description}
 website: ${url}
 folia-supported: true
 api-version: '1.13'
-
-commands:
-  betterworldstats:
-    description: plugin commands
-    usage: /<command> [ reload | version ]
-    aliases:
-      - betterws
-      - bws
-  worldstats:
-    description: Shows the Statistics
-    usage: /<command>
-    aliases:
-      - stats
-
-permissions:
-  betterworldstats.worldstats:
-    description: Permission to use /worldstats
-    default: true
-  betterworldstats.version:
-    description: Permission to show the plugin version
-  betterworldstats.reload:
-    description: Permission to reload the plugin configuration
