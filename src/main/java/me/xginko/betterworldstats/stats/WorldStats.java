@@ -24,7 +24,7 @@ public class WorldStats implements Runnable, Disableable {
 
     private final ScheduledTask scheduledScan;
     private final AtomicInteger chunkCount, entityCount;
-    private @Nullable FileScanResult fileScanResult;
+    private @Nullable FileStatResult fileStatResult;
 
     public WorldStats() {
         this.chunkCount = new AtomicInteger();
@@ -53,70 +53,68 @@ public class WorldStats implements Runnable, Disableable {
             });
         }
 
-        fileScanResult = new FileScanResult(BetterWorldStats.config().scanPaths, BetterWorldStats.config().filesizeUpdatePeriodMillis);
+        fileStatResult = new FileStatResult(BetterWorldStats.config().scanPaths);
 
         if (BetterWorldStats.config().doLogging) {
             BetterWorldStats.logger().info(Component.text("Updated file stats asynchronously.", Util.GUPPIE_GREEN));
             BetterWorldStats.logger().info(Component.text(
-                    "Size: " + BetterWorldStats.config().filesizeFormat.format(fileScanResult.sizeInGb) + "GB, " +
-                            "files: " + fileScanResult.fileCount + ", " +
-                            "folders: " + fileScanResult.folderCount + ", " +
+                    "Size: " + BetterWorldStats.config().filesizeFormat.format(fileStatResult.sizeInGb) + "GB, " +
+                            "files: " + fileStatResult.fileCount + ", " +
+                            "folders: " + fileStatResult.folderCount + ", " +
                             "chunks: " + chunkCount + ", " +
                             "entities: " + entityCount, Util.GUPPIE_GREEN));
         }
     }
 
     public String getSize() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
-        return BetterWorldStats.config().filesizeFormat.format(fileScanResult.sizeInGb);
+        return BetterWorldStats.config().filesizeFormat.format(fileStatResult.sizeInGb);
     }
 
     public String getSpoofedSize() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
         return BetterWorldStats.config().filesizeFormat
-                .format(fileScanResult.sizeInGb + BetterWorldStats.config().additionalSpoofFilesize);
+                .format(fileStatResult.sizeInGb + BetterWorldStats.config().additionalSpoofFilesize);
     }
 
     public String getFolderCount() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
-        return Integer.toString(fileScanResult.folderCount);
+        return Integer.toString(fileStatResult.folderCount);
     }
 
     public String getFileCount() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
-        return Integer.toString(fileScanResult.fileCount);
+        return Integer.toString(fileStatResult.fileCount);
     }
 
     public String getChunkCount() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
         return CAN_GET_CHUNK_COUNT ? chunkCount.toString() : "unsupported";
     }
 
     public String getEntityCount() {
-        if (fileScanResult == null) return "";
+        if (fileStatResult == null) return "";
 
         return CAN_GET_ENTITY_COUNT ? entityCount.toString() : "unsupported";
     }
 
-    private static class FileScanResult {
+    private static class FileStatResult {
 
-        public final long expiration_time_millis;
         public final double sizeInGb;
         public int fileCount, folderCount;
 
-        protected FileScanResult(@NotNull Iterable<String> paths_to_scan, long cooldown_millis) {
+        protected FileStatResult(@NotNull Iterable<String> paths_to_scan) {
             this.fileCount = this.folderCount = 0;
             long byteSize = 0L;
             for (String path : paths_to_scan) {
                 byteSize += this.getByteSize(new File(path));
             }
             this.sizeInGb = byteSize / 1048576.0D / 1000.0D;
-            this.expiration_time_millis = System.currentTimeMillis() + cooldown_millis;
         }
 
         private long getByteSize(File file) {
