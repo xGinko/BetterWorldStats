@@ -1,6 +1,7 @@
 name: Build and upload jar
 
 on:
+  workflow_dispatch: 
   push:
     branches: [ main ]
   pull_request:
@@ -26,7 +27,7 @@ jobs:
           arguments: build test --stacktrace --scan
 
       - name: Upload Build
-        uses: actions/upload-artifact@v3.1.3
+        uses: actions/upload-artifact@v4
         with:
           name: BetterWorldStats
           path: build/libs/BetterWorldStats*.jar

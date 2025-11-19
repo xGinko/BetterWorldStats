@@ -11,11 +11,11 @@ description = "Show stats about server age, map size and unique player joins on 
 repositories {
     mavenCentral()
 
-    maven("https://papermc.io/repo/repository/maven-public/") {
+    maven("https://repo.papermc.io/repository/maven-public/") {
         name = "papermc"
     }
 
-    maven("https://ci.pluginwiki.us/plugin/repository/everything/") {
+    maven("https://repo.bsdevelopment.org/releases") {
         name = "configmaster-repo"
     }
 
@@ -43,7 +43,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.2")
     implementation("space.arim.morepaperlib:morepaperlib:0.4.3")
     implementation("com.github.ben-manes.caffeine:caffeine:2.9.3") // 2.X for Java 8 targets
-    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.1")
+    implementation("com.github.thatsmusic99:ConfigurationMaster-API:v2.0.0-rc.3")
 }
 
 runPaper.folia.registerTask();
